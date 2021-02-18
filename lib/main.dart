@@ -24,12 +24,12 @@ import './screens/detailsScreen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
-  runApp(Ownless(cameras.first));
+  runApp(Ownless());
 }
 
 class Ownless extends StatefulWidget {
   CameraDescription camera;
-  Ownless(this.camera);
+  Ownless();
 
   @override
   _OwnlessState createState() => _OwnlessState();

@@ -43,5 +43,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera, so you can add images of the stuff you want to declutter.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone to access your camera.</string>
 </dict>
 </plist>
