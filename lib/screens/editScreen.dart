@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import '../assets/constants.dart' as Constants;
 import 'package:provider/provider.dart';
 import '../providers/items.dart';
 import '../providers/item.dart';
@@ -16,8 +14,12 @@ class _EditFormState extends State<EditForm> {
   TextEditingController descriptionController = TextEditingController();
 
   void _updateItem(id, imgPath) {
-    var title = titleController.value.text == "" ? "Untitled" : titleController.value.text;
-    var description = descriptionController.value.text == "" ? "No description" : descriptionController.value.text;
+    var title = titleController.value.text == ""
+        ? "Untitled"
+        : titleController.value.text;
+    var description = descriptionController.value.text == ""
+        ? "No description"
+        : descriptionController.value.text;
     Provider.of<Items>(context).updateItem(id, title, description, imgPath);
     Navigator.of(context).pop();
   }
@@ -25,7 +27,8 @@ class _EditFormState extends State<EditForm> {
   @override
   Widget build(BuildContext context) {
     var item = ModalRoute.of(context).settings.arguments as Item;
-    descriptionController.text = item.description == "No description" ? "" : item.description;
+    descriptionController.text =
+        item.description == "No description" ? "" : item.description;
     titleController.text = item.title == "Untitled" ? "" : item.title;
     var id = item.id;
     var imgPath = item.imgUrl;

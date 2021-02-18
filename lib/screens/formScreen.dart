@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import '../assets/constants.dart' as Constants;
 import 'package:provider/provider.dart';
 import '../providers/items.dart';
 
@@ -15,8 +13,12 @@ class _AddFormState extends State<AddForm> {
   TextEditingController descriptionController = TextEditingController();
 
   void _saveItem(String imgPath) {
-    var title = titleController.value.text == "" ? "Untitled" : titleController.value.text;
-    var description = descriptionController.value.text == "" ? "No description" : descriptionController.value.text;
+    var title = titleController.value.text == ""
+        ? "Untitled"
+        : titleController.value.text;
+    var description = descriptionController.value.text == ""
+        ? "No description"
+        : descriptionController.value.text;
     Provider.of<Items>(context).addItem(title, description, imgPath);
     Provider.of<Items>(context, listen: false).fetchAndSetItems();
     Navigator.of(context).popUntil((route) => (route.settings.name == "/"));

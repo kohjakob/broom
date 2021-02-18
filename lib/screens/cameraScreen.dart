@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:ownless2/screens/formScreen.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import '../providers/items.dart';
 import '../assets/constants.dart' as Constants;
 
 class AddCamera extends StatefulWidget {
@@ -74,14 +71,17 @@ class _AddCameraState extends State<AddCamera> {
               Container(
                 height: constraints.maxHeight * 0.8,
                 child: Container(
-                  margin: EdgeInsets.fromLTRB(Constants.defaultPadding, Constants.defaultPadding, Constants.defaultPadding, 0),
+                  margin: EdgeInsets.fromLTRB(Constants.defaultPadding,
+                      Constants.defaultPadding, Constants.defaultPadding, 0),
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     border: Border.all(width: 1, color: Colors.indigo.shade100),
-                    borderRadius: BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(Constants.defaultBorderRadius)),
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(Constants.defaultBorderRadius)),
                     child: FutureBuilder<void>(
                       future: _initializeCameraControllerFuture,
                       builder: (context, snapshot) {
