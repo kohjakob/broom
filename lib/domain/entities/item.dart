@@ -3,17 +3,17 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Item extends Equatable {
-  final String _id;
-  final String _name;
-  final String _description;
+  final String id;
+  final String name;
+  final String description;
 
   Item({
     String id,
     @required String name,
     @required String description,
-  })  : _id = id ?? null,
-        _name = _checkSufficiency(name),
-        _description = _checkSufficiency(description);
+  })  : this.id = id ?? null,
+        this.name = _checkSufficiency(name),
+        this.description = _checkSufficiency(description);
 
   static _checkSufficiency(String string) {
     if (string.isEmpty) {
@@ -24,5 +24,5 @@ class Item extends Equatable {
   }
 
   @override
-  List<Object> get props => [_id, _name, _description];
+  List<Object> get props => [this.id, this.name, this.description];
 }
