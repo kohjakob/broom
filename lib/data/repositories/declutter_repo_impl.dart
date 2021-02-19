@@ -22,4 +22,14 @@ class DeclutterRepoImpl implements DeclutterRepo {
       return Left(Failure(Code.ItemSaveFail));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Item>>> getItems() async {
+    try {
+      final items = await localDatasource.getItemsFromDatabase();
+      return Right(items);
+    } on NoItemsYetException {
+      return Left(Failure(Code.NoItemsYet));
+    }
+  }
 }

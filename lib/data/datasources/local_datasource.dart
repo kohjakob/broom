@@ -1,3 +1,4 @@
+import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/data/models/item_model.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:hive/hive.dart';
@@ -6,6 +7,8 @@ import 'package:uuid/uuid.dart';
 
 abstract class LocalDatasource {
   Future<ItemModel> saveItemToDatabase(Item item);
+
+  Future<List<ItemModel>> getItemsFromDatabase();
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
@@ -26,5 +29,15 @@ class LocalDatasourceImpl implements LocalDatasource {
     final key = await items.add(model);
 
     return items.get(key);
+  }
+
+  @override
+  Future<List<ItemModel>> getItemsFromDatabase() async {
+    if (items.isEmpty) {
+      throw NoItemsYetException();
+    } else {
+      final models = items.values;
+      return models;
+    }
   }
 }

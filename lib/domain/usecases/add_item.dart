@@ -16,8 +16,8 @@ class AddItem {
   }) async {
     try {
       final item = Item(name: name, description: description);
-      final result = await repo.addItem(item);
-      return result.fold(
+      final either = await repo.addItem(item);
+      return either.fold(
         (failure) => Left(failure),
         (item) => Right(item),
       );

@@ -4,4 +4,6 @@ import 'package:broom/domain/entities/item.dart';
 
 abstract class DeclutterRepo {
   Future<Either<Failure, Item>> addItem(Item item);
+
+  Future<Either<Failure, List<Item>>> getItems();
 }

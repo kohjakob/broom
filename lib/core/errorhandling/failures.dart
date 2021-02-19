@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 enum Code {
   InsufficientItemInfo,
   ItemSaveFail,
+  NoItemsYet,
 }
 
 class Failure extends Equatable {
