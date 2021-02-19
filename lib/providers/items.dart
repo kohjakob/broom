@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:ownless2/helpers/dbHelper.dart';
+import 'package:broom/helpers/dbHelper.dart';
 
 import '../assets/orderCategory.dart';
 import './item.dart';
@@ -21,7 +21,10 @@ class Items with ChangeNotifier {
 
     var dbItems = itemsList.map((item) {
       Map<String, double> answers = {};
-      answersList.where((a) => a["itemId"] == item["id"]).toList().forEach((answer) {
+      answersList
+          .where((a) => a["itemId"] == item["id"])
+          .toList()
+          .forEach((answer) {
         answers[answer["id"]] = answer["answer"];
       });
       return Item(
@@ -73,7 +76,8 @@ class Items with ChangeNotifier {
     });
   }
 
-  List<Item> getItemsByOrderAndSearchQuery(OrderCategory order, String searchQuery) {
+  List<Item> getItemsByOrderAndSearchQuery(
+      OrderCategory order, String searchQuery) {
     var items = [..._items];
 
     if (searchQuery != "") {

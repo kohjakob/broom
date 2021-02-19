@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:ownless2/screens/editScreen.dart';
-import 'package:ownless2/screens/formScreen.dart';
+import 'package:broom/screens/editScreen.dart';
+import 'package:broom/screens/formScreen.dart';
 import 'package:provider/provider.dart';
 
 import './providers/items.dart';

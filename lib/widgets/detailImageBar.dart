@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ownless2/screens/editScreen.dart';
+import 'package:broom/screens/editScreen.dart';
 import 'dart:io';
 import '../providers/item.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,8 @@ class ImageBar extends StatelessWidget {
             child: Text('Yes'),
             onPressed: () {
               Provider.of<Items>(context, listen: false).deleteItem(item.id);
-              Navigator.of(context).popUntil((route) => (route.settings.name == "/"));
+              Navigator.of(context)
+                  .popUntil((route) => (route.settings.name == "/"));
             },
           )
         ],
@@ -61,7 +62,8 @@ class ImageBar extends StatelessWidget {
             Icons.edit,
             color: Colors.indigo.shade500,
           ),
-          onPressed: () => Navigator.of(context).pushNamed(EditForm.routeName, arguments: item),
+          onPressed: () => Navigator.of(context)
+              .pushNamed(EditForm.routeName, arguments: item),
         )
       ],
       flexibleSpace: FlexibleSpaceBar(

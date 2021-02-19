@@ -22,5 +22,8 @@ class Question extends Equatable {
     @required this.category,
     @required this.text,
     @required this.answerToAgree,
-  }) : super([category, text, answerToAgree]);
+  });
+
+  @override
+  List<Object> get props => [category, text, answerToAgree];
 }
