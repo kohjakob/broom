@@ -10,5 +10,5 @@
 
 ### Implemented in [Flutter](http://flutter.dev/docs/) with a Clean Architecture [approach](https://resocoder.com/flutter-clean-architecture-tdd/).
 
-- Storage: [Hive](https://github.com/hivedb/hive)
+- Storage: SQLite with [sqflite](https://pub.dev/packages/sqflite)
 - State-Management: [Bloc](https://pub.dev/packages/flutter_bloc)
