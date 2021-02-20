@@ -29,7 +29,7 @@ class _SwipeState extends State<Swipe> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     _items = Provider.of<Items>(context);
     _questions = Provider.of<Questions>(context);
 
@@ -67,7 +67,8 @@ class _SwipeState extends State<Swipe> {
 
             if (item.answers != null) {
               if (item.answers.length != _questions.questions.length) {
-                question = _questions.findUnanswered(item.answers.keys.toList());
+                question =
+                    _questions.findUnanswered(item.answers.keys.toList());
               } else {
                 return Container();
               }

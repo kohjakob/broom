@@ -25,7 +25,7 @@ class _AddFormState extends State<AddForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final String imgPath = ModalRoute.of(context).settings.arguments as String;
     return Scaffold(
       backgroundColor: Colors.indigo.shade50,

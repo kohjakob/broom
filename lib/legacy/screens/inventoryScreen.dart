@@ -23,7 +23,7 @@ class _InventoryState extends State<Inventory> {
   String _searchQuery = "";
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final _items = Provider.of<Items>(context);
     _displayItems = _items.getItemsByOrderAndSearchQuery(_order, _searchQuery);
 
@@ -72,7 +72,7 @@ class _InventoryState extends State<Inventory> {
                       mainAxisSpacing: 12,
                     ),
                     delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
+                      (context, int index) {
                         return LayoutBuilder(builder: (context, constraints) {
                           return index == 0
                               ? GestureDetector(

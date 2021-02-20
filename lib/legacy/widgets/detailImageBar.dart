@@ -35,7 +35,7 @@ class ImageBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return SliverAppBar(
       pinned: true,
       title: Text(

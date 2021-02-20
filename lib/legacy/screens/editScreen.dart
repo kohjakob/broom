@@ -25,7 +25,7 @@ class _EditFormState extends State<EditForm> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     var item = ModalRoute.of(context).settings.arguments as Item;
     descriptionController.text =
         item.description == "No description" ? "" : item.description;

@@ -33,7 +33,7 @@ class _OwnlessState extends State<Ownless> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

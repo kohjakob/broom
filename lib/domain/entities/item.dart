@@ -3,20 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 class Item extends Equatable {
-  final String id;
+  final int id;
   final String name;
   final String description;
 
   Item({
-    String id,
-    @required String name,
-    @required String description,
+    id,
+    @required name,
+    @required description,
   })  : this.id = id ?? null,
         this.name = _checkSufficiency(name),
         this.description = _checkSufficiency(description);
 
   static _checkSufficiency(String string) {
-    if (string.isEmpty) {
+    if (string == "") {
       throw InsufficientItemInfoException();
     } else {
       return string;

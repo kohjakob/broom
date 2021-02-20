@@ -54,7 +54,7 @@ class Details extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     final id = ModalRoute.of(context).settings.arguments as String;
     final item = Provider.of<Items>(context, listen: false).findById(id);
     final questions = Provider.of<Questions>(context);

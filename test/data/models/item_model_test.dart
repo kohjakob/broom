@@ -9,10 +9,7 @@ void main() {
       // arrange
       // act
       try {
-        ItemModel(
-            id: "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
-            name: "Book about yoga",
-            description: "");
+        ItemModel(id: 0, name: "Book about yoga", description: "");
       }
       // assert
       catch (e) {
