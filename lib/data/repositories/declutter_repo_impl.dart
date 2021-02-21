@@ -1,7 +1,6 @@
 import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/core/errorhandling/failures.dart';
 import 'package:broom/data/datasources/local_datasource.dart';
-import 'package:broom/domain/entities/image.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/repositories/declutter_repo.dart';
 import 'package:dartz/dartz.dart';

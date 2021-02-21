@@ -1,8 +1,6 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:uuid/uuid.dart';
 
 class Camera {
   CameraController cameraController;
@@ -29,6 +27,7 @@ class Camera {
     final xFile = await cameraController.takePicture();
     final directory = await getApplicationDocumentsDirectory();
     final path = join(directory.path, xFile.name);
+    // ignore: await_only_futures
     await xFile.saveTo(path);
     return path;
   }

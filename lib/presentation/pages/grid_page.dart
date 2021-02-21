@@ -7,6 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class GridPage extends StatelessWidget {
   static String routeName = "gridPage";
 
+  _startAddNewItemTour(context) {
+    Navigator.of(context).pushNamed(CameraPage.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ItemsBloc, ItemsState>(
@@ -19,8 +23,7 @@ class GridPage extends StatelessWidget {
                   children: [
                     FlatButton.icon(
                       color: Colors.red,
-                      onPressed: () =>
-                          Navigator.of(context).pushNamed(CameraPage.routeName),
+                      onPressed: () => _startAddNewItemTour(context),
                       icon: Icon(Icons.add),
                       label: Text("Add new item"),
                     ),
@@ -53,9 +56,9 @@ class GridPage extends StatelessWidget {
           );
         } else {
           return FlatButton(
-              child: Text("Add item"),
-              onPressed: () =>
-                  Navigator.of(context).pushNamed(CameraPage.routeName));
+            child: Text("Add item"),
+            onPressed: () => _startAddNewItemTour(context),
+          );
         }
       },
     );

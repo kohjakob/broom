@@ -1,12 +1,8 @@
 import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/data/models/item_model.dart';
-import 'package:broom/domain/entities/image.dart';
 import 'package:broom/domain/entities/item.dart';
-import 'package:camera/camera.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 abstract class LocalDatasource {
   Future<ItemModel> saveItemToDatabase(Item item);

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:broom/legacy/screens/formScreen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 import '../assets/constants.dart' as Constants;
 
 class AddCamera extends StatefulWidget {
@@ -40,9 +38,6 @@ class _AddCameraState extends State<AddCamera> {
   void _takePicture(BuildContext context) async {
     try {
       await _initializeCameraControllerFuture;
-      final appDir = await getApplicationDocumentsDirectory();
-      final fileName = "${DateTime.now()}.png";
-      final path = join(appDir.path, fileName);
       final pathTo = await _cameraController.takePicture();
       Navigator.of(context)
           .pushNamed(AddForm.routeName, arguments: pathTo.path);

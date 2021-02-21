@@ -26,12 +26,21 @@ class Broom extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          fontFamily: "Poppins",
+          primarySwatch: Colors.indigo,
+          accentColor: Colors.indigoAccent,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
         routes: {
           GridPage.routeName: (ctx) => GridPage(),
           FormPage.routeName: (ctx) => FormPage(),
           CameraPage.routeName: (ctx) => CameraPage(),
         },
         home: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             items: [
               BottomNavigationBarItem(
