@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
 import 'package:broom/presentation/pages/camera_page.dart';
-import 'package:broom/presentation/widgets/small_button.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +29,7 @@ class FormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemsBloc, ItemsState>(
+    return BlocBuilder<CameraBloc, CameraState>(
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -40,18 +39,21 @@ class FormPage extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  TopNavBar([
-                    SmallButton(
-                      () {
-                        context.read<ItemsBloc>().add(AddItemEvent(
-                            nameController.text, descriptionController.text));
-                        Navigator.of(context).pop();
-                      },
-                      "Save",
-                      Icons.add,
-                      Theme.of(context).accentColor,
-                    )
-                  ]),
+                  TopNavBar(
+                    showBack: true,
+                    actions: [
+                      SmallButton(
+                        onPressed: () {
+                          context.read<ItemsBloc>().add(AddItemEvent(
+                              nameController.text, descriptionController.text));
+                          Navigator.of(context).pop();
+                        },
+                        label: "Save",
+                        icon: Icons.add,
+                        color: Theme.of(context).accentColor,
+                      )
+                    ],
+                  ),
                   Form(
                     child: Container(
                       padding: EdgeInsets.fromLTRB(20, 20, 20, 20),

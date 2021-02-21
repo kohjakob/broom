@@ -3,7 +3,7 @@ import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
 import 'package:broom/presentation/pages/camera_page.dart';
 import 'package:broom/presentation/pages/form_page.dart';
-import 'package:broom/presentation/pages/grid_page.dart';
+import 'package:broom/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,30 +33,10 @@ class Broom extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
-          GridPage.routeName: (ctx) => GridPage(),
           FormPage.routeName: (ctx) => FormPage(),
           CameraPage.routeName: (ctx) => CameraPage(),
         },
-        home: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: "List",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
-                label: "Rate items",
-              ),
-            ],
-          ),
-          body: SafeArea(
-            child: GridPage(),
-          ),
-        ),
+        home: HomePage(),
       ),
     );
   }
