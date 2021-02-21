@@ -8,17 +8,19 @@ class TopNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            child: Icon(Icons.arrow_back),
-            onTap: () => Navigator.of(context).pop(),
-          ),
-          ...actions,
-        ],
+    return Positioned(
+      child: Container(
+        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              child: Icon(Icons.arrow_back),
+              onTap: () => Navigator.of(context).pop(),
+            ),
+            ...actions,
+          ],
+        ),
       ),
     );
   }

@@ -10,8 +10,9 @@ abstract class ItemsEvent extends Equatable {
 class AddItemEvent extends ItemsEvent {
   final String name;
   final String description;
+  final String imagePath;
 
-  AddItemEvent(this.name, this.description) : super();
+  AddItemEvent(this.name, this.description, [this.imagePath]) : super();
 
   @override
   List<Object> get props => [name, description];

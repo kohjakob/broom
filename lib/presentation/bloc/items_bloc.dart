@@ -29,10 +29,13 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
     }
   }
 
-  Future<ItemsState> _addItemEvent(event, state) async {
+  Future<ItemsState> _addItemEvent(AddItemEvent event, state) async {
     var either;
-    either =
-        await addItem.execute(name: event.name, description: event.description);
+    either = await addItem.execute(
+      name: event.name,
+      description: event.description,
+      imagePath: event.imagePath,
+    );
 
     return await either.fold((failure) async {
       return AddItemFailed();

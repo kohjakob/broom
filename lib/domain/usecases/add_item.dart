@@ -13,9 +13,11 @@ class AddItem {
   Future<Either<Failure, Item>> execute({
     @required String name,
     @required String description,
+    @required String imagePath,
   }) async {
     try {
-      final item = Item(name: name, description: description);
+      final item =
+          Item(name: name, description: description, imagePath: imagePath);
       final either = await repo.addItem(item);
       return either.fold(
         (failure) => Left(failure),

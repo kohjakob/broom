@@ -6,12 +6,15 @@ class Item extends Equatable {
   final int id;
   final String name;
   final String description;
+  final String imagePath;
 
   Item({
     id,
+    imagePath,
     @required name,
     @required description,
   })  : this.id = id ?? null,
+        this.imagePath = imagePath,
         this.name = _checkSufficiency(name),
         this.description = _checkSufficiency(description);
 
@@ -24,5 +27,6 @@ class Item extends Equatable {
   }
 
   @override
-  List<Object> get props => [this.id, this.name, this.description];
+  List<Object> get props =>
+      [this.id, this.name, this.description, this.imagePath];
 }

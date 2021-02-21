@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
 import 'package:broom/presentation/pages/camera_page.dart';
@@ -31,7 +33,7 @@ class NoItemsFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("No items yet");
+    return AddNewItemTile();
   }
 }
 
@@ -42,23 +44,22 @@ class ItemGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
+      child: GridView.builder(
+        physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(20),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 1,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20),
-          itemCount: state.items.length + 1,
-          itemBuilder: (BuildContext ctx, index) {
-            if (index == 0) {
-              return AddNewItemTile();
-            } else {
-              return ItemTile(state, index);
-            }
-          },
-        ),
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 1,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: state.items.length + 1,
+        itemBuilder: (BuildContext ctx, index) {
+          if (index == 0) {
+            return AddNewItemTile();
+          } else {
+            return ItemTile(state, index);
+          }
+        },
       ),
     );
   }
@@ -77,20 +78,34 @@ class ItemTile extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
-          padding: EdgeInsets.all(20),
-          color: Theme.of(context).primaryColor.withAlpha(30),
+          color: Colors.indigo.shade50,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                item.name,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              SizedBox(height: 10),
-              Text(
-                item.description,
-                style: Theme.of(context).textTheme.caption,
+              item.imagePath != null
+                  ? Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor.withAlpha(30),
+                          image: DecorationImage(
+                            image: FileImage(
+                              File(item.imagePath),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: FittedBox(
+                  child: Text(
+                    item.name,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
               ),
             ],
           ),

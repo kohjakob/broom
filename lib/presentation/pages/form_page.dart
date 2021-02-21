@@ -44,9 +44,24 @@ class FormPage extends StatelessWidget {
                     actions: [
                       SmallButton(
                         onPressed: () {
-                          context.read<ItemsBloc>().add(AddItemEvent(
-                              nameController.text, descriptionController.text));
-                          Navigator.of(context).pop();
+                          if (state is ImageSavedState) {
+                            context.read<ItemsBloc>().add(
+                                  AddItemEvent(
+                                    nameController.text,
+                                    descriptionController.text,
+                                    state.filePath,
+                                  ),
+                                );
+                            Navigator.of(context).pop();
+                          } else {
+                            context.read<ItemsBloc>().add(
+                                  AddItemEvent(
+                                    nameController.text,
+                                    descriptionController.text,
+                                  ),
+                                );
+                            Navigator.of(context).pop();
+                          }
                         },
                         label: "Save",
                         icon: Icons.add,

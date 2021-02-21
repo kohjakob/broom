@@ -1,4 +1,5 @@
 import 'package:broom/presentation/bloc/camera_bloc.dart';
+import 'package:broom/presentation/bloc/items_bloc.dart';
 import 'package:broom/presentation/pages/form_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,24 @@ class CameraPage extends StatelessWidget {
             ),
             Expanded(
               child: Container(
-                child: Stack(
-                  children: [
-                    CameraPreview(),
-                    CameraActions(),
-                  ],
+                child: BlocBuilder<CameraBloc, CameraState>(
+                  builder: (context, state) {
+                    if (state.camera.cameraController != null) {
+                      return Stack(
+                        children: [
+                          CameraPreview(state),
+                          CameraActions(),
+                        ],
+                      );
+                    } else {
+                      return Center(
+                        child: Text(
+                          "Seems like your device doesn't have a camera",
+                        ),
+                      );
+                      ;
+                    }
+                  },
                 ),
               ),
             ),
@@ -57,7 +71,7 @@ class CameraActions extends StatelessWidget {
       left: 0,
       right: 0,
       child: Container(
-        color: Colors.white.withAlpha(200),
+        color: Colors.indigo.shade50,
         padding: EdgeInsets.all(30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -89,24 +103,14 @@ class CameraActions extends StatelessWidget {
 }
 
 class CameraPreview extends StatelessWidget {
-  const CameraPreview();
+  CameraState state;
+
+  CameraPreview(this.state);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CameraBloc, CameraState>(
-      builder: (BuildContext context, CameraState state) {
-        if (state.camera.cameraController != null) {
-          return Container(
-            child: state.camera.cameraController.buildPreview(),
-          );
-        } else {
-          return Center(
-            child: Text(
-              "Seems like your device doesn't have a camera",
-            ),
-          );
-        }
-      },
+    return Container(
+      child: state.camera.cameraController.buildPreview(),
     );
   }
 }
