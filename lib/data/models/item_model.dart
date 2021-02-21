@@ -1,4 +1,3 @@
-import 'package:broom/data/datasources/local_datasource.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:broom/domain/entities/item.dart';

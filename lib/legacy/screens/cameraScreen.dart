@@ -43,8 +43,9 @@ class _AddCameraState extends State<AddCamera> {
       final appDir = await getApplicationDocumentsDirectory();
       final fileName = "${DateTime.now()}.png";
       final path = join(appDir.path, fileName);
-      await _cameraController.takePicture(path);
-      Navigator.of(context).pushNamed(AddForm.routeName, arguments: path);
+      final pathTo = await _cameraController.takePicture();
+      Navigator.of(context)
+          .pushNamed(AddForm.routeName, arguments: pathTo.path);
     } catch (e) {
       print(e);
     }

@@ -1,7 +1,10 @@
 import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/data/models/item_model.dart';
+import 'package:broom/domain/entities/image.dart';
 import 'package:broom/domain/entities/item.dart';
+import 'package:camera/camera.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,15 +22,11 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String createItemsTable =
       'CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT, description TEXT);';
   final String clearItemsTable = 'DELETE FROM items;';
-
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 12;
-  bool dbIsReady = false;
+  final dbVersion = 13;
 
-  LocalDatasourceImpl._create() {
-    initDatabase();
-  }
+  LocalDatasourceImpl._create();
 
   static Future<LocalDatasourceImpl> create() async {
     final datasource = LocalDatasourceImpl._create();
@@ -48,7 +47,6 @@ class LocalDatasourceImpl implements LocalDatasource {
         await db.execute(clearItemsTable);
       },
     );
-    dbIsReady = true;
   }
 
   @override
