@@ -18,18 +18,19 @@ class AddItemEvent extends ItemsEvent {
   List<Object> get props => [name, description];
 }
 
-class GetItemsEvent extends ItemsEvent {
-  GetItemsEvent() : super();
-}
+class GetItemsEvent extends ItemsEvent {}
 
-class SortItemsAscAlphaEvent extends ItemsEvent {
-  SortItemsAscAlphaEvent() : super();
-}
+class SortItemsAscAlphaEvent extends ItemsEvent {}
 
-class SortItemsDescAlphaEvent extends ItemsEvent {
-  SortItemsDescAlphaEvent() : super();
-}
+class SortItemsDescAlphaEvent extends ItemsEvent {}
 
-class SortChronologicalEvent extends ItemsEvent {
-  SortChronologicalEvent() : super();
+class SortChronologicalEvent extends ItemsEvent {}
+
+class SearchByLettersEvent extends ItemsEvent {
+  final String query;
+
+  SearchByLettersEvent(this.query) : super();
+
+  @override
+  List<Object> get props => [query];
 }

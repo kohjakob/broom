@@ -15,7 +15,7 @@ abstract class ItemsLoaded extends ItemsState {
   ItemsLoaded(this.allItems, this.itemsToDisplay);
 
   @override
-  List<Object> get props => [allItems, itemsToDisplay];
+  List<Object> get props => [...allItems, ...itemsToDisplay];
 }
 
 class AddItemFailed extends ItemsState {}
@@ -23,11 +23,11 @@ class AddItemFailed extends ItemsState {}
 class GetItemsFailed extends ItemsState {}
 
 class ItemsSortedChronological extends ItemsLoaded {
-  ItemsSortedChronological(itemsToDisplay)
-      : super(itemsToDisplay, itemsToDisplay);
+  ItemsSortedChronological(allItems, itemsToDisplay)
+      : super(allItems, itemsToDisplay);
 
   @override
-  List<Object> get props => [itemsToDisplay];
+  List<Object> get props => [...itemsToDisplay, ...allItems];
 }
 
 class ItemsSortedAscAlpha extends ItemsLoaded {
@@ -35,7 +35,7 @@ class ItemsSortedAscAlpha extends ItemsLoaded {
       : super(allItems, itemsToDisplay);
 
   @override
-  List<Object> get props => [itemsToDisplay, allItems];
+  List<Object> get props => [...itemsToDisplay, ...allItems];
 }
 
 class ItemsSortedDescAlpha extends ItemsLoaded {
@@ -43,5 +43,5 @@ class ItemsSortedDescAlpha extends ItemsLoaded {
       : super(allItems, itemsToDisplay);
 
   @override
-  List<Object> get props => [itemsToDisplay, allItems];
+  List<Object> get props => [...itemsToDisplay, ...allItems];
 }

@@ -36,6 +36,9 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
     if (event is SortChronologicalEvent) {
       yield await _sortItemsChronologicalEvent(event, state);
     }
+    if (event is SearchByLettersEvent) {
+      yield await _searchByLettersEvent(event, state);
+    }
   }
 
   Future<ItemsState> _addItemEvent(AddItemEvent event, state) async {
@@ -62,7 +65,7 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
         return GetItemsFailed();
       },
       (itemsToDisplay) {
-        return ItemsSortedChronological(itemsToDisplay);
+        return ItemsSortedChronological(itemsToDisplay, itemsToDisplay);
       },
     );
   }
@@ -89,7 +92,34 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
 
   Future<ItemsState> _sortItemsChronologicalEvent(event, state) async {
     if (state != ItemsNotLoaded) {
-      return ItemsSortedChronological(state.allItems);
+      var sortedItems = state.itemsToDisplay.toList();
+      sortedItems.sort((Item l, Item r) => r.id.compareTo(l.id));
+      return ItemsSortedChronological(state.allItems, sortedItems);
+    } else {
+      return ItemsNotLoaded();
+    }
+  }
+
+  Future<ItemsState> _searchByLettersEvent(event, state) async {
+    if (state is ItemsLoaded) {
+      var currentItems = state.allItems;
+      if (event.query != "") {
+        currentItems = state.allItems.toList();
+        currentItems.retainWhere((item) =>
+            item.name.toLowerCase().contains(event.query.toLowerCase()));
+      }
+      if (state is ItemsSortedAscAlpha) {
+        currentItems.sort((Item l, Item r) => l.name.compareTo(r.name));
+        return ItemsSortedAscAlpha(state.allItems, currentItems);
+      }
+      if (state is ItemsSortedDescAlpha) {
+        currentItems.sort((Item l, Item r) => r.name.compareTo(l.name));
+        return ItemsSortedDescAlpha(state.allItems, currentItems);
+      }
+      if (state is ItemsSortedChronological) {
+        currentItems.sort((Item l, Item r) => r.id.compareTo(l.id));
+        return ItemsSortedChronological(state.allItems, currentItems);
+      }
     } else {
       return ItemsNotLoaded();
     }

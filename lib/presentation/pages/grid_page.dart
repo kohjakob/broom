@@ -22,7 +22,11 @@ class GridPage extends StatelessWidget {
                 color: Theme.of(context).accentColor.withAlpha(20),
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Row(
-                  children: [SearchBar(), SizedBox(width: 20), SortDropdown()],
+                  children: [
+                    SearchBar(),
+                    SizedBox(width: 20),
+                    SortDropdown(),
+                  ],
                 ),
               ),
               ItemGrid(state),
@@ -46,6 +50,9 @@ class SearchBar extends StatelessWidget {
     return Expanded(
       child: Container(
         child: TextFormField(
+          onChanged: (value) {
+            context.read<ItemsBloc>().add(SearchByLettersEvent(value));
+          },
           decoration: InputDecoration(
             hintText: "Search items or rooms",
             prefixIcon: Icon(Icons.search),
