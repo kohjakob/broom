@@ -6,6 +6,7 @@ import 'package:broom/presentation/pages/camera_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GridPage extends StatelessWidget {
   static String routeName = "gridPage";
@@ -17,6 +18,51 @@ class GridPage extends StatelessWidget {
         if (state is ItemsLoaded) {
           return Column(
             children: [
+              Container(
+                color: Theme.of(context).accentColor.withAlpha(20),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: "Search items or rooms",
+                            prefixIcon: Icon(Icons.search),
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(color: Colors.black54),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      child: Container(
+                        color: Colors.white,
+                        padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+                        child: DropdownButton(
+                          underline: Container(),
+                          items: [
+                            DropdownMenuItem(
+                              child: FaIcon(FontAwesomeIcons.sortAlphaDown),
+                            ),
+                            DropdownMenuItem(
+                              child: FaIcon(FontAwesomeIcons.sortAlphaUp),
+                            ),
+                            DropdownMenuItem(
+                              child: FaIcon(FontAwesomeIcons.calendarAlt),
+                            ),
+                          ],
+                          onChanged: (value) => null,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               ItemGrid(state),
             ],
           );
@@ -80,8 +126,6 @@ class ItemTile extends StatelessWidget {
         child: Container(
           color: Colors.indigo.shade50,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               item.imagePath != null
                   ? Expanded(
@@ -99,14 +143,17 @@ class ItemTile extends StatelessWidget {
                     )
                   : Container(),
               Container(
-                padding: EdgeInsets.all(20),
-                child: FittedBox(
-                  child: Text(
-                    item.name,
-                    style: Theme.of(context).textTheme.bodyText1,
+                padding: EdgeInsets.all(15),
+                color: Colors.indigo.shade50,
+                child: Center(
+                  child: FittedBox(
+                    child: Text(
+                      item.name,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TopNavBar extends StatelessWidget {
+class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final bool showBack;
 
@@ -8,22 +8,26 @@ class TopNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              child: Icon(Icons.arrow_back),
-              onTap: () => Navigator.of(context).pop(),
-            ),
-            ...actions,
-          ],
-        ),
+    return Container(
+      color: Theme.of(context).accentColor.withAlpha(20),
+      padding: EdgeInsets.fromLTRB(
+          20, MediaQuery.of(context).padding.top + 20, 20, 20),
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            child: Icon(Icons.arrow_back),
+            onTap: () => Navigator.of(context).pop(),
+          ),
+          ...actions,
+        ],
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(100);
 }
 
 class SmallButton extends StatelessWidget {

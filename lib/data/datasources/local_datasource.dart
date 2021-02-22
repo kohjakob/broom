@@ -21,7 +21,7 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String clearItemsTable = 'DELETE FROM items;';
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 17;
+  final dbVersion = 19;
 
   LocalDatasourceImpl._create();
 

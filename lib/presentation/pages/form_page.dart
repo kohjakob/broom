@@ -32,48 +32,46 @@ class FormPage extends StatelessWidget {
     return BlocBuilder<CameraBloc, CameraState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
+          appBar: TopNavBar(
+            showBack: true,
+            actions: [
+              SmallButton(
+                onPressed: () {
+                  if (state is ImageSavedState) {
+                    context.read<ItemsBloc>().add(
+                          AddItemEvent(
+                            nameController.text,
+                            descriptionController.text,
+                            state.filePath,
+                          ),
+                        );
+                    Navigator.of(context).popUntil(ModalRoute.withName("/"));
+                  } else {
+                    context.read<ItemsBloc>().add(
+                          AddItemEvent(
+                            nameController.text,
+                            descriptionController.text,
+                          ),
+                        );
+                    Navigator.of(context).popUntil(ModalRoute.withName("/"));
+                  }
+                },
+                label: "Save",
+                icon: Icons.add,
+                color: Theme.of(context).accentColor,
+              )
+            ],
           ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  TopNavBar(
-                    showBack: true,
-                    actions: [
-                      SmallButton(
-                        onPressed: () {
-                          if (state is ImageSavedState) {
-                            context.read<ItemsBloc>().add(
-                                  AddItemEvent(
-                                    nameController.text,
-                                    descriptionController.text,
-                                    state.filePath,
-                                  ),
-                                );
-                            Navigator.of(context).pop();
-                          } else {
-                            context.read<ItemsBloc>().add(
-                                  AddItemEvent(
-                                    nameController.text,
-                                    descriptionController.text,
-                                  ),
-                                );
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        label: "Save",
-                        icon: Icons.add,
-                        color: Theme.of(context).accentColor,
-                      )
-                    ],
-                  ),
                   Form(
                     child: Container(
                       padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                       child: Column(
                         children: [
+                          SizedBox(height: 30),
                           _buildItemImage(context, state),
                           SizedBox(height: 30),
                           TextFormField(

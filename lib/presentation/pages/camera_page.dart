@@ -2,6 +2,7 @@ import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
 import 'package:broom/presentation/pages/form_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,32 +12,29 @@ class CameraPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
+      appBar: TopNavBar(
+        showBack: true,
+        actions: [
+          SmallButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(FormPage.routeName);
+            },
+            label: "Skip",
+            color: Theme.of(context).accentColor,
+          )
+        ],
       ),
       body: SafeArea(
         child: Column(
           children: [
-            TopNavBar(
-              showBack: true,
-              actions: [
-                SmallButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(FormPage.routeName);
-                  },
-                  label: "Skip",
-                  color: Theme.of(context).accentColor.withAlpha(100),
-                )
-              ],
-            ),
             Expanded(
               child: Container(
                 child: BlocBuilder<CameraBloc, CameraState>(
                   builder: (context, state) {
                     if (state.camera.cameraController != null) {
-                      return Stack(
+                      return Column(
                         children: [
-                          CameraPreview(state),
+                          CameraLivePreview(state),
                           CameraActions(),
                         ],
                       );
@@ -66,19 +64,15 @@ class CameraActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
+    return Expanded(
       child: Container(
-        color: Colors.indigo.shade50,
         padding: EdgeInsets.all(30),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
               radius: 34,
-              backgroundColor: Colors.white,
+              backgroundColor: Theme.of(context).accentColor.withAlpha(80),
               child: Material(
                 color: Theme.of(context).accentColor,
                 shape: CircleBorder(),
@@ -102,15 +96,23 @@ class CameraActions extends StatelessWidget {
   }
 }
 
-class CameraPreview extends StatelessWidget {
-  CameraState state;
+class CameraLivePreview extends StatelessWidget {
+  final CameraState state;
 
-  CameraPreview(this.state);
+  CameraLivePreview(this.state);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: state.camera.cameraController.buildPreview(),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: ClipRect(
+        child: Transform.scale(
+          scale: state.camera.cameraController.value.aspectRatio,
+          child: Center(
+            child: CameraPreview(state.camera.cameraController),
+          ),
+        ),
+      ),
     );
   }
 }
