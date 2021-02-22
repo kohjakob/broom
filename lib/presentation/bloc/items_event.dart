@@ -20,7 +20,16 @@ class AddItemEvent extends ItemsEvent {
 
 class GetItemsEvent extends ItemsEvent {
   GetItemsEvent() : super();
+}
 
-  @override
-  List<Object> get props => [];
+class SortItemsAscAlphaEvent extends ItemsEvent {
+  SortItemsAscAlphaEvent() : super();
+}
+
+class SortItemsDescAlphaEvent extends ItemsEvent {
+  SortItemsDescAlphaEvent() : super();
+}
+
+class SortChronologicalEvent extends ItemsEvent {
+  SortChronologicalEvent() : super();
 }

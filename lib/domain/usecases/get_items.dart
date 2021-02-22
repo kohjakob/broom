@@ -12,7 +12,7 @@ class GetItems {
     final either = await repo.getItems();
     return either.fold(
       (failure) => Left(failure),
-      (items) => Right(items),
+      (items) => Right(items.reversed.toList()),
     );
   }
 }

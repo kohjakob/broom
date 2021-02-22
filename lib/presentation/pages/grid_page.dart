@@ -22,45 +22,7 @@ class GridPage extends StatelessWidget {
                 color: Theme.of(context).accentColor.withAlpha(20),
                 padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Search items or rooms",
-                            prefixIcon: Icon(Icons.search),
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(color: Colors.black54),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(100)),
-                      child: Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-                        child: DropdownButton(
-                          underline: Container(),
-                          items: [
-                            DropdownMenuItem(
-                              child: FaIcon(FontAwesomeIcons.sortAlphaDown),
-                            ),
-                            DropdownMenuItem(
-                              child: FaIcon(FontAwesomeIcons.sortAlphaUp),
-                            ),
-                            DropdownMenuItem(
-                              child: FaIcon(FontAwesomeIcons.calendarAlt),
-                            ),
-                          ],
-                          onChanged: (value) => null,
-                        ),
-                      ),
-                    )
-                  ],
+                  children: [SearchBar(), SizedBox(width: 20), SortDropdown()],
                 ),
               ),
               ItemGrid(state),
@@ -70,6 +32,82 @@ class GridPage extends StatelessWidget {
           return NoItemsFallback();
         }
       },
+    );
+  }
+}
+
+class SearchBar extends StatelessWidget {
+  const SearchBar({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        child: TextFormField(
+          decoration: InputDecoration(
+            hintText: "Search items or rooms",
+            prefixIcon: Icon(Icons.search),
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: Colors.black54),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SortDropdown extends StatelessWidget {
+  const SortDropdown({
+    Key key,
+  }) : super(key: key);
+
+  _getDropdownValueFromState(state) {
+    if (state is ItemsSortedAscAlpha) {
+      return SortItemsAscAlphaEvent();
+    } else if (state is ItemsSortedDescAlpha) {
+      return SortItemsDescAlphaEvent();
+    } else {
+      return SortChronologicalEvent();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(100)),
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
+        child: BlocBuilder<ItemsBloc, ItemsState>(
+          builder: (blocContext, state) {
+            return DropdownButton(
+              underline: Container(),
+              value: _getDropdownValueFromState(state),
+              items: [
+                DropdownMenuItem(
+                  child: FaIcon(FontAwesomeIcons.calendar),
+                  value: SortChronologicalEvent(),
+                ),
+                DropdownMenuItem(
+                  child: FaIcon(FontAwesomeIcons.sortAlphaDown),
+                  value: SortItemsAscAlphaEvent(),
+                ),
+                DropdownMenuItem(
+                  child: FaIcon(FontAwesomeIcons.sortAlphaUp),
+                  value: SortItemsDescAlphaEvent(),
+                ),
+              ],
+              onChanged: (event) {
+                context.read<ItemsBloc>().add(event);
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -98,7 +136,7 @@ class ItemGrid extends StatelessWidget {
             childAspectRatio: 1,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),
-        itemCount: state.items.length + 1,
+        itemCount: state.itemsToDisplay.length + 1,
         itemBuilder: (BuildContext ctx, index) {
           if (index == 0) {
             return AddNewItemTile();
@@ -118,7 +156,7 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Item item = state.items[index - 1];
+    Item item = state.itemsToDisplay[index - 1];
 
     return GestureDetector(
       child: ClipRRect(
@@ -128,7 +166,8 @@ class ItemTile extends StatelessWidget {
           child: Column(
             children: [
               item.imagePath != null
-                  ? Expanded(
+                  ? Flexible(
+                      flex: 2,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor.withAlpha(30),
@@ -142,14 +181,17 @@ class ItemTile extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              Container(
-                padding: EdgeInsets.all(15),
-                color: Colors.indigo.shade50,
-                child: Center(
-                  child: FittedBox(
-                    child: Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.bodyText2,
+              Flexible(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  color: Colors.indigo.shade50,
+                  child: Center(
+                    child: FittedBox(
+                      child: Text(
+                        item.name,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
                   ),
                 ),

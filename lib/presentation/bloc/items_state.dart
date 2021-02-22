@@ -9,16 +9,39 @@ abstract class ItemsState extends Equatable {
 
 class ItemsNotLoaded extends ItemsState {}
 
-class ItemsLoaded extends ItemsState {
-  final List<Item> items;
-  final Item justAdded;
-
-  ItemsLoaded(this.items, [this.justAdded]);
+abstract class ItemsLoaded extends ItemsState {
+  final List<Item> allItems;
+  final List<Item> itemsToDisplay;
+  ItemsLoaded(this.allItems, this.itemsToDisplay);
 
   @override
-  List<Object> get props => [items, justAdded];
+  List<Object> get props => [allItems, itemsToDisplay];
 }
 
 class AddItemFailed extends ItemsState {}
 
 class GetItemsFailed extends ItemsState {}
+
+class ItemsSortedChronological extends ItemsLoaded {
+  ItemsSortedChronological(itemsToDisplay)
+      : super(itemsToDisplay, itemsToDisplay);
+
+  @override
+  List<Object> get props => [itemsToDisplay];
+}
+
+class ItemsSortedAscAlpha extends ItemsLoaded {
+  ItemsSortedAscAlpha(allItems, itemsToDisplay)
+      : super(allItems, itemsToDisplay);
+
+  @override
+  List<Object> get props => [itemsToDisplay, allItems];
+}
+
+class ItemsSortedDescAlpha extends ItemsLoaded {
+  ItemsSortedDescAlpha(allItems, itemsToDisplay)
+      : super(allItems, itemsToDisplay);
+
+  @override
+  List<Object> get props => [itemsToDisplay, allItems];
+}
