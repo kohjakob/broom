@@ -37,7 +37,7 @@ class LocalDatasourceImpl implements LocalDatasource {
 
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 21;
+  final dbVersion = 23;
 
   LocalDatasourceImpl._create();
 
