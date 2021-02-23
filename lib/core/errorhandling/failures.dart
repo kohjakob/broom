@@ -4,6 +4,8 @@ enum Code {
   InsufficientItemInfo,
   ItemSaveFail,
   NoItemsYet,
+  RoomSaveFail,
+  NoRoomsYet,
 }
 
 class Failure extends Equatable {
