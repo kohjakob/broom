@@ -52,6 +52,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mockito: ^4.1.0
+  flutter_launcher_icons: ^0.8.1
+  #flutter pub get                                                                                                                                                                                    ✔  took 8s
+  #flutter pub run flutter_launcher_icons:main
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

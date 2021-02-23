@@ -8,24 +8,33 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).accentColor.withAlpha(20),
-      padding: EdgeInsets.fromLTRB(
-        20,
-        MediaQuery.of(context).padding.top + 10,
-        20,
-        10,
-      ),
-      child: Row(
-        children: [
-          GestureDetector(
-            child: Icon(Icons.arrow_back),
-            onTap: () => Navigator.of(context).pop(),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          height: MediaQuery.of(context).padding.top,
+          color: Theme.of(context).primaryColor,
+        ),
+        Container(
+          color: Theme.of(context).accentColor.withAlpha(20),
+          padding: EdgeInsets.fromLTRB(
+            20,
+            10,
+            20,
+            10,
           ),
-          Spacer(),
-          ...actions,
-        ],
-      ),
+          child: Row(
+            children: [
+              GestureDetector(
+                child: Icon(Icons.arrow_back),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+              Spacer(),
+              ...actions,
+            ],
+          ),
+        ),
+      ],
     );
   }
 
