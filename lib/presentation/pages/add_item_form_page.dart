@@ -8,23 +8,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemFormPage extends StatelessWidget {
-  static String routeName = "formPage";
+  static String routeName = "addItemFormPage";
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 
   _buildItemImage(context, state) {
-    final imageProvide = (state is ImageSavedState)
-        ? FileImage(File(state.filePath))
-        : NetworkImage(
-            "https://oldnavy.gap.com/webcontent/0018/569/346/cn18569346.jpg");
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(AddItemCameraPage.routeName),
-      child: CircleAvatar(
-        backgroundImage: imageProvide,
-        radius: 70,
-        backgroundColor: Theme.of(context).primaryColor.withAlpha(100),
-      ),
-    );
+    if (state is ImageSavedState) {
+      return GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: CircleAvatar(
+          backgroundImage: FileImage(File(state.filePath)),
+          radius: 70,
+          backgroundColor: Theme.of(context).primaryColor.withAlpha(50),
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: CircleAvatar(
+          radius: 70,
+          backgroundColor: Theme.of(context).primaryColor.withAlpha(50),
+          child: Text(
+            "📦",
+            style: TextStyle(fontSize: 55),
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -37,26 +47,16 @@ class AddItemFormPage extends StatelessWidget {
             actions: [
               SmallButton(
                 onPressed: () {
-                  if (state is ImageSavedState) {
-                    context.read<ItemsBloc>().add(
-                          AddItemEvent(
-                            nameController.text,
-                            descriptionController.text,
-                            state.filePath,
-                          ),
-                        );
-                    Navigator.of(context).popUntil(ModalRoute.withName("/"));
-                  } else {
-                    context.read<ItemsBloc>().add(
-                          AddItemEvent(
-                            nameController.text,
-                            descriptionController.text,
-                          ),
-                        );
-                    Navigator.of(context).popUntil(ModalRoute.withName("/"));
-                  }
+                  context.read<ItemsBloc>().add(
+                        AddItemEvent(
+                          nameController.text,
+                          descriptionController.text,
+                          (state is ImageSavedState) ? state.filePath : null,
+                        ),
+                      );
+                  Navigator.of(context).popUntil(ModalRoute.withName("/"));
                 },
-                label: "Save",
+                label: "Save Item",
                 icon: Icons.add,
                 color: Theme.of(context).accentColor,
               )

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemCameraPage extends StatelessWidget {
-  static String routeName = "cameraPage";
+  static String routeName = "addItemCameraPage";
 
   @override
   Widget build(BuildContext context) {

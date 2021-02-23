@@ -2,7 +2,7 @@ import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class AddRoomFormPage extends StatelessWidget {
-  static String routeName = "formPage";
+  static String routeName = "addRoomFormPage";
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
 

@@ -103,6 +103,9 @@ class RoomButton extends StatelessWidget {
       child: ButtonTheme(
         minWidth: 10,
         child: OutlineButton(
+          highlightedBorderColor: color,
+          highlightColor: color.withAlpha(50),
+          splashColor: color.withAlpha(50),
           shape: StadiumBorder(),
           onPressed: onPressed,
           borderSide: BorderSide(color: color, width: 1),
