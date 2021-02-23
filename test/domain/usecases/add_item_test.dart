@@ -45,7 +45,7 @@ void main() {
     () async {
       // arrange
       final item = Item(
-          id: "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
+          id: 1,
           name: "Belt",
           description: "Old belt i stole from my father last christmas");
       when(repo.addItem(any)).thenAnswer((_) async => Right(item));

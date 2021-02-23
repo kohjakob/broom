@@ -26,13 +26,15 @@ void main() {
     () async {
       // arrange
       final itemToSave = Item(
-          id: "6c84fb90-12c4-11e1-840d-7b25c5ee775a",
-          name: "Belt",
-          description: "Old belt i stole from my father last christmas");
-      final savedItem = ItemModel(
           id: 1,
           name: "Belt",
           description: "Old belt i stole from my father last christmas");
+      final savedItem = ItemModel(
+        id: 1,
+        name: "Belt",
+        description: "Old belt i stole from my father last christmas",
+        imagePath: null,
+      );
       when(mockLocalDatasource.saveItemToDatabase(any))
           .thenAnswer((_) async => savedItem);
       // act

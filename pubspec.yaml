@@ -35,6 +35,7 @@ dependencies:
   sqflite: ^1.3.2+3
   camera: ^0.7.0+2
   font_awesome_flutter: ^8.11.0
+  flex_color_picker: ^1.1.3
 
   # Legacy dependencies
   intl: ^0.15.8

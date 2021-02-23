@@ -25,6 +25,7 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
       yield await _addItemEvent(event, state);
     }
     if (event is GetItemsEvent) {
+      yield ItemsLoading();
       yield await _getItemsEvent(event, state);
     }
     if (event is SortItemsAscAlphaEvent) {

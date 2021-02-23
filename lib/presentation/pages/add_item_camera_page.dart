@@ -1,12 +1,11 @@
 import 'package:broom/presentation/bloc/camera_bloc.dart';
-import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/pages/form_page.dart';
+import 'package:broom/presentation/pages/add_item_form_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CameraPage extends StatelessWidget {
+class AddItemCameraPage extends StatelessWidget {
   static String routeName = "cameraPage";
 
   @override
@@ -17,7 +16,7 @@ class CameraPage extends StatelessWidget {
         actions: [
           SmallButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(FormPage.routeName);
+              Navigator.of(context).pushNamed(AddItemFormPage.routeName);
             },
             label: "Skip",
             color: Theme.of(context).accentColor,
@@ -44,7 +43,6 @@ class CameraPage extends StatelessWidget {
                           "Seems like your device doesn't have a camera",
                         ),
                       );
-                      ;
                     }
                   },
                 ),
@@ -83,7 +81,8 @@ class CameraActions extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       context.read<CameraBloc>().add(SnapImageEvent());
-                      Navigator.of(context).pushNamed(FormPage.routeName);
+                      Navigator.of(context)
+                          .pushNamed(AddItemFormPage.routeName);
                     },
                   ),
                 ),

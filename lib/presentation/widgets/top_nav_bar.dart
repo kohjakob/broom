@@ -11,15 +11,18 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       color: Theme.of(context).accentColor.withAlpha(20),
       padding: EdgeInsets.fromLTRB(
-          20, MediaQuery.of(context).padding.top + 20, 20, 20),
-      height: 100,
+        20,
+        MediaQuery.of(context).padding.top + 10,
+        20,
+        10,
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
             child: Icon(Icons.arrow_back),
             onTap: () => Navigator.of(context).pop(),
           ),
+          Spacer(),
           ...actions,
         ],
       ),
@@ -27,7 +30,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(400);
 }
 
 class SmallButton extends StatelessWidget {

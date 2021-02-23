@@ -9,6 +9,8 @@ abstract class ItemsState extends Equatable {
 
 class ItemsNotLoaded extends ItemsState {}
 
+class ItemsLoading extends ItemsState {}
+
 abstract class ItemsLoaded extends ItemsState {
   final List<Item> allItems;
   final List<Item> itemsToDisplay;

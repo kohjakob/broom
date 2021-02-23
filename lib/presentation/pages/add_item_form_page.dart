@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/pages/camera_page.dart';
+import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FormPage extends StatelessWidget {
+class AddItemFormPage extends StatelessWidget {
   static String routeName = "formPage";
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -18,7 +18,7 @@ class FormPage extends StatelessWidget {
         : NetworkImage(
             "https://oldnavy.gap.com/webcontent/0018/569/346/cn18569346.jpg");
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(CameraPage.routeName),
+      onTap: () => Navigator.of(context).pushNamed(AddItemCameraPage.routeName),
       child: CircleAvatar(
         backgroundImage: imageProvide,
         radius: 70,
@@ -77,7 +77,7 @@ class FormPage extends StatelessWidget {
                           TextFormField(
                             controller: nameController,
                             decoration: InputDecoration(
-                              hintText: "Title",
+                              hintText: "Item Title",
                               suffixIcon: Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
                                 child: Icon(Icons.title),

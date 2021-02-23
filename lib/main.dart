@@ -1,8 +1,9 @@
 import 'package:broom/injector.dart';
 import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/pages/camera_page.dart';
-import 'package:broom/presentation/pages/form_page.dart';
+import 'package:broom/presentation/pages/add_item_camera_page.dart';
+import 'package:broom/presentation/pages/add_item_form_page.dart';
+import 'package:broom/presentation/pages/add_room_form_page.dart';
 import 'package:broom/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,8 +34,9 @@ class Broom extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
-          FormPage.routeName: (ctx) => FormPage(),
-          CameraPage.routeName: (ctx) => CameraPage(),
+          AddItemFormPage.routeName: (ctx) => AddItemFormPage(),
+          AddItemCameraPage.routeName: (ctx) => AddItemCameraPage(),
+          AddRoomFormPage.routeName: (ctx) => AddRoomFormPage(),
         },
         home: HomePage(),
       ),

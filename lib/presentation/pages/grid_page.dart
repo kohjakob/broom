@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/pages/camera_page.dart';
+import 'package:broom/presentation/pages/add_item_camera_page.dart';
+import 'package:broom/presentation/pages/add_room_form_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,9 +30,12 @@ class GridPage extends StatelessWidget {
                   ],
                 ),
               ),
+              RoomBar(),
               ItemGrid(state),
             ],
           );
+        } else if (state is ItemsLoading) {
+          return Center(child: CircularProgressIndicator());
         } else {
           return NoItemsFallback();
         }
@@ -40,10 +44,122 @@ class GridPage extends StatelessWidget {
   }
 }
 
+class RoomBar extends StatelessWidget {
+  const RoomBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+      height: 65,
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        children: [
+          SizedBox(width: 20),
+          AddNewRoomButton(),
+          RoomButton(
+            color: Theme.of(context).primaryColor,
+            label: "All",
+            count: 112,
+            onPressed: () => null,
+          ),
+          RoomButton(
+            color: Colors.red.shade300,
+            label: "🍳",
+            count: 1,
+            onPressed: () => null,
+          ),
+          RoomButton(
+            color: Colors.orange.shade300,
+            label: "👨‍💻",
+            count: 1,
+            onPressed: () => null,
+          ),
+          SizedBox(width: 20),
+        ],
+      ),
+    );
+  }
+}
+
+class RoomButton extends StatelessWidget {
+  final Function onPressed;
+  final String label;
+  final Color color;
+  final int count;
+
+  RoomButton({
+    this.onPressed,
+    this.label,
+    this.color = Colors.indigoAccent,
+    this.count,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 1, 10, 1),
+      child: ButtonTheme(
+        minWidth: 10,
+        child: OutlineButton(
+          shape: StadiumBorder(),
+          onPressed: onPressed,
+          borderSide: BorderSide(color: color, width: 1),
+          padding: EdgeInsets.fromLTRB(14, 10, 12, 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: TextStyle(color: color),
+              ),
+              SizedBox(width: 5),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  color: color,
+                ),
+                child: Text(
+                  count.toString(),
+                  style: TextStyle(color: Colors.white, fontSize: 11),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddNewRoomButton extends StatelessWidget {
+  AddNewRoomButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 1, 10, 1),
+      child: ButtonTheme(
+        minWidth: 10,
+        child: FlatButton(
+          shape: StadiumBorder(),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(AddRoomFormPage.routeName),
+          color: Theme.of(context).accentColor,
+          child: Text(
+            "Add Room",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class SearchBar extends StatelessWidget {
-  const SearchBar({
-    Key key,
-  }) : super(key: key);
+  const SearchBar();
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +184,7 @@ class SearchBar extends StatelessWidget {
 }
 
 class SortDropdown extends StatelessWidget {
-  const SortDropdown({
-    Key key,
-  }) : super(key: key);
+  const SortDropdown();
 
   _getDropdownValueFromState(state) {
     if (state is ItemsSortedAscAlpha) {
@@ -217,7 +331,7 @@ class AddNewItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(CameraPage.routeName),
+      onTap: () => Navigator.of(context).pushNamed(AddItemCameraPage.routeName),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
@@ -233,7 +347,7 @@ class AddNewItemTile extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "Add new item",
+                "Add Item",
                 style: TextStyle(color: Colors.white),
               ),
             ],
