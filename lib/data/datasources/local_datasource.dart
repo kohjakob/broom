@@ -22,8 +22,9 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String itemName = 'name';
   final String itemDescription = 'description';
   final String itemImagePath = 'imagePath';
+  final String itemRoomId = "roomId";
   final String createItemsTable =
-      'CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT, description TEXT, imagePath TEXT);';
+      'CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT, description TEXT, imagePath TEXT, roomId INTEGER);';
   final String clearItemsTable = 'DELETE FROM items;';
 
   final String roomTable = 'rooms';
@@ -37,7 +38,7 @@ class LocalDatasourceImpl implements LocalDatasource {
 
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 23;
+  final dbVersion = 24;
 
   LocalDatasourceImpl._create();
 
@@ -70,6 +71,7 @@ class LocalDatasourceImpl implements LocalDatasource {
       itemName: item.name,
       itemDescription: item.description,
       itemImagePath: item.imagePath,
+      itemRoomId: item.roomId,
     };
     final insertedId = await db.insert(itemTable, itemModelMap);
     return ItemModel(
@@ -77,6 +79,7 @@ class LocalDatasourceImpl implements LocalDatasource {
       description: item.description,
       id: insertedId,
       imagePath: item.imagePath,
+      roomId: item.roomId,
     );
   }
 
@@ -84,7 +87,7 @@ class LocalDatasourceImpl implements LocalDatasource {
   Future<List<ItemModel>> getItemsFromDatabase() async {
     List<Map> itemModelMaps = await db.query(
       itemTable,
-      columns: [itemId, itemName, itemDescription, itemImagePath],
+      columns: [itemId, itemName, itemDescription, itemImagePath, itemRoomId],
     );
 
     if (itemModelMaps.length > 0) {
@@ -95,6 +98,7 @@ class LocalDatasourceImpl implements LocalDatasource {
           name: itemModelMap[itemName],
           description: itemModelMap[itemDescription],
           imagePath: itemModelMap[itemImagePath],
+          roomId: itemModelMap[itemRoomId],
         ));
       });
       return models;

@@ -11,8 +11,10 @@ class AddItemEvent extends ItemsEvent {
   final String name;
   final String description;
   final String imagePath;
+  final int roomId;
 
-  AddItemEvent(this.name, this.description, [this.imagePath]) : super();
+  AddItemEvent(this.name, this.description, [this.imagePath, this.roomId])
+      : super();
 
   @override
   List<Object> get props => [name, description];

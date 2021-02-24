@@ -48,6 +48,7 @@ class ItemsBloc extends Bloc<ItemsEvent, ItemsState> {
       name: event.name,
       description: event.description,
       imagePath: event.imagePath,
+      roomId: event.roomId,
     );
 
     return await either.fold((failure) async {

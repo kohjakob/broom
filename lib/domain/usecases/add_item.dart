@@ -14,10 +14,15 @@ class AddItem {
     @required String name,
     @required String description,
     @required String imagePath,
+    @required int roomId,
   }) async {
     try {
-      final item =
-          Item(name: name, description: description, imagePath: imagePath);
+      final item = Item(
+        name: name,
+        description: description,
+        imagePath: imagePath,
+        roomId: roomId,
+      );
       final either = await repo.addItem(item);
       return either.fold(
         (failure) => Left(failure),

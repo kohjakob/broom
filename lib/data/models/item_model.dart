@@ -7,17 +7,20 @@ class ItemModel extends Item {
   final String name;
   final String description;
   final String imagePath;
+  final int roomId;
 
   ItemModel({
     @required this.id,
     @required this.imagePath,
     @required this.name,
     @required this.description,
+    @required this.roomId,
   }) : super(
           id: id,
           name: name,
           description: description,
           imagePath: imagePath,
+          roomId: roomId,
         );
 
   @override
