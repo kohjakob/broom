@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
+import 'package:broom/presentation/bloc/rooms_bloc.dart';
 import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/pages/add_room_form_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -52,32 +53,28 @@ class RoomBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       height: 65,
-      child: ListView(
-        physics: BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        children: [
-          SizedBox(width: 20),
-          AddNewRoomButton(),
-          RoomButton(
-            color: Theme.of(context).primaryColor,
-            label: "All",
-            count: 112,
-            onPressed: () => null,
-          ),
-          RoomButton(
-            color: Colors.red.shade300,
-            label: "🍳",
-            count: 1,
-            onPressed: () => null,
-          ),
-          RoomButton(
-            color: Colors.orange.shade300,
-            label: "👨‍💻",
-            count: 1,
-            onPressed: () => null,
-          ),
-          SizedBox(width: 20),
-        ],
+      child: BlocBuilder<RoomsBloc, RoomsState>(
+        builder: (roomContext, state) {
+          if (state is RoomsLoaded) {
+            return ListView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              children: [
+                SizedBox(width: 20),
+                AddNewRoomButton(),
+                ...state.rooms.map(
+                  (room) => RoomButton(
+                    color: Theme.of(context).primaryColor,
+                    label: room.name,
+                    count: 112,
+                    onPressed: () => null,
+                  ),
+                ),
+                SizedBox(width: 20),
+              ],
+            );
+          }
+        },
       ),
     );
   }

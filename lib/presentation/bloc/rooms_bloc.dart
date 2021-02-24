@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:broom/domain/entities/room.dart';
 import 'package:broom/domain/usecases/add_room.dart';
 import 'package:broom/domain/usecases/get_rooms.dart';
 import 'package:equatable/equatable.dart';
@@ -31,6 +32,19 @@ class RoomsBloc extends Bloc<RoomsEvent, RoomsState> {
   Future<RoomsState> _getRoomsEvent(event, state) async {
     var either;
     either = await getRooms.execute();
+
+    return await either.fold(
+      (failure) {
+        return RoomsNotLoaded();
+      },
+      (rooms) {
+        if (state is RoomSelected) {
+          return RoomSelected(rooms, state.selectedIndex);
+        } else {
+          return NoRoomSelected(rooms);
+        }
+      },
+    );
   }
 
   Future<RoomsState> _addRoomEvent(event, state) async {
@@ -40,5 +54,11 @@ class RoomsBloc extends Bloc<RoomsEvent, RoomsState> {
       description: event.description,
       color: event.color,
     );
+
+    return await either.fold((failure) async {
+      return RoomsNotLoaded();
+    }, (item) async {
+      add(GetRoomsEvent());
+    });
   }
 }

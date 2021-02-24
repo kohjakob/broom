@@ -1,5 +1,8 @@
+import 'package:broom/domain/usecases/add_room.dart';
+import 'package:broom/presentation/bloc/rooms_bloc.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddRoomFormPage extends StatelessWidget {
   static String routeName = "addRoomFormPage";
@@ -13,7 +16,15 @@ class AddRoomFormPage extends StatelessWidget {
         showBack: true,
         actions: [
           SmallButton(
-            onPressed: () => null,
+            onPressed: () {
+              context.read<RoomsBloc>().add(
+                    AddRoomEvent(
+                      nameController.text,
+                      descriptionController.text,
+                      Colors.lightBlue.toString(),
+                    ),
+                  );
+            },
             label: "Save Room",
             icon: Icons.add,
             color: Theme.of(context).accentColor,

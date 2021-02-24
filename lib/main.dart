@@ -1,6 +1,7 @@
 import 'package:broom/injector.dart';
 import 'package:broom/presentation/bloc/camera_bloc.dart';
 import 'package:broom/presentation/bloc/items_bloc.dart';
+import 'package:broom/presentation/bloc/rooms_bloc.dart';
 import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/pages/add_item_form_page.dart';
 import 'package:broom/presentation/pages/add_room_form_page.dart';
@@ -24,6 +25,9 @@ class Broom extends StatelessWidget {
         ),
         BlocProvider<CameraBloc>(
           create: (_) => injector<CameraBloc>(),
+        ),
+        BlocProvider<RoomsBloc>(
+          create: (_) => injector<RoomsBloc>(),
         ),
       ],
       child: MaterialApp(

@@ -49,7 +49,7 @@ class DeclutterRepoImpl implements DeclutterRepo {
     try {
       final rooms = await localDatasource.getRoomsFromDatabase();
       return Right(rooms);
-    } on NoItemsYetException {
+    } on NoRoomsYetException {
       return Left(Failure(Code.NoRoomsYet));
     }
   }
