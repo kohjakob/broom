@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:broom/core/constants/colors.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/entities/room.dart';
 import 'package:broom/domain/usecases/add_item.dart';
@@ -27,11 +28,12 @@ class GridCubit extends Cubit<GridState> {
     fetchRooms();
   }
 
-  addRoom(String name, String description) async {
+  addRoom(String name, String description, CustomColor color) async {
     emit(GridLoading());
     final either = await addRoomUsecase.execute(
       name: name,
       description: description,
+      color: color,
     );
     either.fold(
       (failure) {
@@ -43,14 +45,13 @@ class GridCubit extends Cubit<GridState> {
     );
   }
 
-  addItem(String name, String description, String imagePath,
-      Room roomToAddTo) async {
+  addItem(String name, String description, String imagePath, Room room) async {
     emit(GridLoading());
     final either = await addItemUsecase.execute(
       name: name,
       description: description,
       imagePath: imagePath,
-      roomId: roomToAddTo.id,
+      room: room,
     );
     either.fold(
       (failure) {

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:broom/core/constants/colors.dart';
 
 class GridPage extends StatelessWidget {
   static String routeName = "gridPage";
@@ -34,10 +35,8 @@ class GridPage extends StatelessWidget {
               ItemGrid(state),
             ],
           );
-        } else if (state is GridLoading) {
-          return Center(child: CircularProgressIndicator());
         } else {
-          return NoItemsFallback();
+          return LoadingFallback();
         }
       },
     );
@@ -61,15 +60,17 @@ class RoomBar extends StatelessWidget {
               children: [
                 SizedBox(width: 20),
                 AddNewRoomButton(),
+                /*
                 RoomButton(
                   color: Theme.of(context).primaryColor,
                   label: "All",
                   count: state.displayItems.length,
                   onPressed: () => context.read<GridCubit>().filterItems(null),
                 ),
+                */
                 ...state.rooms.map(
                   (room) => RoomButton(
-                    color: Theme.of(context).primaryColor,
+                    color: room.color.material,
                     label: room.name,
                     count: room.items.length,
                     onPressed: () =>
@@ -79,8 +80,23 @@ class RoomBar extends StatelessWidget {
                 SizedBox(width: 20),
               ],
             );
+          } else {
+            return Container();
           }
         },
+      ),
+    );
+  }
+}
+
+class LoadingFallback extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 50,
+        height: 50,
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -225,6 +241,8 @@ class SortDropdown extends StatelessWidget {
                   context.read<GridCubit>().sortItems(sorting);
                 },
               );
+            } else {
+              return Container();
             }
           },
         ),

@@ -1,3 +1,4 @@
+import 'package:broom/core/constants/colors.dart';
 import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/data/models/item_model.dart';
 import 'package:broom/data/models/room_model.dart';
@@ -28,10 +29,11 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String roomId = 'id';
   final String roomName = 'name';
   final String roomDescription = 'description';
+  final String roomColor = 'color';
 
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 27;
+  final dbVersion = 29;
 
   LocalDatasourceImpl._create();
 
@@ -51,7 +53,15 @@ class LocalDatasourceImpl implements LocalDatasource {
         await db.execute(
             'CREATE TABLE $itemTable ($itemId INTEGER PRIMARY KEY, $itemName TEXT, $itemDescription TEXT, $itemImagePath TEXT, $itemRoomId INTEGER, $itemCreatedAt DATE);');
         await db.execute(
-            'CREATE TABLE $roomTable ($roomId INTEGER PRIMARY KEY, $roomName TEXT, $roomDescription TEXT);');
+            'CREATE TABLE $roomTable ($roomId INTEGER PRIMARY KEY, $roomName TEXT, $roomDescription TEXT, $roomColor TEXT);');
+
+        final uncategorizedRoom = {
+          roomName: "Uncategorized",
+          roomDescription: "Items not associated to a room",
+          roomId: -1,
+          roomColor: CustomColor.ORANGE.index,
+        };
+        await db.insert(roomTable, uncategorizedRoom);
       },
       onUpgrade: (Database db, int version, int oldVersion) async {
         await db.execute('DELETE FROM $itemTable;');
@@ -87,6 +97,7 @@ class LocalDatasourceImpl implements LocalDatasource {
     final roomModelMap = {
       roomName: room.name,
       roomDescription: room.description,
+      roomColor: room.color.index,
     };
 
     final insertedId = await db.insert(roomTable, roomModelMap);
@@ -96,6 +107,7 @@ class LocalDatasourceImpl implements LocalDatasource {
       description: room.description,
       id: insertedId,
       items: null,
+      color: CustomColor.values[room.color.index],
     );
   }
 
@@ -129,12 +141,15 @@ class LocalDatasourceImpl implements LocalDatasource {
             .toList();
 
         // Build RoomModel for every found row
+        final colorFromIndex =
+            CustomColor.values[int.parse(roomMap[roomColor])];
         rooms.add(
           RoomModel(
             id: roomMap[roomId],
             name: roomMap[roomName],
             description: roomMap[roomDescription],
             items: items,
+            color: colorFromIndex,
           ),
         );
       }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/camera_cubit.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
+import 'package:broom/presentation/pages/grid_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,6 +132,8 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
                                   });
                                 },
                               );
+                            } else {
+                              return Container();
                             }
                           })
                         ],

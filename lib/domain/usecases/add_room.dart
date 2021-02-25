@@ -1,3 +1,4 @@
+import 'package:broom/core/constants/colors.dart';
 import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:broom/domain/entities/room.dart';
 import 'package:dartz/dartz.dart';
@@ -14,11 +15,13 @@ class AddRoom {
   Future<Either<Failure, Room>> execute({
     @required String name,
     @required String description,
+    @required CustomColor color,
   }) async {
     final room = Room(
       name: name,
       description: description,
       items: null,
+      color: color,
     );
 
     final either = await repo.addRoom(room);
