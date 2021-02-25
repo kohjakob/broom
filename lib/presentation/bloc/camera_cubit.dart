@@ -1,4 +1,17 @@
-part of 'camera_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:broom/device/camera.dart';
+import 'package:equatable/equatable.dart';
+
+class CameraCubit extends Cubit<CameraState> {
+  final Camera camera;
+
+  CameraCubit(this.camera) : super(CameraInitial(camera));
+
+  takePicture() async {
+    final path = await camera.snapImage();
+    emit(ImageSavedState(camera, path));
+  }
+}
 
 abstract class CameraState extends Equatable {
   final Camera camera;

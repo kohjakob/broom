@@ -1,16 +1,23 @@
 import 'dart:io';
 
-import 'package:broom/presentation/bloc/camera_bloc.dart';
-import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/pages/add_item_camera_page.dart';
+import 'package:broom/domain/entities/room.dart';
+import 'package:broom/presentation/bloc/camera_cubit.dart';
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddItemFormPage extends StatelessWidget {
+class AddItemFormPage extends StatefulWidget {
   static String routeName = "addItemFormPage";
+
+  @override
+  _AddItemFormPageState createState() => _AddItemFormPageState();
+}
+
+class _AddItemFormPageState extends State<AddItemFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  var selectedRoom;
 
   _buildItemImage(context, state) {
     if (state is ImageSavedState) {
@@ -39,7 +46,7 @@ class AddItemFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CameraBloc, CameraState>(
+    return BlocBuilder<CameraCubit, CameraState>(
       builder: (context, state) {
         return Scaffold(
           appBar: TopNavBar(
@@ -47,12 +54,11 @@ class AddItemFormPage extends StatelessWidget {
             actions: [
               SmallButton(
                 onPressed: () {
-                  context.read<ItemsBloc>().add(
-                        AddItemEvent(
-                          nameController.text,
-                          descriptionController.text,
-                          (state is ImageSavedState) ? state.filePath : null,
-                        ),
+                  context.read<GridCubit>().addItem(
+                        nameController.text,
+                        descriptionController.text,
+                        (state is ImageSavedState) ? state.filePath : null,
+                        selectedRoom,
                       );
                   Navigator.of(context).popUntil(ModalRoute.withName("/"));
                 },
@@ -97,6 +103,36 @@ class AddItemFormPage extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(height: 20),
+                          BlocBuilder<GridCubit, GridState>(
+                              builder: (ctx, state) {
+                            if (state is GridLoaded) {
+                              return DropdownButtonFormField(
+                                value: null,
+                                items: [
+                                  DropdownMenuItem<Room>(
+                                    value: null,
+                                    child: Text("Uncategorized"),
+                                  ),
+                                  ...state.rooms
+                                      .map(
+                                        (room) => DropdownMenuItem<Room>(
+                                          value: room,
+                                          child: Text(
+                                            room.name,
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ],
+                                onChanged: (room) {
+                                  setState(() {
+                                    selectedRoom = room;
+                                  });
+                                },
+                              );
+                            }
+                          })
                         ],
                       ),
                     ),

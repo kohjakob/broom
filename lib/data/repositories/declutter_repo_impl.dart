@@ -25,16 +25,6 @@ class DeclutterRepoImpl implements DeclutterRepo {
   }
 
   @override
-  Future<Either<Failure, List<Item>>> getItems() async {
-    try {
-      final items = await localDatasource.getItemsFromDatabase();
-      return Right(items);
-    } on NoItemsYetException {
-      return Left(Failure(Code.NoItemsYet));
-    }
-  }
-
-  @override
   Future<Either<Failure, Room>> addRoom(Room room) async {
     try {
       final savedRoom = await localDatasource.saveRoomToDatabase(room);
@@ -46,11 +36,7 @@ class DeclutterRepoImpl implements DeclutterRepo {
 
   @override
   Future<Either<Failure, List<Room>>> getRooms() async {
-    try {
-      final rooms = await localDatasource.getRoomsFromDatabase();
-      return Right(rooms);
-    } on NoRoomsYetException {
-      return Left(Failure(Code.NoRoomsYet));
-    }
+    final rooms = await localDatasource.getRoomsFromDatabase();
+    return Right(rooms);
   }
 }

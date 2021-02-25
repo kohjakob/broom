@@ -2,10 +2,8 @@ import 'package:broom/data/datasources/local_datasource.dart';
 import 'package:broom/data/repositories/declutter_repo_impl.dart';
 import 'package:broom/domain/repositories/declutter_repo.dart';
 import 'package:broom/domain/usecases/add_item.dart';
-import 'package:broom/domain/usecases/get_items.dart';
-import 'package:broom/presentation/bloc/camera_bloc.dart';
-import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/bloc/rooms_bloc.dart';
+import 'package:broom/presentation/bloc/camera_cubit.dart';
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import 'device/camera.dart';
@@ -26,7 +24,6 @@ Future<void> init() async {
   );
 
   // Usecases
-  injector.registerLazySingleton(() => GetItems(injector()));
   injector.registerLazySingleton(() => AddItem(injector()));
   injector.registerLazySingleton(() => GetRooms(injector()));
   injector.registerLazySingleton(() => AddRoom(injector()));
@@ -38,14 +35,10 @@ Future<void> init() async {
 
   // Blocs
   injector.registerFactory(
-    () => ItemsBloc(injector(), injector()),
+    () => GridCubit(injector(), injector(), injector()),
   );
 
   injector.registerFactory(
-    () => CameraBloc(injector()),
-  );
-
-  injector.registerFactory(
-    () => RoomsBloc(injector(), injector()),
+    () => CameraCubit(injector()),
   );
 }

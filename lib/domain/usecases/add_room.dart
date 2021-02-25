@@ -14,10 +14,15 @@ class AddRoom {
   Future<Either<Failure, Room>> execute({
     @required String name,
     @required String description,
-    @required String color,
   }) async {
-    final room = Room(name: name, description: description, color: color);
+    final room = Room(
+      name: name,
+      description: description,
+      items: null,
+    );
+
     final either = await repo.addRoom(room);
+
     return either.fold(
       (failure) => Left(failure),
       (room) => Right(room),

@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:broom/domain/entities/item.dart';
-import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/bloc/rooms_bloc.dart';
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/pages/add_room_form_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,9 +14,9 @@ class GridPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemsBloc, ItemsState>(
+    return BlocBuilder<GridCubit, GridState>(
       builder: (context, state) {
-        if (state is ItemsLoaded) {
+        if (state is GridLoaded) {
           return Column(
             children: [
               Container(
@@ -35,7 +34,7 @@ class GridPage extends StatelessWidget {
               ItemGrid(state),
             ],
           );
-        } else if (state is ItemsLoading) {
+        } else if (state is GridLoading) {
           return Center(child: CircularProgressIndicator());
         } else {
           return NoItemsFallback();
@@ -53,21 +52,28 @@ class RoomBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       height: 65,
-      child: BlocBuilder<RoomsBloc, RoomsState>(
+      child: BlocBuilder<GridCubit, GridState>(
         builder: (roomContext, state) {
-          if (state is RoomsLoaded) {
+          if (state is GridLoaded) {
             return ListView(
               physics: BouncingScrollPhysics(),
               scrollDirection: Axis.horizontal,
               children: [
                 SizedBox(width: 20),
                 AddNewRoomButton(),
+                RoomButton(
+                  color: Theme.of(context).primaryColor,
+                  label: "All",
+                  count: state.displayItems.length,
+                  onPressed: () => context.read<GridCubit>().filterItems(null),
+                ),
                 ...state.rooms.map(
                   (room) => RoomButton(
                     color: Theme.of(context).primaryColor,
                     label: room.name,
-                    count: 112,
-                    onPressed: () => null,
+                    count: room.items.length,
+                    onPressed: () =>
+                        context.read<GridCubit>().filterItems(room),
                   ),
                 ),
                 SizedBox(width: 20),
@@ -166,8 +172,8 @@ class SearchBar extends StatelessWidget {
     return Expanded(
       child: Container(
         child: TextFormField(
-          onChanged: (value) {
-            context.read<ItemsBloc>().add(SearchByLettersEvent(value));
+          onChanged: (query) {
+            context.read<GridCubit>().searchItems(query);
           },
           decoration: InputDecoration(
             hintText: "Search items or rooms",
@@ -186,15 +192,7 @@ class SearchBar extends StatelessWidget {
 class SortDropdown extends StatelessWidget {
   const SortDropdown();
 
-  _getDropdownValueFromState(state) {
-    if (state is ItemsSortedAscAlpha) {
-      return SortItemsAscAlphaEvent();
-    } else if (state is ItemsSortedDescAlpha) {
-      return SortItemsDescAlphaEvent();
-    } else {
-      return SortChronologicalEvent();
-    }
-  }
+  _getDropdownValueFromState(GridLoaded state) {}
 
   @override
   Widget build(BuildContext context) {
@@ -203,29 +201,31 @@ class SortDropdown extends StatelessWidget {
       child: Container(
         color: Colors.white,
         padding: EdgeInsets.fromLTRB(20, 0, 10, 0),
-        child: BlocBuilder<ItemsBloc, ItemsState>(
+        child: BlocBuilder<GridCubit, GridState>(
           builder: (blocContext, state) {
-            return DropdownButton(
-              underline: Container(),
-              value: _getDropdownValueFromState(state),
-              items: [
-                DropdownMenuItem(
-                  child: FaIcon(FontAwesomeIcons.calendar),
-                  value: SortChronologicalEvent(),
-                ),
-                DropdownMenuItem(
-                  child: FaIcon(FontAwesomeIcons.sortAlphaDown),
-                  value: SortItemsAscAlphaEvent(),
-                ),
-                DropdownMenuItem(
-                  child: FaIcon(FontAwesomeIcons.sortAlphaUp),
-                  value: SortItemsDescAlphaEvent(),
-                ),
-              ],
-              onChanged: (event) {
-                context.read<ItemsBloc>().add(event);
-              },
-            );
+            if (state is GridLoaded) {
+              return DropdownButton(
+                underline: Container(),
+                value: state.sorting,
+                items: [
+                  DropdownMenuItem(
+                    child: FaIcon(FontAwesomeIcons.calendar),
+                    value: ItemSorting.AscendingDate,
+                  ),
+                  DropdownMenuItem(
+                    child: FaIcon(FontAwesomeIcons.sortAlphaDown),
+                    value: ItemSorting.AscendingAlphaName,
+                  ),
+                  DropdownMenuItem(
+                    child: FaIcon(FontAwesomeIcons.sortAlphaUp),
+                    value: ItemSorting.DescendingAlphaName,
+                  ),
+                ],
+                onChanged: (sorting) {
+                  context.read<GridCubit>().sortItems(sorting);
+                },
+              );
+            }
           },
         ),
       ),
@@ -243,13 +243,13 @@ class NoItemsFallback extends StatelessWidget {
 }
 
 class ItemGrid extends StatelessWidget {
-  final ItemsLoaded state;
+  final GridLoaded state;
   ItemGrid(this.state);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GridView.builder(
+      child: GridView(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(20),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -257,28 +257,27 @@ class ItemGrid extends StatelessWidget {
             childAspectRatio: 1,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),
-        itemCount: state.itemsToDisplay.length + 1,
-        itemBuilder: (BuildContext ctx, index) {
-          if (index == 0) {
-            return AddNewItemTile();
-          } else {
-            return ItemTile(state, index);
-          }
-        },
+        children: [
+          AddNewItemTile(),
+          ...state.displayItems
+              .where((displayItem) {
+                return (displayItem.searchMatch && displayItem.roomFilterMatch);
+              })
+              .toList()
+              .map((item) => ItemTile(item))
+              .toList()
+        ],
       ),
     );
   }
 }
 
 class ItemTile extends StatelessWidget {
-  final int index;
-  final ItemsLoaded state;
-  ItemTile(this.state, this.index);
+  final DisplayItem displayItem;
+  ItemTile(this.displayItem);
 
   @override
   Widget build(BuildContext context) {
-    Item item = state.itemsToDisplay[index - 1];
-
     return GestureDetector(
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -286,7 +285,7 @@ class ItemTile extends StatelessWidget {
           color: Colors.indigo.shade50,
           child: Column(
             children: [
-              item.imagePath != null
+              displayItem.item.imagePath != null
                   ? Flexible(
                       flex: 2,
                       child: Container(
@@ -294,7 +293,7 @@ class ItemTile extends StatelessWidget {
                           color: Theme.of(context).primaryColor.withAlpha(30),
                           image: DecorationImage(
                             image: FileImage(
-                              File(item.imagePath),
+                              File(displayItem.item.imagePath),
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -310,7 +309,7 @@ class ItemTile extends StatelessWidget {
                   child: Center(
                     child: FittedBox(
                       child: Text(
-                        item.name,
+                        displayItem.item.name,
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ),

@@ -1,4 +1,4 @@
-import 'package:broom/presentation/bloc/camera_bloc.dart';
+import 'package:broom/presentation/bloc/camera_cubit.dart';
 import 'package:broom/presentation/pages/add_item_form_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:camera/camera.dart';
@@ -28,7 +28,7 @@ class AddItemCameraPage extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                child: BlocBuilder<CameraBloc, CameraState>(
+                child: BlocBuilder<CameraCubit, CameraState>(
                   builder: (context, state) {
                     if (state.camera.cameraController != null) {
                       return Column(
@@ -80,7 +80,7 @@ class CameraActions extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   child: InkWell(
                     onTap: () {
-                      context.read<CameraBloc>().add(SnapImageEvent());
+                      context.read<CameraCubit>().takePicture();
                       Navigator.of(context)
                           .pushNamed(AddItemFormPage.routeName);
                     },

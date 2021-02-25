@@ -1,7 +1,6 @@
 import 'package:broom/injector.dart';
-import 'package:broom/presentation/bloc/camera_bloc.dart';
-import 'package:broom/presentation/bloc/items_bloc.dart';
-import 'package:broom/presentation/bloc/rooms_bloc.dart';
+import 'package:broom/presentation/bloc/camera_cubit.dart';
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/pages/add_item_form_page.dart';
 import 'package:broom/presentation/pages/add_room_form_page.dart';
@@ -20,14 +19,11 @@ class Broom extends StatelessWidget {
   Widget build(context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<ItemsBloc>(
-          create: (_) => injector<ItemsBloc>(),
+        BlocProvider<GridCubit>(
+          create: (_) => injector<GridCubit>(),
         ),
-        BlocProvider<CameraBloc>(
-          create: (_) => injector<CameraBloc>(),
-        ),
-        BlocProvider<RoomsBloc>(
-          create: (_) => injector<RoomsBloc>(),
+        BlocProvider<CameraCubit>(
+          create: (_) => injector<CameraCubit>(),
         ),
       ],
       child: MaterialApp(

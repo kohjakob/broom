@@ -1,5 +1,4 @@
-import 'package:broom/domain/usecases/add_room.dart';
-import 'package:broom/presentation/bloc/rooms_bloc.dart';
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +16,9 @@ class AddRoomFormPage extends StatelessWidget {
         actions: [
           SmallButton(
             onPressed: () {
-              context.read<RoomsBloc>().add(
-                    AddRoomEvent(
-                      nameController.text,
-                      descriptionController.text,
-                      Colors.lightBlue.toString(),
-                    ),
+              context.read<GridCubit>().addRoom(
+                    nameController.text,
+                    descriptionController.text,
                   );
             },
             label: "Save Room",

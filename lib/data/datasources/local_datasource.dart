@@ -3,13 +3,12 @@ import 'package:broom/data/models/item_model.dart';
 import 'package:broom/data/models/room_model.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/entities/room.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class LocalDatasource {
   Future<ItemModel> saveItemToDatabase(Item item);
-
-  Future<List<ItemModel>> getItemsFromDatabase();
 
   Future<RoomModel> saveRoomToDatabase(Room room);
 
@@ -23,22 +22,16 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String itemDescription = 'description';
   final String itemImagePath = 'imagePath';
   final String itemRoomId = "roomId";
-  final String createItemsTable =
-      'CREATE TABLE items (id INTEGER PRIMARY KEY, name TEXT, description TEXT, imagePath TEXT, roomId INTEGER);';
-  final String clearItemsTable = 'DELETE FROM items;';
+  final String itemCreatedAt = "createdAt";
 
   final String roomTable = 'rooms';
   final String roomId = 'id';
   final String roomName = 'name';
   final String roomDescription = 'description';
-  final String roomColor = 'color';
-  final String createRoomsTable =
-      'CREATE TABLE rooms (id INTEGER PRIMARY KEY, name TEXT, description TEXT, color TEXT);';
-  final String clearRoomsTable = 'DELETE FROM rooms;';
 
   Database db;
   final dbName = 'broom.db';
-  final dbVersion = 24;
+  final dbVersion = 27;
 
   LocalDatasourceImpl._create();
 
@@ -55,25 +48,31 @@ class LocalDatasourceImpl implements LocalDatasource {
       path,
       version: dbVersion,
       onCreate: (Database db, int version) async {
-        await db.execute(createItemsTable);
-        await db.execute(createRoomsTable);
+        await db.execute(
+            'CREATE TABLE $itemTable ($itemId INTEGER PRIMARY KEY, $itemName TEXT, $itemDescription TEXT, $itemImagePath TEXT, $itemRoomId INTEGER, $itemCreatedAt DATE);');
+        await db.execute(
+            'CREATE TABLE $roomTable ($roomId INTEGER PRIMARY KEY, $roomName TEXT, $roomDescription TEXT);');
       },
       onUpgrade: (Database db, int version, int oldVersion) async {
-        await db.execute(clearItemsTable);
-        await db.execute(clearRoomsTable);
+        await db.execute('DELETE FROM $itemTable;');
+        await db.execute('DELETE FROM $roomTable;');
       },
     );
   }
 
   @override
   Future<ItemModel> saveItemToDatabase(Item item) async {
+    final now = DateTime.now().toString();
     final itemModelMap = {
       itemName: item.name,
       itemDescription: item.description,
       itemImagePath: item.imagePath,
       itemRoomId: item.roomId,
+      itemCreatedAt: now,
     };
+
     final insertedId = await db.insert(itemTable, itemModelMap);
+
     return ItemModel(
       name: item.name,
       description: item.description,
@@ -84,65 +83,66 @@ class LocalDatasourceImpl implements LocalDatasource {
   }
 
   @override
-  Future<List<ItemModel>> getItemsFromDatabase() async {
-    List<Map> itemModelMaps = await db.query(
-      itemTable,
-      columns: [itemId, itemName, itemDescription, itemImagePath, itemRoomId],
-    );
-
-    if (itemModelMaps.length > 0) {
-      List<ItemModel> models = [];
-      itemModelMaps.forEach((itemModelMap) {
-        models.add(ItemModel(
-          id: itemModelMap[itemId],
-          name: itemModelMap[itemName],
-          description: itemModelMap[itemDescription],
-          imagePath: itemModelMap[itemImagePath],
-          roomId: itemModelMap[itemRoomId],
-        ));
-      });
-      return models;
-    } else {
-      throw NoItemsYetException();
-    }
-  }
-
-  @override
   Future<RoomModel> saveRoomToDatabase(Room room) async {
     final roomModelMap = {
       roomName: room.name,
       roomDescription: room.description,
-      roomColor: room.color,
     };
+
     final insertedId = await db.insert(roomTable, roomModelMap);
+
     return RoomModel(
       name: room.name,
       description: room.description,
       id: insertedId,
-      color: room.color,
+      items: null,
     );
   }
 
   @override
   Future<List<RoomModel>> getRoomsFromDatabase() async {
-    List<Map> roomModelMaps = await db.query(
+    List<Map> roomMaps = await db.query(
       roomTable,
-      columns: [roomId, roomName, roomDescription, roomColor],
     );
 
-    if (roomModelMaps.length > 0) {
-      List<RoomModel> models = [];
-      roomModelMaps.forEach((roomModelMap) {
-        models.add(RoomModel(
-          id: roomModelMap[roomId],
-          name: roomModelMap[roomName],
-          description: roomModelMap[roomDescription],
-          color: roomModelMap[roomColor],
-        ));
-      });
-      return models;
+    // If we find min 1 room
+    if (roomMaps.length > 0) {
+      List<RoomModel> rooms = [];
+
+      // For each room
+      for (Map roomMap in roomMaps) {
+        // Look up items in this room
+        List<Map> itemMaps = await db.query(
+          itemTable,
+          where: '$itemRoomId = ?',
+          whereArgs: [roomMap[roomId]],
+        );
+        // Build ItemModel for every found row
+        final items = itemMaps
+            .map((itemMap) => ItemModel(
+                  name: itemMap[itemName],
+                  description: itemMap[itemDescription],
+                  id: itemMap[itemId],
+                  imagePath: itemMap[itemImagePath],
+                  roomId: itemMap[itemRoomId],
+                ))
+            .toList();
+
+        // Build RoomModel for every found row
+        rooms.add(
+          RoomModel(
+            id: roomMap[roomId],
+            name: roomMap[roomName],
+            description: roomMap[roomDescription],
+            items: items,
+          ),
+        );
+      }
+
+      return rooms;
     } else {
-      throw NoRoomsYetException();
+      // Else the list of rooms is empty
+      return [];
     }
   }
 }
