@@ -11,4 +11,5 @@
 ### Implemented in [Flutter](http://flutter.dev/docs/) with a Clean Architecture [approach](https://resocoder.com/flutter-clean-architecture-tdd/).
 
 - Storage: SQLite with [sqflite](https://pub.dev/packages/sqflite)
-- State-Management: [Bloc](https://pub.dev/packages/flutter_bloc)
+- State-Management: Cubits from [Bloc](https://pub.dev/packages/flutter_bloc)
+- Dependency Injection: [GetIt](https://pub.dev/packages/get_it)
