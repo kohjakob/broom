@@ -35,6 +35,7 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
                     descriptionController.text,
                     color,
                   );
+              Navigator.of(context).pop();
             },
             label: "Save Room",
             icon: Icons.add,
@@ -75,20 +76,21 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
                         ),
                       ),
                       DropdownButtonFormField(
-                        value: CustomColor.ORANGE,
+                        value: CustomColor.MIDNIGHT,
                         items: CustomColor.values
                             .map(
                               (color) => DropdownMenuItem<CustomColor>(
-                                  value: color,
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                          radius: 15,
-                                          backgroundColor: color.material),
-                                      SizedBox(width: 10),
-                                      Text(color.name),
-                                    ],
-                                  )),
+                                value: color,
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                        radius: 15,
+                                        backgroundColor: color.material),
+                                    SizedBox(width: 10),
+                                    Text(color.name),
+                                  ],
+                                ),
+                              ),
                             )
                             .toList(),
                         onChanged: (newColor) {

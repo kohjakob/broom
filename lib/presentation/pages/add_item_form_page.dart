@@ -7,6 +7,7 @@ import 'package:broom/presentation/pages/grid_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:broom/core/constants/colors.dart';
 
 class AddItemFormPage extends StatefulWidget {
   static String routeName = "addItemFormPage";
@@ -47,6 +48,9 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    final Room intendedRoom = arguments["intendedRoom"];
+
     return BlocBuilder<CameraCubit, CameraState>(
       builder: (context, state) {
         return Scaffold(
@@ -109,18 +113,23 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
                               builder: (ctx, state) {
                             if (state is GridLoaded) {
                               return DropdownButtonFormField(
-                                value: null,
+                                value: (intendedRoom == null)
+                                    ? state.rooms.first
+                                    : intendedRoom,
                                 items: [
-                                  DropdownMenuItem<Room>(
-                                    value: null,
-                                    child: Text("Uncategorized"),
-                                  ),
                                   ...state.rooms
                                       .map(
                                         (room) => DropdownMenuItem<Room>(
                                           value: room,
-                                          child: Text(
-                                            room.name,
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                  radius: 15,
+                                                  backgroundColor:
+                                                      room.color.material),
+                                              SizedBox(width: 10),
+                                              Text(room.name),
+                                            ],
                                           ),
                                         ),
                                       )

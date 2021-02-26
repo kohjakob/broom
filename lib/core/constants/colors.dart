@@ -15,21 +15,22 @@ extension CustomColorExtensions on CustomColor {
   Color get material {
     switch (this) {
       case CustomColor.MIDNIGHT:
-        return Color(0xFF2c3e50);
+        //return Color(0xFF2c3e50);
+        return Colors.blueGrey;
       case CustomColor.PURPLE:
-        return Color(0xFF8e44ad);
+        return Colors.purple.shade400;
       case CustomColor.BLUE:
-        return Color(0xFF2980b9);
+        return Colors.blue.shade400;
       case CustomColor.GREEN:
-        return Color(0xFF27ae60);
+        return Colors.lightGreen.shade400;
       case CustomColor.RED:
-        return Color(0xFFe74c3c);
+        return Colors.red.shade400;
       case CustomColor.ORANGE:
-        return Color(0xFFe67e22);
+        return Colors.orange.shade400;
       case CustomColor.YELLOW:
-        return Color(0xFFf1c40f);
+        return Colors.amber.shade400;
       case CustomColor.LIGHTGRAY:
-        return Color(0xFF95a5a6);
+        return Colors.grey.shade400;
     }
   }
 

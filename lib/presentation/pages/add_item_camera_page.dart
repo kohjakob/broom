@@ -1,3 +1,4 @@
+import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/camera_cubit.dart';
 import 'package:broom/presentation/pages/add_item_form_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
@@ -10,13 +11,18 @@ class AddItemCameraPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    final Room intendedRoom = arguments["intendedRoom"];
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
         actions: [
           SmallButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(AddItemFormPage.routeName);
+              Navigator.of(context).pushNamed(
+                AddItemFormPage.routeName,
+                arguments: {"intendedRoom": intendedRoom},
+              );
             },
             label: "Skip",
             color: Theme.of(context).accentColor,

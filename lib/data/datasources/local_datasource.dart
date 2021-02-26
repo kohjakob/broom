@@ -56,10 +56,10 @@ class LocalDatasourceImpl implements LocalDatasource {
             'CREATE TABLE $roomTable ($roomId INTEGER PRIMARY KEY, $roomName TEXT, $roomDescription TEXT, $roomColor TEXT);');
 
         final uncategorizedRoom = {
-          roomName: "Uncategorized",
+          roomName: "Other",
           roomDescription: "Items not associated to a room",
           roomId: -1,
-          roomColor: CustomColor.ORANGE.index,
+          roomColor: CustomColor.LIGHTGRAY.index,
         };
         await db.insert(roomTable, uncategorizedRoom);
       },

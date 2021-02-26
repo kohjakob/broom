@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:broom/core/constants/colors.dart';
+import 'package:broom/domain/entities/room.dart';
 
 class GridPage extends StatelessWidget {
   static String routeName = "gridPage";
@@ -32,6 +33,7 @@ class GridPage extends StatelessWidget {
                 ),
               ),
               RoomBar(),
+              ItemGridHeader(state),
               ItemGrid(state),
             ],
           );
@@ -43,12 +45,46 @@ class GridPage extends StatelessWidget {
   }
 }
 
+class ItemGridHeader extends StatelessWidget {
+  final GridLoaded state;
+  const ItemGridHeader(this.state);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+              (state.roomSelected == null)
+                  ? state.displayItems.length == 0
+                      ? "No items yet"
+                      : "All your items"
+                  : state.roomSelected.name,
+              style: Theme.of(context).textTheme.headline5),
+          Row(
+            children: (state.roomSelected == null)
+                ? []
+                : [
+                    IconButton(icon: Icon(Icons.edit), onPressed: null),
+                    IconButton(icon: Icon(Icons.delete), onPressed: null),
+                  ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class RoomBar extends StatelessWidget {
   const RoomBar();
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).accentColor.withAlpha(0),
       padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       height: 65,
       child: BlocBuilder<GridCubit, GridState>(
@@ -60,22 +96,26 @@ class RoomBar extends StatelessWidget {
               children: [
                 SizedBox(width: 20),
                 AddNewRoomButton(),
-                /*
                 RoomButton(
-                  color: Theme.of(context).primaryColor,
-                  label: "All",
+                  selected: (state.roomSelected == null),
+                  room: null,
                   count: state.displayItems.length,
                   onPressed: () => context.read<GridCubit>().filterItems(null),
                 ),
-                */
                 ...state.rooms.map(
-                  (room) => RoomButton(
-                    color: room.color.material,
-                    label: room.name,
-                    count: room.items.length,
-                    onPressed: () =>
-                        context.read<GridCubit>().filterItems(room),
-                  ),
+                  (room) {
+                    if (room.id != -1) {
+                      return RoomButton(
+                        selected: (state.roomSelected == room),
+                        room: room,
+                        count: room.items.length,
+                        onPressed: () =>
+                            context.read<GridCubit>().filterItems(room),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
                 SizedBox(width: 20),
               ],
@@ -104,52 +144,52 @@ class LoadingFallback extends StatelessWidget {
 
 class RoomButton extends StatelessWidget {
   final Function onPressed;
-  final String label;
-  final Color color;
+  final Room room;
   final int count;
+  final bool selected;
 
   RoomButton({
     this.onPressed,
-    this.label,
-    this.color = Colors.indigoAccent,
+    this.room,
     this.count,
+    this.selected,
   });
 
   @override
   Widget build(BuildContext context) {
+    final color =
+        (room == null) ? Theme.of(context).accentColor : room.color.material;
+    final label = (room == null) ? "All" : room.name;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 1, 10, 1),
-      child: ButtonTheme(
+      child: FlatButton(
         minWidth: 10,
-        child: OutlineButton(
-          highlightedBorderColor: color,
-          highlightColor: color.withAlpha(50),
-          splashColor: color.withAlpha(50),
-          shape: StadiumBorder(),
-          onPressed: onPressed,
-          borderSide: BorderSide(color: color, width: 1),
-          padding: EdgeInsets.fromLTRB(14, 10, 12, 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                label,
-                style: TextStyle(color: color),
+        color: selected ? color.withAlpha(40) : Colors.transparent,
+        highlightColor: color.withAlpha(20),
+        splashColor: color.withAlpha(20),
+        shape: StadiumBorder(),
+        onPressed: onPressed,
+        padding: EdgeInsets.fromLTRB(14, 10, 12, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              label,
+              style: TextStyle(color: color),
+            ),
+            SizedBox(width: 5),
+            Container(
+              padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: color,
               ),
-              SizedBox(width: 5),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: color,
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 11),
-                ),
-              )
-            ],
-          ),
+              child: Text(
+                count.toString(),
+                style: TextStyle(color: Colors.white, fontSize: 11),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -256,7 +296,7 @@ class NoItemsFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AddNewItemTile();
+    return AddNewItemTile(null);
   }
 }
 
@@ -276,7 +316,7 @@ class ItemGrid extends StatelessWidget {
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),
         children: [
-          AddNewItemTile(),
+          AddNewItemTile(state.roomSelected),
           ...state.displayItems
               .where((displayItem) {
                 return (displayItem.searchMatch && displayItem.roomFilterMatch);
@@ -300,7 +340,7 @@ class ItemTile extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
-          color: Colors.indigo.shade50,
+          color: Theme.of(context).primaryColor.withAlpha(15),
           child: Column(
             children: [
               displayItem.item.imagePath != null
@@ -323,7 +363,7 @@ class ItemTile extends StatelessWidget {
                 flex: 1,
                 child: Container(
                   padding: EdgeInsets.all(15),
-                  color: Colors.indigo.shade50,
+                  color: Theme.of(context).primaryColor.withAlpha(15),
                   child: Center(
                     child: FittedBox(
                       child: Text(
@@ -343,17 +383,24 @@ class ItemTile extends StatelessWidget {
 }
 
 class AddNewItemTile extends StatelessWidget {
-  const AddNewItemTile();
+  final Room roomSelected;
+
+  const AddNewItemTile(this.roomSelected);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(AddItemCameraPage.routeName),
+      onTap: () => Navigator.of(context).pushNamed(
+        AddItemCameraPage.routeName,
+        arguments: {"intendedRoom": roomSelected},
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
           padding: EdgeInsets.all(20),
-          color: Theme.of(context).accentColor,
+          color: (roomSelected == null)
+              ? Theme.of(context).accentColor
+              : roomSelected.color.material,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -364,8 +411,11 @@ class AddNewItemTile extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "Add Item",
+                (roomSelected == null)
+                    ? "Add Item"
+                    : "Add Item to\n" + roomSelected.name,
                 style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
