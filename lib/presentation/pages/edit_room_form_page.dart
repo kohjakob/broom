@@ -18,28 +18,21 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
   final TextEditingController descriptionController = TextEditingController();
   CustomColor color;
   bool isInit = false;
+  Room roomToEdit;
 
   @override
-  initState() {
-    super.initState();
-    color = CustomColor.ORANGE;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    roomToEdit = arguments["roomToEdit"];
+    nameController.value = TextEditingValue(text: roomToEdit.name);
+    descriptionController.value =
+        TextEditingValue(text: roomToEdit.description);
+    color = roomToEdit.color;
   }
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final Room roomToEdit = arguments["roomToEdit"];
-    nameController.value = TextEditingValue(text: roomToEdit.name);
-    descriptionController.value =
-        TextEditingValue(text: roomToEdit.description);
-
-    if (!isInit) {
-      setState(() {
-        isInit = true;
-        color = roomToEdit.color;
-      });
-    }
-
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
@@ -90,7 +83,7 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
                   ),
                 ),
                 DropdownButtonFormField(
-                  value: roomToEdit.color,
+                  value: color,
                   items: CustomColor.values
                       .map(
                         (color) => DropdownMenuItem<CustomColor>(

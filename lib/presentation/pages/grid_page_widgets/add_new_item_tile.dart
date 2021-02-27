@@ -19,7 +19,7 @@ class AddNewItemTile extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(0),
           color: (roomSelected == null)
               ? Theme.of(context).accentColor
               : roomSelected.color.material,
@@ -31,13 +31,16 @@ class AddNewItemTile extends StatelessWidget {
                 size: 50,
                 color: Colors.white,
               ),
-              SizedBox(height: 10),
-              Text(
-                (roomSelected == null)
-                    ? "Add Item"
-                    : "Add Item to\n" + roomSelected.name,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
+              SizedBox(height: 5),
+              FittedBox(
+                child: Text(
+                  "Add item",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),

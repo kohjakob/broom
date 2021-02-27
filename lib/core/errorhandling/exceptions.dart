@@ -9,3 +9,5 @@ class RoomSaveFailException implements Exception {}
 class NoRoomsYetException implements Exception {}
 
 class EditRoomFailedException implements Exception {}
+
+class EditItemFailedException implements Exception {}

@@ -15,6 +15,8 @@ abstract class LocalDatasource {
 
   Future<RoomModel> editRoomInDatabase(Room room);
 
+  Future<ItemModel> editItemInDatabase(Item item);
+
   Future<List<RoomModel>> getRoomsFromDatabase();
 }
 
@@ -184,6 +186,30 @@ class LocalDatasourceImpl implements LocalDatasource {
       );
     } else {
       throw EditRoomFailedException();
+    }
+  }
+
+  @override
+  Future<ItemModel> editItemInDatabase(Item item) async {
+    final itemModelMap = {
+      itemName: item.name,
+      itemDescription: item.description,
+      itemRoomId: item.roomId,
+    };
+
+    int countUpdatedItems = await db.update(itemTable, itemModelMap,
+        where: "$itemId = ?", whereArgs: [item.id]);
+
+    if (countUpdatedItems > 0) {
+      return ItemModel(
+        description: item.description,
+        id: item.id,
+        imagePath: item.imagePath,
+        name: item.name,
+        roomId: item.roomId,
+      );
+    } else {
+      throw EditItemFailedException();
     }
   }
 }

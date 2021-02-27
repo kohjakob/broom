@@ -50,4 +50,14 @@ class DeclutterRepoImpl implements DeclutterRepo {
       return Left(Failure(Code.RoomEditFail));
     }
   }
+
+  @override
+  Future<Either<Failure, Item>> editItem(Item item) async {
+    try {
+      final updatedItem = await localDatasource.editItemInDatabase(item);
+      return Right(updatedItem);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
 }

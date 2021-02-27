@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -25,9 +26,10 @@ class GridCubit extends Cubit<GridState> {
   final AddRoom addRoomUsecase;
   final AddItem addItemUsecase;
   final EditRoom editRoomUsecase;
+  final EditItem editItemUsecase;
 
   GridCubit(this.getRoomsUsecase, this.addRoomUsecase, this.addItemUsecase,
-      this.editRoomUsecase)
+      this.editRoomUsecase, this.editItemUsecase)
       : super(GridLoading()) {
     fetchRooms();
   }
@@ -79,6 +81,25 @@ class GridCubit extends Cubit<GridState> {
         emit(GridFailed());
       },
       (item) {
+        fetchRooms();
+      },
+    );
+  }
+
+  editItem(
+      int itemId, String name, String description, Room selectedRoom) async {
+    final either = await editItemUsecase.execute(
+      itemId: itemId,
+      name: name,
+      description: description,
+      roomId: selectedRoom.id,
+    );
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+        fetchRooms();
+      },
+      (room) {
         fetchRooms();
       },
     );

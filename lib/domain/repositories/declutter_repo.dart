@@ -6,6 +6,8 @@ import '../entities/item.dart';
 abstract class DeclutterRepo {
   Future<Either<Failure, Item>> addItem(Item item);
 
+  Future<Either<Failure, Item>> editItem(Item item);
+
   Future<Either<Failure, Room>> addRoom(Room room);
 
   Future<Either<Failure, Room>> editRoom(Room room);

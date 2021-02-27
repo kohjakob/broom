@@ -38,35 +38,52 @@ class ItemDetailPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      item.name,
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () => _editItem(item, context)),
-                        IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () => _deleteItem(item, context))
-                      ],
-                    )
-                  ],
-                ),
                 (item.imagePath != null)
-                    ? Image.file(File(item.imagePath))
+                    ? Container(
+                        height: 300,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(
+                              File(item.imagePath),
+                            ),
+                          ),
+                        ),
+                      )
                     : Container(),
-                Text(
-                  item.description,
-                  style: Theme.of(context).textTheme.bodyText2,
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item.name,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.edit),
+                                  onPressed: () => _editItem(item, context)),
+                              IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () => _deleteItem(item, context))
+                            ],
+                          )
+                        ],
+                      ),
+                      Text(
+                        item.description,
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

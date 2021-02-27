@@ -15,7 +15,7 @@ class ItemGrid extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
+            maxCrossAxisExtent: 120,
             childAspectRatio: 1,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),

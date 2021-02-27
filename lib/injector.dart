@@ -1,3 +1,4 @@
+import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:get_it/get_it.dart';
 
 import 'data/datasources/local_datasource.dart';
@@ -29,6 +30,7 @@ Future<void> init() async {
   injector.registerLazySingleton(() => GetRooms(injector()));
   injector.registerLazySingleton(() => AddRoom(injector()));
   injector.registerLazySingleton(() => EditRoom(injector()));
+  injector.registerLazySingleton(() => EditItem(injector()));
 
   // Repository
   injector.registerLazySingleton<DeclutterRepo>(
@@ -37,7 +39,7 @@ Future<void> init() async {
 
   // Blocs
   injector.registerFactory(
-    () => GridCubit(injector(), injector(), injector(), injector()),
+    () => GridCubit(injector(), injector(), injector(), injector(), injector()),
   );
 
   injector.registerFactory(
