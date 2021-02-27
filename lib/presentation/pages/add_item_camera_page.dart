@@ -40,7 +40,7 @@ class AddItemCameraPage extends StatelessWidget {
                       return Column(
                         children: [
                           CameraLivePreview(state),
-                          CameraActions(),
+                          CameraActions(intendedRoom),
                         ],
                       );
                     } else {
@@ -62,9 +62,8 @@ class AddItemCameraPage extends StatelessWidget {
 }
 
 class CameraActions extends StatelessWidget {
-  const CameraActions({
-    Key key,
-  }) : super(key: key);
+  final Room intendedRoom;
+  const CameraActions(this.intendedRoom);
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +86,10 @@ class CameraActions extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       context.read<CameraCubit>().takePicture();
-                      Navigator.of(context)
-                          .pushNamed(AddItemFormPage.routeName);
+                      Navigator.of(context).pushNamed(
+                        AddItemFormPage.routeName,
+                        arguments: {"intendedRoom": intendedRoom},
+                      );
                     },
                   ),
                 ),

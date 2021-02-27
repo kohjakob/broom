@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/camera_cubit.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
-import 'package:broom/presentation/pages/grid_page.dart';
 import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +19,7 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   var selectedRoom;
+  bool isInit = false;
 
   _buildItemImage(context, state) {
     if (state is ImageSavedState) {
@@ -48,8 +48,14 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final Room intendedRoom = arguments["intendedRoom"];
+    if (!isInit) {
+      final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+      final Room intendedRoom = arguments["intendedRoom"];
+      setState(() {
+        isInit = true;
+        selectedRoom = intendedRoom;
+      });
+    }
 
     return BlocBuilder<CameraCubit, CameraState>(
       builder: (context, state) {
@@ -113,9 +119,9 @@ class _AddItemFormPageState extends State<AddItemFormPage> {
                               builder: (ctx, state) {
                             if (state is GridLoaded) {
                               return DropdownButtonFormField(
-                                value: (intendedRoom == null)
+                                value: (selectedRoom == null)
                                     ? state.rooms.first
-                                    : intendedRoom,
+                                    : selectedRoom,
                                 items: [
                                   ...state.rooms
                                       .map(

@@ -7,3 +7,5 @@ class NoItemsYetException implements Exception {}
 class RoomSaveFailException implements Exception {}
 
 class NoRoomsYetException implements Exception {}
+
+class EditRoomFailedException implements Exception {}

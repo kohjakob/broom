@@ -6,6 +6,7 @@ enum Code {
   NoItemsYet,
   RoomSaveFail,
   NoRoomsYet,
+  RoomEditFail,
 }
 
 class Failure extends Equatable {

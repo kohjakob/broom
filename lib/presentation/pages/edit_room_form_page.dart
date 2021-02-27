@@ -16,6 +16,7 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   CustomColor color;
+  bool isInit;
 
   @override
   initState() {
@@ -30,6 +31,13 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
     nameController.value = TextEditingValue(text: roomToEdit.name);
     descriptionController.value =
         TextEditingValue(text: roomToEdit.description);
+
+    if (!isInit) {
+      setState(() {
+        isInit = true;
+        color = roomToEdit.color;
+      });
+    }
 
     return Scaffold(
       appBar: TopNavBar(

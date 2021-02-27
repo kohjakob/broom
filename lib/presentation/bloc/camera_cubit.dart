@@ -5,7 +5,9 @@ import 'package:equatable/equatable.dart';
 class CameraCubit extends Cubit<CameraState> {
   final Camera camera;
 
-  CameraCubit(this.camera) : super(CameraInitial(camera));
+  CameraCubit(this.camera) : super(CameraInitial(camera)) {
+    camera.initCamera();
+  }
 
   takePicture() async {
     final path = await camera.snapImage();

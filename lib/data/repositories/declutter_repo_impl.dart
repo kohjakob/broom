@@ -45,8 +45,8 @@ class DeclutterRepoImpl implements DeclutterRepo {
     try {
       final updatedRoom = await localDatasource.editRoomInDatabase(room);
       return Right(updatedRoom);
-    } on ItemSaveFailException {
-      return Left(Failure(Code.RoomSaveFail));
+    } on EditRoomFailedException {
+      return Left(Failure(Code.RoomEditFail));
     }
   }
 }

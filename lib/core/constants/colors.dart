@@ -31,6 +31,8 @@ extension CustomColorExtensions on CustomColor {
         return Colors.amber.shade400;
       case CustomColor.LIGHTGRAY:
         return Colors.grey.shade400;
+      default:
+        return Colors.blueGrey;
     }
   }
 
@@ -52,6 +54,8 @@ extension CustomColorExtensions on CustomColor {
         return "Yellow";
       case CustomColor.LIGHTGRAY:
         return "Lightgray";
+      default:
+        return "Midnight";
     }
   }
 }

@@ -4,7 +4,6 @@ import 'package:broom/data/models/item_model.dart';
 import 'package:broom/data/models/room_model.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/entities/room.dart';
-import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -182,6 +181,8 @@ class LocalDatasourceImpl implements LocalDatasource {
         id: room.id,
         items: room.items,
       );
+    } else {
+      throw EditRoomFailedException();
     }
   }
 }
