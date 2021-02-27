@@ -21,7 +21,7 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
   @override
   initState() {
     super.initState();
-    color = CustomColor.ORANGE;
+    color = CustomColor.MIDNIGHT;
   }
 
   @override
@@ -75,7 +75,7 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
                   ),
                 ),
                 DropdownButtonFormField(
-                  value: CustomColor.MIDNIGHT,
+                  value: color,
                   items: CustomColor.values
                       .map(
                         (color) => DropdownMenuItem<CustomColor>(

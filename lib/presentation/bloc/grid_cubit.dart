@@ -97,10 +97,33 @@ class GridCubit extends Cubit<GridState> {
     either.fold(
       (failure) {
         emit(GridFailed());
-        fetchRooms();
+        refetchRooms();
       },
-      (room) {
-        fetchRooms();
+      (item) {
+        refetchRooms();
+      },
+    );
+  }
+
+  refetchRooms() async {
+    var either = await getRoomsUsecase.execute();
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+      },
+      (rooms) {
+        final items =
+            rooms.map((room) => room.items).expand((item) => item).toList();
+        var displayItems =
+            items.map((item) => DisplayItem(item, true, true)).toList();
+        displayItems.sort((a, b) => a.item.id.compareTo(b.item.id));
+        emit(GridLoaded(
+          rooms: rooms,
+          displayItems: displayItems,
+          sorting: ItemSorting.AscendingDate,
+          searchQuery: "",
+          roomSelected: null,
+        ));
       },
     );
   }

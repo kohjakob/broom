@@ -32,6 +32,20 @@ class _EditItemFormPageState extends State<EditItemFormPage> {
     item = arguments["item"];
     final state = context.read<GridCubit>().state as GridLoaded;
     selectedRoom = state.rooms.where((room) => room.id == item.roomId).first;
+    nameController.text = item.name;
+    descriptionController.text = item.description;
+  }
+
+  _editItem() {
+    context.read<GridCubit>().editItem(
+        item.id, nameController.text, descriptionController.text, selectedRoom);
+    final editedItem = Item(
+      id: item.id,
+      name: nameController.text,
+      description: descriptionController.text,
+      roomId: selectedRoom.id,
+    );
+    Navigator.of(context).pop(editedItem);
   }
 
   @override
@@ -43,14 +57,7 @@ class _EditItemFormPageState extends State<EditItemFormPage> {
             showBack: true,
             actions: [
               SmallButton(
-                onPressed: () {
-                  context.read<GridCubit>().editItem(
-                      item.id,
-                      nameController.text,
-                      descriptionController.text,
-                      selectedRoom);
-                  Navigator.of(context).pop();
-                },
+                onPressed: () => _editItem(),
                 label: "Update Item",
                 icon: Icons.add,
                 color: Theme.of(context).accentColor,
@@ -68,12 +75,20 @@ class _EditItemFormPageState extends State<EditItemFormPage> {
                       onTap: () => Navigator.of(context).pop(),
                       child: Stack(
                         children: [
-                          CircleAvatar(
-                            backgroundImage: FileImage(File(item.imagePath)),
-                            radius: 70,
-                            backgroundColor:
-                                Theme.of(context).primaryColor.withAlpha(50),
-                          ),
+                          (item.imagePath != null)
+                              ? CircleAvatar(
+                                  backgroundImage:
+                                      FileImage(File(item.imagePath)),
+                                  radius: 70,
+                                  backgroundColor: Theme.of(context)
+                                      .primaryColor
+                                      .withAlpha(50),
+                                )
+                              : CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                ),
                           CircleAvatar(
                             backgroundColor:
                                 Theme.of(context).accentColor.withAlpha(170),

@@ -6,12 +6,24 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/item.dart';
 import 'widgets/top_nav_bar.dart';
 
-class ItemDetailPage extends StatelessWidget {
+class ItemDetailPage extends StatefulWidget {
   static String routeName = "itemDetailPage";
 
-  _editItem(Item item, context) {
-    Navigator.of(context)
-        .pushNamed(EditItemFormPage.routeName, arguments: {"item": item});
+  @override
+  _ItemDetailPageState createState() => _ItemDetailPageState();
+}
+
+class _ItemDetailPageState extends State<ItemDetailPage> {
+  Item item;
+
+  _editItem(Item itemToEdit, context) async {
+    final updatedItem = await Navigator.of(context)
+        .pushNamed(EditItemFormPage.routeName, arguments: {"item": itemToEdit});
+    if (updatedItem != null) {
+      setState(() {
+        item = updatedItem;
+      });
+    }
   }
 
   _deleteItem(Item item, context) {
@@ -27,9 +39,14 @@ class ItemDetailPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final Item item = arguments["item"];
+    item = arguments["item"];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
@@ -62,9 +79,11 @@ class ItemDetailPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            item.name,
-                            style: Theme.of(context).textTheme.headline5,
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
                           ),
                           Row(
                             children: [
