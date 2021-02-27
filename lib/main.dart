@@ -1,3 +1,4 @@
+import 'package:broom/presentation/pages/edit_item_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -42,6 +43,7 @@ class Broom extends StatelessWidget {
           AddRoomFormPage.routeName: (ctx) => AddRoomFormPage(),
           EditRoomFormPage.routeName: (ctx) => EditRoomFormPage(),
           ItemDetailPage.routeName: (ctx) => ItemDetailPage(),
+          EditItemFormPage.routeName: (ctx) => EditItemFormPage(),
         },
         home: HomePage(),
       ),

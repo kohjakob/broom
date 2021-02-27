@@ -16,8 +16,8 @@ class AddRoom {
     @required CustomColor color,
   }) async {
     final room = Room(
-      name: name,
-      description: description,
+      name: (name == "") ? "Untitled" : name,
+      description: (description == "") ? "No description" : description,
       items: null,
       color: color,
     );

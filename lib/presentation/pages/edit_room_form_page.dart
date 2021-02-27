@@ -17,7 +17,7 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   CustomColor color;
-  bool isInit;
+  bool isInit = false;
 
   @override
   initState() {

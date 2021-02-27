@@ -19,8 +19,8 @@ class EditRoom {
   }) async {
     final room = Room(
       id: roomId,
-      name: name,
-      description: description,
+      name: (name == "") ? "Untitled" : name,
+      description: (description == "") ? "No description" : description,
       items: null,
       color: color,
     );

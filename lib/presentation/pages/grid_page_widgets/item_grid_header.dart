@@ -30,7 +30,8 @@ class ItemGridHeader extends StatelessWidget {
         ),
       ),
       actions: [
-        FlatButton(onPressed: null, child: Text("No")),
+        FlatButton(
+            onPressed: () => Navigator.of(context).pop(), child: Text("No")),
         FlatButton(onPressed: null, child: Text("Yes")),
       ],
     );

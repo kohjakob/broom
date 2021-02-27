@@ -19,8 +19,8 @@ class AddItem {
   }) async {
     try {
       final item = Item(
-        name: name,
-        description: description,
+        name: (name == "") ? "Untitled" : name,
+        description: (description == "") ? "No description" : description,
         imagePath: imagePath,
         roomId: (room != null) ? room.id : -1,
       );
