@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../assets/questionCategory.dart';
-import './question.dart';
+import 'question.dart';
 
 class Questions with ChangeNotifier {
   List<Question> _questions = [
@@ -88,12 +88,14 @@ class Questions with ChangeNotifier {
     ),
     Question(
       id: "17",
-      text: "Would it be possible and convenient to borrow this from a friend of neighboor?",
+      text:
+          "Would it be possible and convenient to borrow this from a friend of neighboor?",
       category: QuestionCategory.use,
     ),
     Question(
       id: "18",
-      text: "If a friend would wish for this for birthday, would you give it away?",
+      text:
+          "If a friend would wish for this for birthday, would you give it away?",
       category: QuestionCategory.use,
     ),
   ];

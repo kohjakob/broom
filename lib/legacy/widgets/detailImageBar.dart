@@ -1,9 +1,11 @@
-import 'package:broom/legacy/screens/editScreen.dart';
-import 'package:flutter/material.dart';
 import 'dart:io';
-import '../providers/item.dart';
+
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/item.dart';
 import '../providers/items.dart';
+import '../screens/editScreen.dart';
 
 class ImageBar extends StatelessWidget {
   const ImageBar(this.item);

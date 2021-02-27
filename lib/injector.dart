@@ -1,15 +1,15 @@
-import 'package:broom/data/datasources/local_datasource.dart';
-import 'package:broom/data/repositories/declutter_repo_impl.dart';
-import 'package:broom/domain/repositories/declutter_repo.dart';
-import 'package:broom/domain/usecases/add_item.dart';
-import 'package:broom/domain/usecases/edit_room.dart';
-import 'package:broom/presentation/bloc/camera_cubit.dart';
-import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import 'data/datasources/local_datasource.dart';
+import 'data/repositories/declutter_repo_impl.dart';
 import 'device/camera.dart';
+import 'domain/repositories/declutter_repo.dart';
+import 'domain/usecases/add_item.dart';
 import 'domain/usecases/add_room.dart';
+import 'domain/usecases/edit_room.dart';
 import 'domain/usecases/get_rooms.dart';
+import 'presentation/bloc/camera_cubit.dart';
+import 'presentation/bloc/grid_cubit.dart';
 
 final injector = GetIt.instance;
 

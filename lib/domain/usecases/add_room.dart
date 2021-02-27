@@ -1,9 +1,9 @@
-import 'package:broom/core/constants/colors.dart';
-import 'package:broom/domain/entities/room.dart';
+import '../../core/constants/colors.dart';
+import '../entities/room.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
-import 'package:broom/domain/repositories/declutter_repo.dart';
-import 'package:broom/core/errorhandling/failures.dart';
+import '../repositories/declutter_repo.dart';
+import '../../core/errorhandling/failures.dart';
 
 class AddRoom {
   final DeclutterRepo repo;

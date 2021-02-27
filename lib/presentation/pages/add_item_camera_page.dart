@@ -1,10 +1,12 @@
-import 'package:broom/domain/entities/room.dart';
-import 'package:broom/presentation/bloc/camera_cubit.dart';
-import 'package:broom/presentation/pages/add_item_form_page.dart';
-import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/entities/room.dart';
+import '../bloc/camera_cubit.dart';
+import 'add_item_form_page.dart';
+import 'widgets/small_button.dart';
+import 'widgets/top_nav_bar.dart';
 
 class AddItemCameraPage extends StatelessWidget {
   static String routeName = "addItemCameraPage";

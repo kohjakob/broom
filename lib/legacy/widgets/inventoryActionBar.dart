@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import '../assets/constants.dart' as Constants;
-import './inventoryDropdown.dart';
+import 'inventoryDropdown.dart';
 
 class ActionBar extends StatelessWidget {
   final Function handleOrderChange;
@@ -28,16 +28,19 @@ class ActionBarDelegate implements SliverPersistentHeaderDelegate {
   double maxExtentDelegate;
   Function handleOrderChange;
   Function handleSearch;
-  ActionBarDelegate(this.minExtentDelegate, this.maxExtentDelegate, this.handleOrderChange, this.handleSearch);
+  ActionBarDelegate(this.minExtentDelegate, this.maxExtentDelegate,
+      this.handleOrderChange, this.handleSearch);
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       height: minExtent,
       width: 100,
       color: Colors.indigo.shade50.withOpacity(shrinkOffset / 70),
       //color: Colors.red,
-      padding: EdgeInsets.fromLTRB(Constants.defaultPadding, 20, Constants.defaultPadding, 20),
+      padding: EdgeInsets.fromLTRB(
+          Constants.defaultPadding, 20, Constants.defaultPadding, 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -78,7 +81,8 @@ class ActionBarDelegate implements SliverPersistentHeaderDelegate {
   OverScrollHeaderStretchConfiguration get stretchConfiguration => null;
 
   @override
-  PersistentHeaderShowOnScreenConfiguration get showOnScreenConfiguration => null;
+  PersistentHeaderShowOnScreenConfiguration get showOnScreenConfiguration =>
+      null;
 
   @override
   TickerProvider get vsync => null;

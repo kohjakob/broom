@@ -1,7 +1,8 @@
-import 'package:broom/domain/entities/room.dart';
 import 'package:dartz/dartz.dart';
-import 'package:broom/domain/repositories/declutter_repo.dart';
-import 'package:broom/core/errorhandling/failures.dart';
+
+import '../../core/errorhandling/failures.dart';
+import '../entities/room.dart';
+import '../repositories/declutter_repo.dart';
 
 class GetRooms {
   final DeclutterRepo repo;

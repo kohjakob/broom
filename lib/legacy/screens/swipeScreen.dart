@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/items.dart';
 import '../providers/item.dart';
-import '../providers/questions.dart';
+import '../providers/items.dart';
 import '../providers/question.dart';
+import '../providers/questions.dart';
 import '../widgets/swipeInstance.dart';
 
 class Swipe extends StatefulWidget {

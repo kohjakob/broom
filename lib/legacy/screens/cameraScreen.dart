@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:broom/legacy/screens/formScreen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
 import '../assets/constants.dart' as Constants;
+import 'formScreen.dart';
 
 class AddCamera extends StatefulWidget {
   static const routeName = "/add-camera";

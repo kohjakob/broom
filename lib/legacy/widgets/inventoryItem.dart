@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 
 import '../assets/constants.dart' as Constants;
 import '../screens/detailsScreen.dart';
@@ -16,11 +17,13 @@ class GridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(Details.routeName, arguments: id),
+      onTap: () =>
+          Navigator.of(context).pushNamed(Details.routeName, arguments: id),
       child: Container(
         decoration: BoxDecoration(),
         child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
+          borderRadius:
+              BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
           child: Column(
             children: [
               Container(

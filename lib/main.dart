@@ -1,14 +1,15 @@
-import 'package:broom/injector.dart';
-import 'package:broom/presentation/bloc/camera_cubit.dart';
-import 'package:broom/presentation/bloc/grid_cubit.dart';
-import 'package:broom/presentation/pages/add_item_camera_page.dart';
-import 'package:broom/presentation/pages/add_item_form_page.dart';
-import 'package:broom/presentation/pages/add_room_form_page.dart';
-import 'package:broom/presentation/pages/edit_room_form_page.dart';
-import 'package:broom/presentation/pages/home_page.dart';
-import 'package:broom/presentation/pages/item_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'home_page.dart';
+import 'injector.dart';
+import 'presentation/bloc/camera_cubit.dart';
+import 'presentation/bloc/grid_cubit.dart';
+import 'presentation/pages/add_item_camera_page.dart';
+import 'presentation/pages/add_item_form_page.dart';
+import 'presentation/pages/add_room_form_page.dart';
+import 'presentation/pages/edit_room_form_page.dart';
+import 'presentation/pages/item_detail_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

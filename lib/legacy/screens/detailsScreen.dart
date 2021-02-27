@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/question.dart';
-import '../providers/items.dart';
+import '../assets/constants.dart' as Constants;
 import '../providers/item.dart';
+import '../providers/items.dart';
+import '../providers/question.dart';
 import '../providers/questions.dart';
 import '../widgets/detailImageBar.dart';
-import '../assets/constants.dart' as Constants;
-import 'package:intl/intl.dart';
 
 class Details extends StatelessWidget {
   static const routeName = "/details";

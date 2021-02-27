@@ -1,6 +1,7 @@
-import 'package:broom/core/errorhandling/exceptions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+
+import '../../core/errorhandling/exceptions.dart';
 
 class Item extends Equatable {
   final int id;

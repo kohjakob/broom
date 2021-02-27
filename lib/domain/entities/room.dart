@@ -1,4 +1,4 @@
-import 'package:broom/core/constants/colors.dart';
+import '../../core/constants/colors.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

@@ -1,8 +1,9 @@
-import 'package:broom/core/constants/colors.dart';
-import 'package:broom/domain/entities/item.dart';
-import 'package:broom/domain/entities/room.dart';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
+
+import '../../core/constants/colors.dart';
+import '../../domain/entities/item.dart';
+import '../../domain/entities/room.dart';
 
 class RoomModel extends Room {
   final int id;

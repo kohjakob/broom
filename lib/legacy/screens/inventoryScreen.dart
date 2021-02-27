@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../assets/orderCategory.dart';
-import '../providers/items.dart';
-import '../providers/item.dart';
-import '../widgets/inventoryActionBar.dart';
 import '../assets/constants.dart' as Constants;
-import '../widgets/inventoryItem.dart';
+import '../assets/orderCategory.dart';
+import '../providers/item.dart';
+import '../providers/items.dart';
 import '../screens/cameraScreen.dart';
+import '../widgets/inventoryActionBar.dart';
+import '../widgets/inventoryItem.dart';
 
 class Inventory extends StatefulWidget {
   static const routeName = "/inventory";

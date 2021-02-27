@@ -1,10 +1,7 @@
-import 'package:broom/core/constants/colors.dart';
-import 'package:broom/domain/entities/item.dart';
-import 'package:broom/domain/entities/room.dart';
-import 'package:broom/presentation/bloc/grid_cubit.dart';
-import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../domain/entities/item.dart';
+import 'widgets/top_nav_bar.dart';
 
 class ItemDetailPage extends StatelessWidget {
   static String routeName = "itemDetailPage";

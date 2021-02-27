@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 
 import 'providers/items.dart';
 import 'providers/questions.dart';
-import 'screens/inventoryScreen.dart';
-import 'screens/swipeScreen.dart';
 import 'screens/cameraScreen.dart';
 import 'screens/detailsScreen.dart';
 import 'screens/editScreen.dart';
 import 'screens/formScreen.dart';
+import 'screens/inventoryScreen.dart';
+import 'screens/swipeScreen.dart';
 
 class Ownless extends StatefulWidget {
   CameraDescription camera;

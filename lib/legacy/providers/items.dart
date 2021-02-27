@@ -1,9 +1,9 @@
-import 'package:broom/legacy/helpers/dbHelper.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../assets/orderCategory.dart';
-import './item.dart';
+import '../helpers/dbHelper.dart';
+import 'item.dart';
 
 class Items with ChangeNotifier {
   List<Item> _items = [];

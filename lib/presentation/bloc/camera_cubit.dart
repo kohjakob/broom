@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:broom/device/camera.dart';
+import '../../device/camera.dart';
 import 'package:equatable/equatable.dart';
 
 class CameraCubit extends Cubit<CameraState> {

@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
-import 'dart:math';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 
 import '../assets/constants.dart' as Constants;
 import '../providers/item.dart';
@@ -21,7 +21,8 @@ class SwipeInstance extends StatefulWidget {
   _SwipeInstanceState createState() => _SwipeInstanceState();
 }
 
-class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProviderStateMixin {
+class _SwipeInstanceState extends State<SwipeInstance>
+    with SingleTickerProviderStateMixin {
   List<Color> questionColors = [
     Colors.indigo,
     Colors.deepOrange,
@@ -52,7 +53,8 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
     setState(() {
       skip = true;
     });
-    var animationFuture = dragController.animateTo(-600, duration: Duration(milliseconds: 300));
+    var animationFuture =
+        dragController.animateTo(-600, duration: Duration(milliseconds: 300));
     animationFuture.whenComplete(() {
       widget.popItem();
     });
@@ -60,7 +62,10 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
 
   bool _checkVelocity(DragEndDetails dragDetails, Offset dragOffset) {
     Size screenSize = MediaQuery.of(context).size;
-    return dragOffset.distance.abs() + dragDetails.velocity.pixelsPerSecond.distance.abs() > screenSize.width / 2 && dragDetails.velocity.pixelsPerSecond.distance > 300;
+    return dragOffset.distance.abs() +
+                dragDetails.velocity.pixelsPerSecond.distance.abs() >
+            screenSize.width / 2 &&
+        dragDetails.velocity.pixelsPerSecond.distance > 300;
   }
 
   void _onPanStart(DragStartDetails details) {
@@ -77,20 +82,25 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
   void _onPanEnd(DragEndDetails deets) {
     Offset dragOffset = dragUpdateOffset - dragStartOffset;
     if (_checkVelocity(deets, dragOffset)) {
-      FrictionSimulation frictionSim = FrictionSimulation(1.1, dragController.value, deets.velocity.pixelsPerSecond.distance);
+      FrictionSimulation frictionSim = FrictionSimulation(
+          1.1, dragController.value, deets.velocity.pixelsPerSecond.distance);
       dragController.animateWith(frictionSim);
       dragController.addListener(handleNextSwipeable);
     } else {
-      SpringDescription springDesc = SpringDescription(mass: 2, stiffness: 20, damping: 3);
-      SpringSimulation springSim = SpringSimulation(springDesc, dragController.value, 0, deets.velocity.pixelsPerSecond.distance);
+      SpringDescription springDesc =
+          SpringDescription(mass: 2, stiffness: 20, damping: 3);
+      SpringSimulation springSim = SpringSimulation(springDesc,
+          dragController.value, 0, deets.velocity.pixelsPerSecond.distance);
       dragController.animateWith(springSim);
     }
   }
 
   void handleNextSwipeable() {
     Size screenSize = MediaQuery.of(context).size;
-    Offset cardOffset = Offset.fromDirection(dragDirection, dragController.value);
-    if (cardOffset.dx.abs() > screenSize.width || cardOffset.dy.abs() > screenSize.height) {
+    Offset cardOffset =
+        Offset.fromDirection(dragDirection, dragController.value);
+    if (cardOffset.dx.abs() > screenSize.width ||
+        cardOffset.dy.abs() > screenSize.height) {
       dragController.stop();
       dragController.removeListener(handleNextSwipeable);
       if (1 > dragDirection && dragDirection > -1.5)
@@ -155,7 +165,8 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
                     ),
                     decoration: BoxDecoration(
                       color: questionColors[Random().nextInt(6)],
-                      borderRadius: BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Constants.defaultBorderRadius)),
                     ),
                     child: Center(
                       child: AutoSizeText(
@@ -163,7 +174,10 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline6.apply(color: Colors.white),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6
+                            .apply(color: Colors.white),
                       ),
                     ),
                   ),
@@ -180,7 +194,10 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
                       children: [
                         Text(
                           "Not sure, skip",
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.indigo.shade200),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(color: Colors.indigo.shade200),
                         ),
                         SizedBox(width: 4),
                         Icon(
@@ -201,33 +218,49 @@ class _SwipeInstanceState extends State<SwipeInstance> with SingleTickerProvider
                     animation: dragController,
                     builder: (context, snapshot) {
                       return Transform.translate(
-                        offset: Offset.fromDirection(dragDirection, dragController.value),
+                        offset: Offset.fromDirection(
+                            dragDirection, dragController.value),
                         child: GestureDetector(
-                          onTap: () => Navigator.of(context).pushNamed(Details.routeName, arguments: widget.item.id),
+                          onTap: () => Navigator.of(context).pushNamed(
+                              Details.routeName,
+                              arguments: widget.item.id),
                           onPanStart: (details) => _onPanStart(details),
                           onPanUpdate: (details) => _onPanUpdate(details),
                           onPanEnd: (details) => _onPanEnd(details),
                           child: Container(
-                            margin: EdgeInsets.only(left: Constants.defaultPadding, right: Constants.defaultPadding),
+                            margin: EdgeInsets.only(
+                                left: Constants.defaultPadding,
+                                right: Constants.defaultPadding),
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: FileImage(File(widget.item.imgUrl)), fit: BoxFit.cover),
-                              borderRadius: BorderRadius.all(Radius.circular(Constants.defaultBorderRadius)),
+                              image: DecorationImage(
+                                  image: FileImage(File(widget.item.imgUrl)),
+                                  fit: BoxFit.cover),
+                              borderRadius: BorderRadius.all(Radius.circular(
+                                  Constants.defaultBorderRadius)),
                             ),
                             child: Stack(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.all(Constants.defaultPadding),
+                                  padding:
+                                      EdgeInsets.all(Constants.defaultPadding),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.item.title,
-                                        style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline5
+                                            .copyWith(color: Colors.white),
                                       ),
                                       Text(
                                         widget.item.description,
-                                        style: Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .copyWith(color: Colors.white),
                                       ),
                                     ],
                                   ),
