@@ -4,6 +4,7 @@ import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/entities/room.dart';
 import 'package:broom/domain/usecases/add_item.dart';
 import 'package:broom/domain/usecases/add_room.dart';
+import 'package:broom/domain/usecases/edit_room.dart';
 import 'package:broom/domain/usecases/get_rooms.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -22,14 +23,15 @@ class GridCubit extends Cubit<GridState> {
   final GetRooms getRoomsUsecase;
   final AddRoom addRoomUsecase;
   final AddItem addItemUsecase;
+  final EditRoom editRoomUsecase;
 
-  GridCubit(this.getRoomsUsecase, this.addRoomUsecase, this.addItemUsecase)
+  GridCubit(this.getRoomsUsecase, this.addRoomUsecase, this.addItemUsecase,
+      this.editRoomUsecase)
       : super(GridLoading()) {
     fetchRooms();
   }
 
   addRoom(String name, String description, CustomColor color) async {
-    emit(GridLoading());
     final either = await addRoomUsecase.execute(
       name: name,
       description: description,
@@ -45,8 +47,26 @@ class GridCubit extends Cubit<GridState> {
     );
   }
 
+  editRoom(
+      int roomId, String name, String description, CustomColor color) async {
+    final either = await editRoomUsecase.execute(
+      roomId: roomId,
+      name: name,
+      description: description,
+      color: color,
+    );
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+        fetchRooms();
+      },
+      (room) {
+        fetchRooms();
+      },
+    );
+  }
+
   addItem(String name, String description, String imagePath, Room room) async {
-    emit(GridLoading());
     final either = await addItemUsecase.execute(
       name: name,
       description: description,
@@ -64,7 +84,6 @@ class GridCubit extends Cubit<GridState> {
   }
 
   fetchRooms() async {
-    emit(GridLoading());
     var either = await getRoomsUsecase.execute();
     either.fold(
       (failure) {

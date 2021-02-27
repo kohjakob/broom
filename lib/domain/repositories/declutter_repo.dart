@@ -8,5 +8,7 @@ abstract class DeclutterRepo {
 
   Future<Either<Failure, Room>> addRoom(Room room);
 
+  Future<Either<Failure, Room>> editRoom(Room room);
+
   Future<Either<Failure, List<Room>>> getRooms();
 }

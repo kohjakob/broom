@@ -4,6 +4,8 @@ import 'package:broom/domain/entities/item.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/pages/add_item_camera_page.dart';
 import 'package:broom/presentation/pages/add_room_form_page.dart';
+import 'package:broom/presentation/pages/edit_room_form_page.dart';
+import 'package:broom/presentation/pages/item_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -49,11 +51,41 @@ class ItemGridHeader extends StatelessWidget {
   final GridLoaded state;
   const ItemGridHeader(this.state);
 
+  _editRoom(context) {
+    Navigator.of(context).pushNamed(EditRoomFormPage.routeName,
+        arguments: {"roomToEdit": state.roomSelected});
+  }
+
+  _deleteRoomDialog(context) {
+    final deleteDialog = AlertDialog(
+      title: Text("Really delete this room?"),
+      content: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Checkbox(value: false, onChanged: null),
+                Expanded(child: Text("Delete all items in this room"))
+              ],
+            )
+          ],
+        ),
+      ),
+      actions: [
+        FlatButton(onPressed: null, child: Text("No")),
+        FlatButton(onPressed: null, child: Text("Yes")),
+      ],
+    );
+    showDialog(context: context, child: deleteDialog);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-      height: 60,
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -68,8 +100,12 @@ class ItemGridHeader extends StatelessWidget {
             children: (state.roomSelected == null)
                 ? []
                 : [
-                    IconButton(icon: Icon(Icons.edit), onPressed: null),
-                    IconButton(icon: Icon(Icons.delete), onPressed: null),
+                    IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () => _editRoom(context)),
+                    IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => _deleteRoomDialog(context)),
                   ],
           )
         ],
@@ -248,8 +284,6 @@ class SearchBar extends StatelessWidget {
 class SortDropdown extends StatelessWidget {
   const SortDropdown();
 
-  _getDropdownValueFromState(GridLoaded state) {}
-
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -265,15 +299,21 @@ class SortDropdown extends StatelessWidget {
                 value: state.sorting,
                 items: [
                   DropdownMenuItem(
-                    child: FaIcon(FontAwesomeIcons.calendar),
+                    child: FaIcon(
+                      FontAwesomeIcons.calendar,
+                    ),
                     value: ItemSorting.AscendingDate,
                   ),
                   DropdownMenuItem(
-                    child: FaIcon(FontAwesomeIcons.sortAlphaDown),
+                    child: FaIcon(
+                      FontAwesomeIcons.sortAlphaDown,
+                    ),
                     value: ItemSorting.AscendingAlphaName,
                   ),
                   DropdownMenuItem(
-                    child: FaIcon(FontAwesomeIcons.sortAlphaUp),
+                    child: FaIcon(
+                      FontAwesomeIcons.sortAlphaUp,
+                    ),
                     value: ItemSorting.DescendingAlphaName,
                   ),
                 ],
@@ -309,7 +349,7 @@ class ItemGrid extends StatelessWidget {
     return Expanded(
       child: GridView(
         physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: 200,
             childAspectRatio: 1,
@@ -337,6 +377,10 @@ class ItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () =>
+          Navigator.of(context).pushNamed(ItemDetailPage.routeName, arguments: {
+        "item": displayItem.item,
+      }),
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(

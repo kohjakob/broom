@@ -19,10 +19,11 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
           color: Theme.of(context).accentColor.withAlpha(20),
           padding: EdgeInsets.fromLTRB(
             20,
-            10,
+            0,
             20,
-            10,
+            0,
           ),
+          height: 60,
           child: Row(
             children: [
               GestureDetector(

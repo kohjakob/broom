@@ -13,6 +13,8 @@ abstract class LocalDatasource {
 
   Future<RoomModel> saveRoomToDatabase(Room room);
 
+  Future<RoomModel> editRoomInDatabase(Room room);
+
   Future<List<RoomModel>> getRoomsFromDatabase();
 }
 
@@ -158,6 +160,28 @@ class LocalDatasourceImpl implements LocalDatasource {
     } else {
       // Else the list of rooms is empty
       return [];
+    }
+  }
+
+  @override
+  Future<RoomModel> editRoomInDatabase(Room room) async {
+    final roomModelMap = {
+      roomName: room.name,
+      roomDescription: room.description,
+      roomColor: room.color.index,
+    };
+
+    int countUpdatedRooms = await db.update(roomTable, roomModelMap,
+        where: "$roomId = ?", whereArgs: [room.id]);
+
+    if (countUpdatedRooms > 0) {
+      return RoomModel(
+        name: room.name,
+        description: room.description,
+        color: room.color,
+        id: room.id,
+        items: room.items,
+      );
     }
   }
 }

@@ -5,14 +5,14 @@ import 'package:broom/presentation/widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddRoomFormPage extends StatefulWidget {
-  static String routeName = "addRoomFormPage";
+class EditRoomFormPage extends StatefulWidget {
+  static String routeName = "editRoomFormPage";
 
   @override
-  _AddRoomFormPageState createState() => _AddRoomFormPageState();
+  _EditRoomFormPageState createState() => _EditRoomFormPageState();
 }
 
-class _AddRoomFormPageState extends State<AddRoomFormPage> {
+class _EditRoomFormPageState extends State<EditRoomFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   CustomColor color;
@@ -25,20 +25,27 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    final Room roomToEdit = arguments["roomToEdit"];
+    nameController.value = TextEditingValue(text: roomToEdit.name);
+    descriptionController.value =
+        TextEditingValue(text: roomToEdit.description);
+
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
         actions: [
           SmallButton(
             onPressed: () {
-              context.read<GridCubit>().addRoom(
+              context.read<GridCubit>().editRoom(
+                    roomToEdit.id,
                     nameController.text,
                     descriptionController.text,
                     color,
                   );
               Navigator.of(context).pop();
             },
-            label: "Save Room",
+            label: "Update Room",
             icon: Icons.add,
             color: Theme.of(context).accentColor,
           )
@@ -77,7 +84,7 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
                         ),
                       ),
                       DropdownButtonFormField(
-                        value: CustomColor.MIDNIGHT,
+                        value: roomToEdit.color,
                         items: CustomColor.values
                             .map(
                               (color) => DropdownMenuItem<CustomColor>(
