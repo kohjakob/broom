@@ -23,6 +23,12 @@ class Room extends Equatable {
         this.items = items,
         this.color = color;
 
+  bool operator ==(dynamic other) =>
+      other != null && other is Room && this.id == other.id;
+
+  @override
+  int get hashCode => super.hashCode;
+
   @override
   List<Object> get props =>
       [this.id, this.name, this.description, this.items, this.color];

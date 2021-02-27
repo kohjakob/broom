@@ -17,6 +17,10 @@ abstract class LocalDatasource {
 
   Future<ItemModel> editItemInDatabase(Item item);
 
+  Future<bool> deleteItemFromDatabase(int id);
+
+  Future<bool> deleteRoomFromDatabase(int id, bool keepItems);
+
   Future<List<RoomModel>> getRoomsFromDatabase();
 }
 
@@ -210,6 +214,36 @@ class LocalDatasourceImpl implements LocalDatasource {
       );
     } else {
       throw EditItemFailedException();
+    }
+  }
+
+  @override
+  Future<bool> deleteItemFromDatabase(int id) async {
+    final countDeletedItems =
+        await db.delete(itemTable, where: "$itemId = ?", whereArgs: [id]);
+    if (countDeletedItems > 0) {
+      return true;
+    }
+  }
+
+  @override
+  Future<bool> deleteRoomFromDatabase(int id, bool keepItems) async {
+    if (keepItems) {
+      final countDeletedRooms =
+          await db.delete(roomTable, where: "$roomId = ?", whereArgs: [id]);
+      final countUpdatedItems = await db.update(itemTable, {itemRoomId: -1},
+          where: "$itemRoomId = ?", whereArgs: [id]);
+      if (countDeletedRooms > 0) {
+        return true;
+      }
+    } else {
+      final countDeletedRooms =
+          await db.delete(roomTable, where: "$roomId = ?", whereArgs: [id]);
+      final countDeletedItems =
+          await db.delete(itemTable, where: "$itemRoomId = ?", whereArgs: [id]);
+      if (countDeletedItems > 0) {
+        return true;
+      }
     }
   }
 }

@@ -60,4 +60,25 @@ class DeclutterRepoImpl implements DeclutterRepo {
       return Left(Failure(Code.ItemEditFail));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> deleteItem(int id) async {
+    try {
+      final success = await localDatasource.deleteItemFromDatabase(id);
+      return Right(success);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteRoom(int id, bool keepItems) async {
+    try {
+      final success =
+          await localDatasource.deleteRoomFromDatabase(id, keepItems);
+      return Right(success);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
 }

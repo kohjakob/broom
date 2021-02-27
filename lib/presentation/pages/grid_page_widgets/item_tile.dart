@@ -24,7 +24,7 @@ class ItemTile extends StatelessWidget {
             children: [
               displayItem.item.imagePath != null
                   ? Flexible(
-                      flex: 2,
+                      flex: 3,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor.withAlpha(30),
@@ -41,7 +41,7 @@ class ItemTile extends StatelessWidget {
               Flexible(
                 flex: 1,
                 child: Container(
-                  padding: EdgeInsets.all(15),
+                  padding: EdgeInsets.all(5),
                   color: Theme.of(context).primaryColor.withAlpha(15),
                   child: Center(
                     child: FittedBox(

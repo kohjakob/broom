@@ -26,10 +26,4 @@ class ItemModel extends Item {
 
   @override
   List<Object> get props => [id, name, description, imagePath];
-
-  bool operator ==(dynamic other) =>
-      other != null && other is ItemModel && this.id == other.id;
-
-  @override
-  int get hashCode => super.hashCode;
 }

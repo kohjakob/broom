@@ -1,3 +1,4 @@
+import 'package:broom/domain/usecases/delete_item.dart';
 import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:get_it/get_it.dart';
 
@@ -7,6 +8,7 @@ import 'device/camera.dart';
 import 'domain/repositories/declutter_repo.dart';
 import 'domain/usecases/add_item.dart';
 import 'domain/usecases/add_room.dart';
+import 'domain/usecases/delete_room.dart';
 import 'domain/usecases/edit_room.dart';
 import 'domain/usecases/get_rooms.dart';
 import 'presentation/bloc/camera_cubit.dart';
@@ -31,6 +33,8 @@ Future<void> init() async {
   injector.registerLazySingleton(() => AddRoom(injector()));
   injector.registerLazySingleton(() => EditRoom(injector()));
   injector.registerLazySingleton(() => EditItem(injector()));
+  injector.registerLazySingleton(() => DeleteItem(injector()));
+  injector.registerLazySingleton(() => DeleteRoom(injector()));
 
   // Repository
   injector.registerLazySingleton<DeclutterRepo>(
@@ -39,7 +43,8 @@ Future<void> init() async {
 
   // Blocs
   injector.registerFactory(
-    () => GridCubit(injector(), injector(), injector(), injector(), injector()),
+    () => GridCubit(injector(), injector(), injector(), injector(), injector(),
+        injector(), injector()),
   );
 
   injector.registerFactory(

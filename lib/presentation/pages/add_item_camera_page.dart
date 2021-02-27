@@ -110,6 +110,13 @@ class CameraLivePreview extends StatelessWidget {
   CameraLivePreview(this.state);
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState appState) {
+    if (appState == AppLifecycleState.resumed) {
+      state.camera.cameraController.initialize();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1,

@@ -23,7 +23,7 @@ class _EditItemFormPageState extends State<EditItemFormPage> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   Item item;
-  var selectedRoom;
+  Room selectedRoom;
 
   @override
   void didChangeDependencies() {

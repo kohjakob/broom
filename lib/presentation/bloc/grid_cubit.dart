@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:broom/domain/usecases/delete_item.dart';
+import 'package:broom/domain/usecases/delete_room.dart';
 import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -27,9 +29,17 @@ class GridCubit extends Cubit<GridState> {
   final AddItem addItemUsecase;
   final EditRoom editRoomUsecase;
   final EditItem editItemUsecase;
+  final DeleteItem deleteItemUsecase;
+  final DeleteRoom deleteRoomUsecase;
 
-  GridCubit(this.getRoomsUsecase, this.addRoomUsecase, this.addItemUsecase,
-      this.editRoomUsecase, this.editItemUsecase)
+  GridCubit(
+      this.getRoomsUsecase,
+      this.addRoomUsecase,
+      this.addItemUsecase,
+      this.editRoomUsecase,
+      this.editItemUsecase,
+      this.deleteItemUsecase,
+      this.deleteRoomUsecase)
       : super(GridLoading()) {
     fetchRooms();
   }
@@ -45,6 +55,36 @@ class GridCubit extends Cubit<GridState> {
         emit(GridFailed());
       },
       (room) {
+        fetchRooms();
+      },
+    );
+  }
+
+  deleteRoomKeepItems(int roomId) async {
+    final either = await deleteRoomUsecase.execute(
+      id: roomId,
+      keepItems: true,
+    );
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+      },
+      (item) {
+        fetchRooms();
+      },
+    );
+  }
+
+  deleteRoomAndItems(int roomId) async {
+    final either = await deleteRoomUsecase.execute(
+      id: roomId,
+      keepItems: false,
+    );
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+      },
+      (item) {
         fetchRooms();
       },
     );
@@ -75,6 +115,20 @@ class GridCubit extends Cubit<GridState> {
       description: description,
       imagePath: imagePath,
       room: room,
+    );
+    either.fold(
+      (failure) {
+        emit(GridFailed());
+      },
+      (item) {
+        fetchRooms();
+      },
+    );
+  }
+
+  deleteItem(int itemId) async {
+    final either = await deleteItemUsecase.execute(
+      id: itemId,
     );
     either.fold(
       (failure) {

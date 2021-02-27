@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/item.dart';
 import 'widgets/top_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemDetailPage extends StatefulWidget {
   static String routeName = "itemDetailPage";
@@ -16,9 +18,13 @@ class ItemDetailPage extends StatefulWidget {
 class _ItemDetailPageState extends State<ItemDetailPage> {
   Item item;
 
-  _editItem(Item itemToEdit, context) async {
-    final updatedItem = await Navigator.of(context)
-        .pushNamed(EditItemFormPage.routeName, arguments: {"item": itemToEdit});
+  _editItem(Item itemToEdit) async {
+    final updatedItem = await Navigator.of(context).pushNamed(
+      EditItemFormPage.routeName,
+      arguments: {
+        "item": itemToEdit,
+      },
+    );
     if (updatedItem != null) {
       setState(() {
         item = updatedItem;
@@ -26,13 +32,23 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
     }
   }
 
-  _deleteItem(Item item, context) {
+  _deleteItem(Item item) {
     final deleteDialog = AlertDialog(
       title: Text("Really delete " + item.name + "?"),
       actions: [
         FlatButton(
-            onPressed: () => Navigator.of(context).pop(), child: Text("No")),
-        FlatButton(onPressed: null, child: Text("Yes")),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("No"),
+        ),
+        FlatButton(
+          onPressed: () {
+            context.read<GridCubit>().deleteItem(item.id);
+            Navigator.of(context).popUntil(ModalRoute.withName("/"));
+          },
+          child: Text("Yes"),
+        ),
       ],
     );
     showDialog(context: context, child: deleteDialog);
@@ -89,10 +105,10 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                             children: [
                               IconButton(
                                   icon: Icon(Icons.edit),
-                                  onPressed: () => _editItem(item, context)),
+                                  onPressed: () => _editItem(item)),
                               IconButton(
                                   icon: Icon(Icons.delete),
-                                  onPressed: () => _deleteItem(item, context))
+                                  onPressed: () => _deleteItem(item))
                             ],
                           )
                         ],
