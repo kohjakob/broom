@@ -1,21 +1,26 @@
 import 'dart:io';
 
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:flutter/material.dart';
 
-import '../../bloc/grid_cubit.dart';
 import '../item_detail_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemTile extends StatelessWidget {
-  final DisplayItem displayItem;
-  ItemTile(this.displayItem);
+  final displayItem;
+  final room;
+  ItemTile(this.displayItem, this.room);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>
-          Navigator.of(context).pushNamed(ItemDetailPage.routeName, arguments: {
-        "item": displayItem.item,
-      }),
+      onTap: () {
+        context.read<ItemDetailCubit>().setItem(
+              displayItem.item,
+              room,
+            );
+        Navigator.of(context).pushNamed(ItemDetailPage.routeName);
+      },
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(

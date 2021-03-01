@@ -26,7 +26,10 @@ class ItemGrid extends StatelessWidget {
                 return (displayItem.searchMatch && displayItem.roomFilterMatch);
               })
               .toList()
-              .map((item) => ItemTile(item))
+              .map((item) => ItemTile(
+                  item,
+                  state.rooms
+                      .firstWhere((room) => room.id == item.item.roomId)))
               .toList()
         ],
       ),

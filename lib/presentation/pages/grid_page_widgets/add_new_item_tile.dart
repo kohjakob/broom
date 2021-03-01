@@ -1,21 +1,22 @@
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../domain/entities/room.dart';
 import '../add_item_camera_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewItemTile extends StatelessWidget {
   final Room roomSelected;
-
   const AddNewItemTile(this.roomSelected);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        AddItemCameraPage.routeName,
-        arguments: {"intendedRoom": roomSelected},
-      ),
+      onTap: () {
+        context.read<ItemDetailCubit>().setEmptyItem(roomSelected);
+        Navigator.of(context).pushNamed(AddItemCameraPage.routeName);
+      },
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(

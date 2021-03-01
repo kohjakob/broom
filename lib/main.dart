@@ -1,3 +1,4 @@
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,9 @@ class Broom extends StatelessWidget {
       providers: [
         BlocProvider<GridCubit>(
           create: (_) => injector<GridCubit>(),
+        ),
+        BlocProvider<ItemDetailCubit>(
+          create: (_) => injector<ItemDetailCubit>(),
         ),
       ],
       child: MaterialApp(

@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,19 +18,11 @@ class ItemDetailPage extends StatefulWidget {
 }
 
 class _ItemDetailPageState extends State<ItemDetailPage> {
-  Item item;
-
-  _editItem(Item itemToEdit) async {
-    final Item updatedItem = await Navigator.of(context).pushNamed(
-      EditItemFormPage.routeName,
-      arguments: {
-        "item": itemToEdit,
-      },
-    );
+  _editItem(Item itemToEdit, Room room, BuildContext context) async {
+    final updatedItem =
+        await Navigator.of(context).pushNamed(EditItemFormPage.routeName);
     if (updatedItem != null) {
-      setState(() {
-        item = updatedItem;
-      });
+      context.read<ItemDetailCubit>().setItem(updatedItem, room);
     }
   }
 
@@ -55,13 +49,6 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    item = arguments["item"];
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(
@@ -74,56 +61,69 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            child: Column(
-              children: [
-                (item.imagePath != null)
-                    ? Container(
-                        height: 300,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(
-                              File(item.imagePath),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: BlocBuilder<ItemDetailCubit, ItemDetailState>(
+              builder: (idContext, idState) {
+                if (idState is ItemDetailLoaded) {
+                  return Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              item.name,
-                              style: Theme.of(context).textTheme.headline5,
+                      (idState.item.imagePath != null)
+                          ? Container(
+                              height: 300,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(
+                                    File(idState.item.imagePath),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Container(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    idState.item.name,
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      onPressed: () => _editItem(
+                                        idState.item,
+                                        idState.roomOfItem,
+                                        context,
+                                      ),
+                                    ),
+                                    IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () =>
+                                            _deleteItem(idState.item))
+                                  ],
+                                )
+                              ],
                             ),
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () => _editItem(item)),
-                              IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () => _deleteItem(item))
-                            ],
-                          )
-                        ],
-                      ),
-                      Text(
-                        item.description,
-                        style: Theme.of(context).textTheme.bodyText2,
+                            Text(
+                              idState.item.description,
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                ),
-              ],
+                  );
+                }
+              },
             ),
           ),
         ),

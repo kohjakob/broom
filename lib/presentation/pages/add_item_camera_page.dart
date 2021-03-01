@@ -1,3 +1,4 @@
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -6,6 +7,7 @@ import '../../domain/entities/room.dart';
 import 'add_item_form_page.dart';
 import 'widgets/small_button.dart';
 import 'widgets/top_nav_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemCameraPage extends StatefulWidget {
   static String routeName = "addItemCameraPage";
@@ -38,8 +40,6 @@ class _AddItemCameraPageState extends State<AddItemCameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    final Room intendedRoom = arguments["intendedRoom"];
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
@@ -49,10 +49,7 @@ class _AddItemCameraPageState extends State<AddItemCameraPage> {
         actions: [
           SmallButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(
-                AddItemFormPage.routeName,
-                arguments: {"intendedRoom": intendedRoom},
-              );
+              Navigator.of(context).pushNamed(AddItemFormPage.routeName);
             },
             label: "Skip",
             color: Theme.of(context).accentColor,
@@ -70,7 +67,7 @@ class _AddItemCameraPageState extends State<AddItemCameraPage> {
                       return Column(
                         children: [
                           CameraLivePreview(cameraController),
-                          CameraActions(intendedRoom, cameraController),
+                          CameraActions(cameraController),
                         ],
                       );
                     } else {
@@ -91,23 +88,13 @@ class _AddItemCameraPageState extends State<AddItemCameraPage> {
 
 class CameraActions extends StatelessWidget {
   final CameraController cameraController;
-  final Room intendedRoom;
 
-  const CameraActions(this.intendedRoom, this.cameraController);
+  const CameraActions(this.cameraController);
 
-  _takePicture(context) async {
+  _takePicture(BuildContext context) async {
     final xFile = await cameraController.takePicture();
-    final directory = await getApplicationDocumentsDirectory();
-    final path = join(directory.path, xFile.name);
-    // ignore: await_only_futures
-    await xFile.saveTo(path);
-    Navigator.of(context).pushNamed(
-      AddItemFormPage.routeName,
-      arguments: {
-        "intendedRoom": intendedRoom,
-        "imagePath": path,
-      },
-    );
+    await context.read<ItemDetailCubit>().setImage(xFile);
+    Navigator.of(context).pushNamed(AddItemFormPage.routeName);
   }
 
   @override
