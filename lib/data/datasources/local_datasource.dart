@@ -223,6 +223,8 @@ class LocalDatasourceImpl implements LocalDatasource {
         await db.delete(itemTable, where: "$itemId = ?", whereArgs: [id]);
     if (countDeletedItems > 0) {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -231,18 +233,21 @@ class LocalDatasourceImpl implements LocalDatasource {
     if (keepItems) {
       final countDeletedRooms =
           await db.delete(roomTable, where: "$roomId = ?", whereArgs: [id]);
-      final countUpdatedItems = await db.update(itemTable, {itemRoomId: -1},
+      await db.update(itemTable, {itemRoomId: -1},
           where: "$itemRoomId = ?", whereArgs: [id]);
       if (countDeletedRooms > 0) {
         return true;
+      } else {
+        return false;
       }
     } else {
       final countDeletedRooms =
           await db.delete(roomTable, where: "$roomId = ?", whereArgs: [id]);
-      final countDeletedItems =
-          await db.delete(itemTable, where: "$itemRoomId = ?", whereArgs: [id]);
-      if (countDeletedItems > 0) {
+      await db.delete(itemTable, where: "$itemRoomId = ?", whereArgs: [id]);
+      if (countDeletedRooms > 0) {
         return true;
+      } else {
+        return false;
       }
     }
   }

@@ -44,6 +44,7 @@ class _EditItemFormPageState extends State<EditItemFormPage> {
       name: nameController.text,
       description: descriptionController.text,
       roomId: selectedRoom.id,
+      imagePath: item.imagePath,
     );
     Navigator.of(context).pop(editedItem);
   }

@@ -37,7 +37,7 @@ class AddNewItemTile extends StatelessWidget {
                   "Add item",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 10,
+                    fontSize: 13,
                   ),
                   textAlign: TextAlign.center,
                 ),

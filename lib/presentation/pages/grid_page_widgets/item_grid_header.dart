@@ -1,5 +1,4 @@
 import 'package:broom/domain/entities/room.dart';
-import 'package:broom/domain/usecases/delete_room.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/grid_cubit.dart';

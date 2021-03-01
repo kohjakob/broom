@@ -19,7 +19,7 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
   Item item;
 
   _editItem(Item itemToEdit) async {
-    final updatedItem = await Navigator.of(context).pushNamed(
+    final Item updatedItem = await Navigator.of(context).pushNamed(
       EditItemFormPage.routeName,
       arguments: {
         "item": itemToEdit,
