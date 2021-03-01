@@ -4,6 +4,7 @@ import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
+import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/item.dart';
@@ -122,6 +123,8 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                       ),
                     ],
                   );
+                } else {
+                  return LoadingFallback();
                 }
               },
             ),

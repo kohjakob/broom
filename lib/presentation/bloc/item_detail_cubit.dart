@@ -17,10 +17,10 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
     emit(
       ItemDetailLoaded(
         Item(
-          name: "My item",
-          description: "Used for playing the drums",
+          name: "Untitled",
+          description: "No description",
           id: 0,
-          imagePath: "None",
+          imagePath: null,
           roomId: roomOfItem?.id,
         ),
         (roomOfItem != null) ? roomOfItem : null,

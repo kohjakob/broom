@@ -101,10 +101,10 @@ class GridCubit extends Cubit<GridState> {
     either.fold(
       (failure) {
         emit(GridFailed());
-        fetchRooms();
+        refetchRooms();
       },
       (room) {
-        fetchRooms();
+        refetchRooms(room);
       },
     );
   }
@@ -121,7 +121,7 @@ class GridCubit extends Cubit<GridState> {
         emit(GridFailed());
       },
       (item) {
-        fetchRooms();
+        refetchRooms();
       },
     );
   }
@@ -135,7 +135,7 @@ class GridCubit extends Cubit<GridState> {
         emit(GridFailed());
       },
       (item) {
-        fetchRooms();
+        refetchRooms();
       },
     );
   }
@@ -159,7 +159,8 @@ class GridCubit extends Cubit<GridState> {
     );
   }
 
-  refetchRooms() async {
+  refetchRooms([Room editedRoom]) async {
+    final previous = state;
     var either = await getRoomsUsecase.execute();
     either.fold(
       (failure) {
@@ -180,6 +181,11 @@ class GridCubit extends Cubit<GridState> {
         ));
       },
     );
+    if (previous is GridLoaded) {
+      sortItems(previous.sorting);
+      filterItems((editedRoom != null) ? editedRoom : previous.roomSelected);
+      searchItems("");
+    }
   }
 
   fetchRooms() async {

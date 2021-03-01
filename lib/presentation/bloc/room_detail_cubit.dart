@@ -1,9 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:broom/core/constants/colors.dart';
-import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/item.dart';
 import '../../domain/entities/room.dart';
 

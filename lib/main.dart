@@ -35,6 +35,7 @@ class Broom extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "Poppins",
           primarySwatch: Colors.indigo,
