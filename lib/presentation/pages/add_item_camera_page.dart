@@ -1,15 +1,40 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/room.dart';
-import '../bloc/camera_cubit.dart';
 import 'add_item_form_page.dart';
 import 'widgets/small_button.dart';
 import 'widgets/top_nav_bar.dart';
 
-class AddItemCameraPage extends StatelessWidget {
+class AddItemCameraPage extends StatefulWidget {
   static String routeName = "addItemCameraPage";
+
+  @override
+  _AddItemCameraPageState createState() => _AddItemCameraPageState();
+}
+
+class _AddItemCameraPageState extends State<AddItemCameraPage> {
+  CameraController cameraController;
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    final cameras = await availableCameras();
+    cameraController = CameraController(cameras[0], ResolutionPreset.medium);
+    cameraController.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    cameraController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +43,9 @@ class AddItemCameraPage extends StatelessWidget {
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
         actions: [
           SmallButton(
             onPressed: () {
@@ -36,20 +64,18 @@ class AddItemCameraPage extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                child: BlocBuilder<CameraCubit, CameraState>(
-                  builder: (context, state) {
-                    if (state.camera.cameraController != null) {
+                child: Builder(
+                  builder: (context) {
+                    if (cameraController != null) {
                       return Column(
                         children: [
-                          CameraLivePreview(state),
-                          CameraActions(intendedRoom),
+                          CameraLivePreview(cameraController),
+                          CameraActions(intendedRoom, cameraController),
                         ],
                       );
                     } else {
                       return Center(
-                        child: Text(
-                          "Seems like your device doesn't have a camera",
-                        ),
+                        child: CircularProgressIndicator(),
                       );
                     }
                   },
@@ -64,8 +90,25 @@ class AddItemCameraPage extends StatelessWidget {
 }
 
 class CameraActions extends StatelessWidget {
+  final CameraController cameraController;
   final Room intendedRoom;
-  const CameraActions(this.intendedRoom);
+
+  const CameraActions(this.intendedRoom, this.cameraController);
+
+  _takePicture(context) async {
+    final xFile = await cameraController.takePicture();
+    final directory = await getApplicationDocumentsDirectory();
+    final path = join(directory.path, xFile.name);
+    // ignore: await_only_futures
+    await xFile.saveTo(path);
+    Navigator.of(context).pushNamed(
+      AddItemFormPage.routeName,
+      arguments: {
+        "intendedRoom": intendedRoom,
+        "imagePath": path,
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,13 +129,7 @@ class CameraActions extends StatelessWidget {
                   radius: 25,
                   backgroundColor: Colors.transparent,
                   child: InkWell(
-                    onTap: () {
-                      context.read<CameraCubit>().takePicture();
-                      Navigator.of(context).pushNamed(
-                        AddItemFormPage.routeName,
-                        arguments: {"intendedRoom": intendedRoom},
-                      );
-                    },
+                    onTap: () => _takePicture(context),
                   ),
                 ),
               ),
@@ -105,16 +142,9 @@ class CameraActions extends StatelessWidget {
 }
 
 class CameraLivePreview extends StatelessWidget {
-  final CameraState state;
+  final CameraController cameraController;
 
-  CameraLivePreview(this.state);
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState appState) {
-    if (appState == AppLifecycleState.resumed) {
-      state.camera.cameraController.initialize();
-    }
-  }
+  CameraLivePreview(this.cameraController);
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +152,9 @@ class CameraLivePreview extends StatelessWidget {
       aspectRatio: 1,
       child: ClipRect(
         child: Transform.scale(
-          scale: state.camera.cameraController.value.aspectRatio,
+          scale: cameraController.value.aspectRatio,
           child: Center(
-            child: CameraPreview(state.camera.cameraController),
+            child: CameraPreview(cameraController),
           ),
         ),
       ),

@@ -29,6 +29,9 @@ class _AddRoomFormPageState extends State<AddRoomFormPage> {
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
         actions: [
           SmallButton(
             onPressed: () {

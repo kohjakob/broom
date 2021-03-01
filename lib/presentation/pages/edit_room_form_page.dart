@@ -36,6 +36,9 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
     return Scaffold(
       appBar: TopNavBar(
         showBack: true,
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
         actions: [
           SmallButton(
             onPressed: () {

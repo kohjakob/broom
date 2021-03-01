@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home_page.dart';
 import 'injector.dart';
-import 'presentation/bloc/camera_cubit.dart';
 import 'presentation/bloc/grid_cubit.dart';
 import 'presentation/pages/add_item_camera_page.dart';
 import 'presentation/pages/add_item_form_page.dart';
@@ -25,9 +24,6 @@ class Broom extends StatelessWidget {
       providers: [
         BlocProvider<GridCubit>(
           create: (_) => injector<GridCubit>(),
-        ),
-        BlocProvider<CameraCubit>(
-          create: (_) => injector<CameraCubit>(),
         ),
       ],
       child: MaterialApp(

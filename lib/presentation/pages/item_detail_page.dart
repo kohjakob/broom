@@ -65,6 +65,9 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopNavBar(
+        onBackPressed: () {
+          Navigator.of(context).pop();
+        },
         showBack: true,
         actions: [],
       ),

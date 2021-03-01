@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final bool showBack;
+  final Function onBackPressed;
 
-  TopNavBar({this.actions, this.showBack});
+  TopNavBar({
+    @required this.actions,
+    @required this.showBack,
+    @required this.onBackPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               GestureDetector(
                 child: Icon(Icons.arrow_back),
-                onTap: () => Navigator.of(context).pop(),
+                onTap: () => onBackPressed(),
               ),
               Spacer(),
               ...actions,
