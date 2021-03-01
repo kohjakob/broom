@@ -1,4 +1,5 @@
 import 'package:broom/domain/entities/room.dart';
+import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../../bloc/grid_cubit.dart';
@@ -75,11 +76,12 @@ class _DeleteRoomDialogState extends State<DeleteRoomDialog> {
 
 class ItemGridHeader extends StatelessWidget {
   final GridLoaded state;
+
   const ItemGridHeader(this.state);
 
-  _editRoom(context) {
-    Navigator.of(context).pushNamed(EditRoomFormPage.routeName,
-        arguments: {"roomToEdit": state.roomSelected});
+  _editRoom(BuildContext context) {
+    context.read<RoomDetailCubit>().setRoom(state.roomSelected);
+    Navigator.of(context).pushNamed(EditRoomFormPage.routeName);
   }
 
   _deleteRoomDialog(context) async {

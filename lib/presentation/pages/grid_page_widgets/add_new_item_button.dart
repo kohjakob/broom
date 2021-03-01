@@ -6,9 +6,9 @@ import '../../../domain/entities/room.dart';
 import '../add_item_camera_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddNewItemTile extends StatelessWidget {
+class AddNewItemButton extends StatelessWidget {
   final Room roomSelected;
-  const AddNewItemTile(this.roomSelected);
+  const AddNewItemButton(this.roomSelected);
 
   @override
   Widget build(BuildContext context) {

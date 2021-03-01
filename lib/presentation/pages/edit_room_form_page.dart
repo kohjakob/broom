@@ -1,35 +1,15 @@
+import 'package:broom/presentation/bloc/room_detail_cubit.dart';
+
 import '../../core/constants/colors.dart';
-import '../../domain/entities/room.dart';
 import '../bloc/grid_cubit.dart';
+import 'grid_page_widgets/loading_fallback.dart';
 import 'widgets/small_button.dart';
 import 'widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EditRoomFormPage extends StatefulWidget {
+class EditRoomFormPage extends StatelessWidget {
   static String routeName = "editRoomFormPage";
-
-  @override
-  _EditRoomFormPageState createState() => _EditRoomFormPageState();
-}
-
-class _EditRoomFormPageState extends State<EditRoomFormPage> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  CustomColor color;
-  bool isInit = false;
-  Room roomToEdit;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    roomToEdit = arguments["roomToEdit"];
-    nameController.value = TextEditingValue(text: roomToEdit.name);
-    descriptionController.value =
-        TextEditingValue(text: roomToEdit.description);
-    color = roomToEdit.color;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,75 +20,94 @@ class _EditRoomFormPageState extends State<EditRoomFormPage> {
           Navigator.of(context).pop();
         },
         actions: [
-          SmallButton(
-            onPressed: () {
-              context.read<GridCubit>().editRoom(
-                    roomToEdit.id,
-                    nameController.text,
-                    descriptionController.text,
-                    color,
-                  );
-              Navigator.of(context).pop();
+          BlocBuilder<RoomDetailCubit, RoomDetailState>(
+            builder: (rdContext, rdState) {
+              if (rdState is RoomDetailLoaded) {
+                return SmallButton(
+                  onPressed: () async {
+                    await context.read<GridCubit>().editRoom(
+                          rdState.room.id,
+                          rdState.room.name,
+                          rdState.room.description,
+                          rdState.room.color,
+                        );
+                    Navigator.of(context).pop();
+                  },
+                  label: "Update Room",
+                  icon: Icons.add,
+                  color: Theme.of(context).accentColor,
+                );
+              } else {
+                return Container();
+              }
             },
-            label: "Update Room",
-            icon: Icons.add,
-            color: Theme.of(context).accentColor,
-          )
+          ),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: "Room Title",
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                      child: Icon(Icons.title),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                TextFormField(
-                  controller: descriptionController,
-                  maxLines: 3,
-                  maxLength: 200,
-                  decoration: InputDecoration(
-                    hintText: "Description",
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 54),
-                      child: Icon(Icons.article_outlined),
-                    ),
-                  ),
-                ),
-                DropdownButtonFormField(
-                  value: color,
-                  items: CustomColor.values
-                      .map(
-                        (color) => DropdownMenuItem<CustomColor>(
-                          value: color,
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                  radius: 15, backgroundColor: color.material),
-                              SizedBox(width: 10),
-                              Text(color.name),
-                            ],
+            child: BlocBuilder<RoomDetailCubit, RoomDetailState>(
+              builder: (rdContext, rdState) {
+                if (rdState is RoomDetailLoaded) {
+                  return Column(
+                    children: [
+                      TextFormField(
+                        initialValue: rdState.room.name,
+                        onChanged: (newName) =>
+                            context.read<RoomDetailCubit>().setName(newName),
+                        decoration: InputDecoration(
+                          hintText: "Room Title",
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                            child: Icon(Icons.title),
                           ),
                         ),
-                      )
-                      .toList(),
-                  onChanged: (newColor) {
-                    setState(() {
-                      color = newColor;
-                    });
-                  },
-                ),
-              ],
+                      ),
+                      SizedBox(height: 20),
+                      TextFormField(
+                        initialValue: rdState.room.description,
+                        onChanged: (newDescription) => context
+                            .read<RoomDetailCubit>()
+                            .setDescription(newDescription),
+                        maxLines: 3,
+                        maxLength: 200,
+                        decoration: InputDecoration(
+                          hintText: "Description",
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 54),
+                            child: Icon(Icons.article_outlined),
+                          ),
+                        ),
+                      ),
+                      DropdownButtonFormField(
+                        value: rdState.room.color,
+                        items: CustomColor.values
+                            .map(
+                              (color) => DropdownMenuItem<CustomColor>(
+                                value: color,
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                        radius: 15,
+                                        backgroundColor: color.material),
+                                    SizedBox(width: 10),
+                                    Text(color.name),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (newColor) =>
+                            context.read<RoomDetailCubit>().setColor(newColor),
+                      ),
+                    ],
+                  );
+                } else {
+                  return LoadingFallback();
+                }
+              },
             ),
           ),
         ),

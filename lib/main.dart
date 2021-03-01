@@ -1,4 +1,5 @@
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
+import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,9 @@ class Broom extends StatelessWidget {
         ),
         BlocProvider<ItemDetailCubit>(
           create: (_) => injector<ItemDetailCubit>(),
+        ),
+        BlocProvider<RoomDetailCubit>(
+          create: (_) => injector<RoomDetailCubit>(),
         ),
       ],
       child: MaterialApp(

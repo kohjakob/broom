@@ -1,6 +1,8 @@
+import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../add_room_form_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewRoomButton extends StatelessWidget {
   AddNewRoomButton();
@@ -13,8 +15,10 @@ class AddNewRoomButton extends StatelessWidget {
         minWidth: 10,
         child: FlatButton(
           shape: StadiumBorder(),
-          onPressed: () =>
-              Navigator.of(context).pushNamed(AddRoomFormPage.routeName),
+          onPressed: () {
+            context.read<RoomDetailCubit>().setEmptyRoom();
+            Navigator.of(context).pushNamed(AddRoomFormPage.routeName);
+          },
           color: Theme.of(context).accentColor,
           child: Text(
             "Add Room",

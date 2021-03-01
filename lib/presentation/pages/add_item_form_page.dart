@@ -4,6 +4,7 @@ import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 
 import '../../domain/entities/room.dart';
 import '../bloc/grid_cubit.dart';
+import 'grid_page_widgets/loading_fallback.dart';
 import 'widgets/small_button.dart';
 import 'widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,8 @@ class AddItemFormPage extends StatelessWidget {
                 icon: Icons.add,
                 color: Theme.of(context).accentColor,
               );
+            } else {
+              return Container();
             }
           }),
         ],
@@ -144,6 +147,8 @@ class AddItemFormPage extends StatelessWidget {
                       )
                     ],
                   );
+                } else {
+                  return LoadingFallback();
                 }
               },
             ),

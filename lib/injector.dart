@@ -1,6 +1,7 @@
 import 'package:broom/domain/usecases/delete_item.dart';
 import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
+import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import 'data/datasources/local_datasource.dart';
@@ -43,5 +44,9 @@ Future<void> init() async {
 
   injector.registerFactory(
     () => ItemDetailCubit(),
+  );
+
+  injector.registerFactory(
+    () => RoomDetailCubit(),
   );
 }

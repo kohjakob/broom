@@ -6,16 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/item.dart';
 import '../../domain/entities/room.dart';
 
-enum ItemSorting { AscendingAlphaName, DescendingAlphaName, AscendingDate }
-
-class DisplayItem {
-  Item item;
-  bool searchMatch;
-  bool roomFilterMatch;
-
-  DisplayItem(this.item, this.searchMatch, this.roomFilterMatch);
-}
-
 class ItemDetailCubit extends Cubit<ItemDetailState> {
   ItemDetailCubit() : super(ItemDetailLoading());
 

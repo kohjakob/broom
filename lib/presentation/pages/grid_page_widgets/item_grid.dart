@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../bloc/grid_cubit.dart';
-import 'add_new_item_tile.dart';
+import 'add_new_item_button.dart';
 import 'item_tile.dart';
 
 class ItemGrid extends StatelessWidget {
@@ -20,7 +20,7 @@ class ItemGrid extends StatelessWidget {
             crossAxisSpacing: 20,
             mainAxisSpacing: 20),
         children: [
-          AddNewItemTile(state.roomSelected),
+          AddNewItemButton(state.roomSelected),
           ...state.displayItems
               .where((displayItem) {
                 return (displayItem.searchMatch && displayItem.roomFilterMatch);
