@@ -85,7 +85,7 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
         imagePath: previous.item.imagePath,
         roomId: room.id,
       );
-      emit(ItemDetailLoaded(newItem, previous.roomOfItem));
+      emit(ItemDetailLoaded(newItem, room));
     }
   }
 }
@@ -109,5 +109,6 @@ class ItemDetailLoaded extends ItemDetailState {
   List<Object> get props => [
         item,
         roomOfItem,
+        item.roomId,
       ];
 }
