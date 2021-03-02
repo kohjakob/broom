@@ -31,22 +31,24 @@ class _DeleteRoomDialogState extends State<DeleteRoomDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Checkbox(
-                  value: deleteAllRooms,
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        deleteAllRooms = value;
-                      },
-                    );
-                  },
-                ),
-                Expanded(child: Text("Delete all items in this room"))
-              ],
-            )
+            (widget.room.items.length > 0)
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Checkbox(
+                        value: deleteAllRooms,
+                        onChanged: (value) {
+                          setState(
+                            () {
+                              deleteAllRooms = value;
+                            },
+                          );
+                        },
+                      ),
+                      Expanded(child: Text("Delete all items in this room"))
+                    ],
+                  )
+                : Container(),
           ],
         ),
       ),

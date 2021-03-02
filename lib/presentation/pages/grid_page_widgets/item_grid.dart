@@ -7,6 +7,7 @@ import 'item_tile.dart';
 class ItemGrid extends StatelessWidget {
   final GridLoaded state;
   ItemGrid(this.state);
+  AnimationController _controller;
 
   @override
   Widget build(BuildContext context) {

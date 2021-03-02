@@ -162,12 +162,14 @@ class GridCubit extends Cubit<GridState> {
 
   refetchRooms([Room editedRoom]) async {
     final previous = state;
+    List<Room> fetchedRooms;
     var either = await getRoomsUsecase.execute();
     either.fold(
       (failure) {
         emit(GridFailed());
       },
       (rooms) {
+        fetchedRooms = rooms;
         final items =
             rooms.map((room) => room.items).expand((item) => item).toList();
         var displayItems =
@@ -184,7 +186,11 @@ class GridCubit extends Cubit<GridState> {
     );
     if (previous is GridLoaded) {
       sortItems(previous.sorting);
-      filterItems((editedRoom != null) ? editedRoom : previous.roomSelected);
+      filterItems((editedRoom != null)
+          ? editedRoom
+          : fetchedRooms
+              .where((room) => room.id == previous.roomSelected.id)
+              .first);
       searchItems("");
     }
   }
