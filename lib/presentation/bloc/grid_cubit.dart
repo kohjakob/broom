@@ -186,11 +186,15 @@ class GridCubit extends Cubit<GridState> {
     );
     if (previous is GridLoaded) {
       sortItems(previous.sorting);
-      filterItems((editedRoom != null)
-          ? editedRoom
-          : fetchedRooms
-              .where((room) => room.id == previous.roomSelected.id)
-              .first);
+      var newRoom;
+      if (previous.roomSelected != null) {
+        newRoom = fetchedRooms
+            .where((room) => room.id == previous.roomSelected.id)
+            .first;
+      } else {
+        newRoom = null;
+      }
+      filterItems((editedRoom != null) ? editedRoom : newRoom);
       searchItems("");
     }
   }
