@@ -4,6 +4,7 @@ import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
+import 'package:broom/presentation/pages/edit_item_camera_page.dart';
 import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart';
 
 import 'widgets/small_button.dart';
@@ -22,6 +23,7 @@ class EditItemFormPage extends StatelessWidget {
           state.item.name,
           state.item.description,
           state.roomOfItem,
+          state.item.imagePath,
         );
     final editedItem = Item(
       id: state.item.id,
@@ -69,7 +71,10 @@ class EditItemFormPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 30),
                       GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(EditItemCameraPage.routeName);
+                        },
                         child: Stack(
                           children: [
                             (idState.item.imagePath != null)

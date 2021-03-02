@@ -140,13 +140,14 @@ class GridCubit extends Cubit<GridState> {
     );
   }
 
-  editItem(
-      int itemId, String name, String description, Room selectedRoom) async {
+  editItem(int itemId, String name, String description, Room selectedRoom,
+      String imagePath) async {
     final either = await editItemUsecase.execute(
       itemId: itemId,
       name: name,
       description: description,
       roomId: selectedRoom.id,
+      imagePath: imagePath,
     );
     either.fold(
       (failure) {

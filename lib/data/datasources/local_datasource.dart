@@ -199,6 +199,7 @@ class LocalDatasourceImpl implements LocalDatasource {
       itemName: item.name,
       itemDescription: item.description,
       itemRoomId: item.roomId,
+      itemImagePath: item.imagePath,
     };
 
     int countUpdatedItems = await db.update(itemTable, itemModelMap,

@@ -15,13 +15,14 @@ class EditItem {
     @required String name,
     @required String description,
     @required int roomId,
+    @required String imagePath,
   }) async {
     final item = Item(
       id: itemId,
       name: (name == "") ? "Untitled" : name,
       description: (description == "") ? "No description" : description,
       roomId: roomId,
-      imagePath: null,
+      imagePath: imagePath,
     );
 
     final either = await repo.editItem(item);
