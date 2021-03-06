@@ -10,31 +10,64 @@ import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SwipePage extends StatelessWidget {
+class SwipePage extends StatefulWidget {
+  @override
+  _SwipePageState createState() => _SwipePageState();
+}
+
+class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..forward();
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastLinearToSlowEaseIn,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: BlocBuilder<SwipeCubit, SwipeState>(
               builder: (swipeContext, swipeState) {
                 if (swipeState is SwipeLoaded) {
                   return Column(
                     children: [
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(30),
-                            color: Colors.indigo.shade50,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Did you use this item in the last week?",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.indigo.shade500,
+                      SizeTransition(
+                        sizeFactor: _animation,
+                        axis: Axis.vertical,
+                        axisAlignment: 1,
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(30),
+                              color: Colors.indigo.shade50,
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Did you use this item in the last week?",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.indigo.shade500,
+                                ),
                               ),
                             ),
                           ),
@@ -44,44 +77,62 @@ class SwipePage extends StatelessWidget {
                       Expanded(
                         child: Stack(
                           children: [
-                            Center(
-                              child: FlatButton(
-                                color: Theme.of(context).accentColor,
-                                shape: StadiumBorder(),
-                                child: Text(
-                                  "Reload",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .copyWith(color: Colors.white),
-                                ),
-                                onPressed: () =>
-                                    context.read<SwipeCubit>().fetchItems(),
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Skip answer",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.grey,
+                                    size: 15,
+                                  ),
+                                ],
                               ),
                             ),
-                            ...swipeState.items.map(
-                              (item) {
-                                return SwipeableCard(item);
-                              },
-                            ).toList(),
+                            Stack(
+                              children: [
+                                Center(
+                                  child: FlatButton(
+                                    color: Theme.of(context).accentColor,
+                                    shape: StadiumBorder(),
+                                    child: Text(
+                                      "Reload",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          .copyWith(color: Colors.white),
+                                    ),
+                                    onPressed: () =>
+                                        context.read<SwipeCubit>().fetchItems(),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Expanded(
+                                      child: Stack(
+                                        children: [
+                                          ...swipeState.items.map(
+                                            (item) {
+                                              return SwipeableCard(item);
+                                            },
+                                          ).toList(),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 41),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Skip answer",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(width: 5),
-                          Icon(
-                            Icons.arrow_forward,
-                            size: 15,
-                            color: Colors.grey,
-                          )
-                        ],
                       ),
                     ],
                   );
@@ -116,6 +167,12 @@ class _SwipeableCardState extends State<SwipeableCard>
   void initState() {
     super.initState();
     dragController = AnimationController.unbounded(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    dragController.dispose();
+    super.dispose();
   }
 
   bool _checkVelocity(DragEndDetails dragDetails, Offset dragOffset) {
@@ -217,73 +274,67 @@ class _SwipeableCardState extends State<SwipeableCard>
               context.read<ItemDetailCubit>().setItem(widget.item, null);
               Navigator.of(context).pushNamed(ItemDetailPage.routeName);
             },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: ColorFiltered(
-                colorFilter: ColorFilter.mode(
-                  Colors.transparent,
-                  BlendMode.overlay,
-                ),
-                child: Container(
-                  decoration: (widget.item.imagePath != null)
-                      ? BoxDecoration(
-                          image: DecorationImage(
-                            image: FileImage(File(widget.item.imagePath)),
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  child: Stack(
-                    children: [
-                      Center(
-                        child: buildSwipeIndicator(),
-                      ),
-                      Column(
-                        children: [
-                          Expanded(
-                            child: (widget.item.imagePath == null)
-                                ? Icon(
-                                    Icons.image,
-                                    color: Theme.of(context)
-                                        .accentColor
-                                        .withAlpha(100),
-                                    size: 220,
-                                  )
-                                : Container(),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            color: Theme.of(context).accentColor,
-                            padding: EdgeInsets.fromLTRB(30, 25, 30, 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.item.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      .copyWith(color: Colors.white),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  widget.item.description,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(color: Colors.white),
-                                ),
-                              ],
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    decoration: (widget.item.imagePath != null)
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: FileImage(File(widget.item.imagePath)),
+                              fit: BoxFit.cover,
                             ),
+                          )
+                        : BoxDecoration(
+                            color: Theme.of(context).primaryColor,
                           ),
-                        ],
-                      ),
-                    ],
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: (widget.item.imagePath == null)
+                              ? Icon(
+                                  Icons.image,
+                                  color: Theme.of(context)
+                                      .accentColor
+                                      .withAlpha(100),
+                                  size: 220,
+                                )
+                              : Container(),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          color: Theme.of(context).accentColor,
+                          padding: EdgeInsets.fromLTRB(30, 25, 30, 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.item.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(color: Colors.white),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                widget.item.description,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+                Center(
+                  child: buildSwipeIndicator(),
+                ),
+              ],
             ),
           ),
         );
