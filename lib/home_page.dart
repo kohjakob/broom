@@ -1,3 +1,4 @@
+import 'package:broom/presentation/pages/swipe_page.dart';
 import 'package:flutter/material.dart';
 
 import 'presentation/pages/grid_page.dart';
@@ -11,7 +12,7 @@ class _HomePageState extends State<HomePage> {
   var bottomNavigationPageIndex;
   final bottomNavigationPages = [
     GridPage(),
-    GridPage(),
+    SwipePage(),
   ];
 
   @override
@@ -30,11 +31,11 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
-            label: "List",
+            label: "Inventory",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            label: "Rate items",
+            label: "Swipe",
           ),
         ],
         currentIndex: bottomNavigationPageIndex,

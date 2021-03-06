@@ -16,4 +16,6 @@ abstract class DeclutterRepo {
   Future<Either<Failure, bool>> deleteRoom(int id, bool keepItems);
 
   Future<Either<Failure, List<Room>>> getRooms();
+
+  Future<Either<Failure, List<Item>>> getItems();
 }

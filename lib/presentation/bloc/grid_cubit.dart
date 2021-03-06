@@ -211,6 +211,7 @@ class GridCubit extends Cubit<GridState> {
         var displayItems =
             items.map((item) => DisplayItem(item, true, true)).toList();
         displayItems.sort((a, b) => a.item.id.compareTo(b.item.id));
+
         emit(GridLoaded(
           rooms: rooms,
           displayItems: displayItems,

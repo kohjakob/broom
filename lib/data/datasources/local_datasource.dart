@@ -22,6 +22,8 @@ abstract class LocalDatasource {
   Future<bool> deleteRoomFromDatabase(int id, bool keepItems);
 
   Future<List<RoomModel>> getRoomsFromDatabase();
+
+  Future<List<ItemModel>> getItemsFromDatabase();
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
@@ -250,6 +252,31 @@ class LocalDatasourceImpl implements LocalDatasource {
       } else {
         return false;
       }
+    }
+  }
+
+  @override
+  Future<List<ItemModel>> getItemsFromDatabase() async {
+    List<Map> itemsMap = await db.query(
+      itemTable,
+    );
+
+    if (itemsMap.length > 0) {
+      final items = itemsMap
+          .map(
+            (itemMap) => ItemModel(
+              name: itemMap[itemName],
+              description: itemMap[itemDescription],
+              id: itemMap[itemId],
+              imagePath: itemMap[itemImagePath],
+              roomId: itemMap[itemRoomId],
+            ),
+          )
+          .toList();
+
+      return items;
+    } else {
+      return [];
     }
   }
 }

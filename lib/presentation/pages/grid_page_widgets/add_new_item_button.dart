@@ -1,4 +1,5 @@
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
+import 'package:broom/presentation/bloc/swipe_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/colors.dart';
@@ -15,6 +16,7 @@ class AddNewItemButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.read<ItemDetailCubit>().setEmptyItem(roomSelected);
+        context.read<SwipeCubit>().fetchItems();
         Navigator.of(context).pushNamed(AddItemCameraPage.routeName);
       },
       child: ClipRRect(
