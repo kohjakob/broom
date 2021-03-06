@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:broom/domain/entities/item.dart';
+import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/bloc/swipe_cubit.dart';
 import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart';
+import 'package:broom/presentation/pages/item_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
@@ -14,32 +16,73 @@ class SwipePage extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            padding: EdgeInsets.all(30),
+            padding: EdgeInsets.all(20),
             child: BlocBuilder<SwipeCubit, SwipeState>(
               builder: (swipeContext, swipeState) {
                 if (swipeState is SwipeLoaded) {
-                  return Stack(
+                  return Column(
                     children: [
-                      Center(
-                        child: FlatButton(
-                          color: Theme.of(context).accentColor,
-                          shape: StadiumBorder(),
-                          child: Text(
-                            "Reload",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                .copyWith(color: Colors.white),
+                      Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(30),
+                            color: Colors.indigo.shade50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Did you use this item in the last week?",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.indigo.shade500,
+                              ),
+                            ),
                           ),
-                          onPressed: () =>
-                              context.read<SwipeCubit>().fetchItems(),
                         ),
                       ),
-                      ...swipeState.items.map(
-                        (item) {
-                          return SwipeableCard(item);
-                        },
-                      ).toList(),
+                      SizedBox(height: 15),
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: FlatButton(
+                                color: Theme.of(context).accentColor,
+                                shape: StadiumBorder(),
+                                child: Text(
+                                  "Reload",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .copyWith(color: Colors.white),
+                                ),
+                                onPressed: () =>
+                                    context.read<SwipeCubit>().fetchItems(),
+                              ),
+                            ),
+                            ...swipeState.items.map(
+                              (item) {
+                                return SwipeableCard(item);
+                              },
+                            ).toList(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Skip answer",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          SizedBox(width: 5),
+                          Icon(
+                            Icons.arrow_forward,
+                            size: 15,
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
                     ],
                   );
                 } else {
@@ -126,6 +169,39 @@ class _SwipeableCardState extends State<SwipeableCard>
     }
   }
 
+  Widget buildSwipeIndicator() {
+    if (skip) return Container();
+
+    var ratio = (dragController.value).abs() / 100;
+    ratio = ratio <= 0 ? 0 : ratio;
+    ratio = ratio > 1 ? 1 : ratio;
+    ratio = ratio <= 0.4 ? 0 : ratio;
+
+    if (1 > dragDirection && dragDirection > -1.5) {
+      return Opacity(
+        opacity: ratio,
+        child: CircleAvatar(
+          radius: 60,
+          child: Icon(
+            Icons.thumb_up,
+            size: 60,
+          ),
+        ),
+      );
+    } else {
+      return Opacity(
+        opacity: ratio,
+        child: CircleAvatar(
+          radius: 60,
+          child: Icon(
+            Icons.thumb_down,
+            size: 60,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -137,8 +213,12 @@ class _SwipeableCardState extends State<SwipeableCard>
             onPanStart: (details) => _onPanStart(details),
             onPanUpdate: (details) => _onPanUpdate(details),
             onPanEnd: (details) => _onPanEnd(details),
+            onTap: () {
+              context.read<ItemDetailCubit>().setItem(widget.item, null);
+              Navigator.of(context).pushNamed(ItemDetailPage.routeName);
+            },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
                   Colors.transparent,
@@ -155,42 +235,52 @@ class _SwipeableCardState extends State<SwipeableCard>
                       : BoxDecoration(
                           color: Theme.of(context).primaryColor,
                         ),
-                  child: Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    padding: EdgeInsets.all(30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(child: Container()),
-                        Text(
-                          widget.item.name,
-                          style: Theme.of(context).textTheme.headline6.copyWith(
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(0.0, 2.0),
-                                blurRadius: 15.0,
-                                color: Colors.black,
-                              ),
-                            ],
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: buildSwipeIndicator(),
+                      ),
+                      Column(
+                        children: [
+                          Expanded(
+                            child: (widget.item.imagePath == null)
+                                ? Icon(
+                                    Icons.image,
+                                    color: Theme.of(context)
+                                        .accentColor
+                                        .withAlpha(100),
+                                    size: 220,
+                                  )
+                                : Container(),
                           ),
-                        ),
-                        Text(
-                          widget.item.description,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(0.0, 2.0),
-                                blurRadius: 15.0,
-                                color: Colors.black,
-                              ),
-                            ],
+                          Container(
+                            width: double.infinity,
+                            color: Theme.of(context).accentColor,
+                            padding: EdgeInsets.fromLTRB(30, 25, 30, 30),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.item.name,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .copyWith(color: Colors.white),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  widget.item.description,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

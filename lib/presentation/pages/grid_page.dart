@@ -22,7 +22,7 @@ class GridPage extends StatelessWidget {
             children: [
               Container(
                 color: Theme.of(context).accentColor.withAlpha(20),
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                padding: EdgeInsets.all(20),
                 child: Row(
                   children: [
                     SearchBar(),
