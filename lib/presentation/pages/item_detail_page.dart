@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
@@ -19,11 +18,11 @@ class ItemDetailPage extends StatefulWidget {
 }
 
 class _ItemDetailPageState extends State<ItemDetailPage> {
-  _editItem(Item itemToEdit, Room room, BuildContext context) async {
+  _editItem(Item itemToEdit, int roomId, BuildContext context) async {
     final updatedItem =
         await Navigator.of(context).pushNamed(EditItemFormPage.routeName);
     if (updatedItem != null) {
-      context.read<ItemDetailCubit>().setItem(updatedItem, room);
+      context.read<ItemDetailCubit>().setItem(updatedItem, roomId);
     }
   }
 
@@ -102,7 +101,7 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                                       icon: Icon(Icons.edit),
                                       onPressed: () => _editItem(
                                         idState.item,
-                                        idState.roomOfItem,
+                                        idState.item.roomId,
                                         context,
                                       ),
                                     ),

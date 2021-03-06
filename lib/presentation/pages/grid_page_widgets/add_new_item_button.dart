@@ -15,7 +15,8 @@ class AddNewItemButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<ItemDetailCubit>().setEmptyItem(roomSelected);
+        final roomId = roomSelected?.id;
+        context.read<ItemDetailCubit>().setEmptyItem(roomId);
         context.read<SwipeCubit>().fetchItems();
         Navigator.of(context).pushNamed(AddItemCameraPage.routeName);
       },

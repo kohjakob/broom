@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:broom/domain/entities/item.dart';
-import 'package:broom/domain/entities/room.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_camera_page.dart';
@@ -22,7 +21,7 @@ class EditItemFormPage extends StatelessWidget {
           state.item.id,
           state.item.name,
           state.item.description,
-          state.roomOfItem,
+          state.item.roomId,
           state.item.imagePath,
         );
     final editedItem = Item(
@@ -138,12 +137,12 @@ class EditItemFormPage extends StatelessWidget {
                           builder: (ctx, gridState) {
                         if (gridState is GridLoaded) {
                           return DropdownButtonFormField(
-                            value: idState.roomOfItem,
+                            value: idState.item.roomId,
                             items: [
                               ...gridState.rooms
                                   .map(
-                                    (room) => DropdownMenuItem<Room>(
-                                      value: room,
+                                    (room) => DropdownMenuItem<int>(
+                                      value: room.id,
                                       child: Row(
                                         children: [
                                           CircleAvatar(
@@ -158,8 +157,8 @@ class EditItemFormPage extends StatelessWidget {
                                   )
                                   .toList(),
                             ],
-                            onChanged: (room) {
-                              context.read<ItemDetailCubit>().setRoom(room);
+                            onChanged: (roomId) {
+                              context.read<ItemDetailCubit>().setRoom(roomId);
                             },
                           );
                         } else {

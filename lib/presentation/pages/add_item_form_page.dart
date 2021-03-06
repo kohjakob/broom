@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 
-import '../../domain/entities/room.dart';
 import '../bloc/grid_cubit.dart';
 import 'grid_page_widgets/loading_fallback.dart';
 import 'widgets/small_button.dart';
@@ -57,7 +56,7 @@ class AddItemFormPage extends StatelessWidget {
                         idState.item.name,
                         idState.item.description,
                         idState.item.imagePath,
-                        idState.roomOfItem,
+                        idState.item.roomId,
                       );
                   Navigator.of(context).popUntil(ModalRoute.withName("/"));
                 },
@@ -114,14 +113,14 @@ class AddItemFormPage extends StatelessWidget {
                         builder: (gridContext, gridState) {
                           if (gridState is GridLoaded) {
                             return DropdownButtonFormField(
-                              value: (idState.roomOfItem == null)
-                                  ? gridState.rooms.first
-                                  : idState.roomOfItem,
+                              value: (idState.item.roomId == null)
+                                  ? gridState.rooms.first.id
+                                  : idState.item.roomId,
                               items: [
                                 ...gridState.rooms
                                     .map(
-                                      (room) => DropdownMenuItem<Room>(
-                                        value: room,
+                                      (room) => DropdownMenuItem<int>(
+                                        value: room.id,
                                         child: Row(
                                           children: [
                                             CircleAvatar(
@@ -136,8 +135,8 @@ class AddItemFormPage extends StatelessWidget {
                                     )
                                     .toList(),
                               ],
-                              onChanged: (room) {
-                                context.read<ItemDetailCubit>().setRoom(room);
+                              onChanged: (roomId) {
+                                context.read<ItemDetailCubit>().setRoom(roomId);
                               },
                             );
                           } else {

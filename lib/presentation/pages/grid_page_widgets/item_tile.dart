@@ -17,7 +17,7 @@ class ItemTile extends StatelessWidget {
       onTap: () {
         context.read<ItemDetailCubit>().setItem(
               displayItem.item,
-              room,
+              room.id,
             );
         Navigator.of(context).pushNamed(ItemDetailPage.routeName);
       },

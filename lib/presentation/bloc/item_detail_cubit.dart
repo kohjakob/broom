@@ -4,16 +4,15 @@ import 'package:equatable/equatable.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../domain/entities/item.dart';
-import '../../domain/entities/room.dart';
 
 class ItemDetailCubit extends Cubit<ItemDetailState> {
   ItemDetailCubit() : super(ItemDetailLoading());
 
-  setItem(Item item, Room roomOfItem) async {
-    emit(ItemDetailLoaded(item, roomOfItem));
+  setItem(Item item, int roomId) async {
+    emit(ItemDetailLoaded(item));
   }
 
-  setEmptyItem(Room roomOfItem) async {
+  setEmptyItem(int roomId) async {
     emit(
       ItemDetailLoaded(
         Item(
@@ -21,9 +20,8 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
           description: "No description",
           id: 0,
           imagePath: null,
-          roomId: roomOfItem?.id,
+          roomId: (roomId != null) ? roomId : null,
         ),
-        (roomOfItem != null) ? roomOfItem : null,
       ),
     );
   }
@@ -43,7 +41,7 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
         imagePath: imagePath,
         roomId: previous.item.roomId,
       );
-      emit(ItemDetailLoaded(newItem, previous.roomOfItem));
+      emit(ItemDetailLoaded(newItem));
     }
   }
 
@@ -57,7 +55,7 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
         imagePath: previous.item.imagePath,
         roomId: previous.item.roomId,
       );
-      emit(ItemDetailLoaded(newItem, previous.roomOfItem));
+      emit(ItemDetailLoaded(newItem));
     }
   }
 
@@ -71,11 +69,11 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
         imagePath: previous.item.imagePath,
         roomId: previous.item.roomId,
       );
-      emit(ItemDetailLoaded(newItem, previous.roomOfItem));
+      emit(ItemDetailLoaded(newItem));
     }
   }
 
-  setRoom(Room room) {
+  setRoom(int roomId) {
     if (state is ItemDetailLoaded) {
       final previous = state as ItemDetailLoaded;
       final newItem = Item(
@@ -83,9 +81,9 @@ class ItemDetailCubit extends Cubit<ItemDetailState> {
         description: previous.item.description,
         id: previous.item.id,
         imagePath: previous.item.imagePath,
-        roomId: room.id,
+        roomId: roomId,
       );
-      emit(ItemDetailLoaded(newItem, room));
+      emit(ItemDetailLoaded(newItem));
     }
   }
 }
@@ -101,14 +99,12 @@ class ItemDetailLoading extends ItemDetailState {}
 
 class ItemDetailLoaded extends ItemDetailState {
   final Item item;
-  final Room roomOfItem;
 
-  ItemDetailLoaded(this.item, this.roomOfItem);
+  ItemDetailLoaded(this.item);
 
   @override
   List<Object> get props => [
         item,
-        roomOfItem,
         item.roomId,
       ];
 }

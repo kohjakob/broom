@@ -271,7 +271,9 @@ class _SwipeableCardState extends State<SwipeableCard>
             onPanUpdate: (details) => _onPanUpdate(details),
             onPanEnd: (details) => _onPanEnd(details),
             onTap: () {
-              context.read<ItemDetailCubit>().setItem(widget.item, null);
+              context
+                  .read<ItemDetailCubit>()
+                  .setItem(widget.item, widget.item.roomId);
               Navigator.of(context).pushNamed(ItemDetailPage.routeName);
             },
             child: Stack(
