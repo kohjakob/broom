@@ -16,26 +16,10 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
-
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..forward();
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastLinearToSlowEaseIn,
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    context.read<SwipeCubit>().fetchItems();
   }
 
   Widget build(BuildContext context) {
@@ -49,25 +33,20 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
                 if (swipeState is SwipeLoaded) {
                   return Column(
                     children: [
-                      SizeTransition(
-                        sizeFactor: _animation,
-                        axis: Axis.vertical,
-                        axisAlignment: 1,
-                        child: Container(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.all(30),
-                              color: Colors.indigo.shade50,
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Did you use this item in the last week?",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.indigo.shade500,
-                                ),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(30),
+                            color: Colors.indigo.shade50,
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Did you use this item in the last week?",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Colors.indigo.shade500,
                               ),
                             ),
                           ),

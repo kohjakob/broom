@@ -21,14 +21,20 @@ class GridPage extends StatelessWidget {
           return Column(
             children: [
               Container(
-                color: Theme.of(context).accentColor.withAlpha(20),
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    SearchBar(),
-                    SizedBox(width: 20),
-                    SortDropdown(),
-                  ],
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    color: Theme.of(context).accentColor.withAlpha(20),
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        SearchBar(),
+                        SizedBox(width: 20),
+                        SortDropdown(),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               RoomBar(state),

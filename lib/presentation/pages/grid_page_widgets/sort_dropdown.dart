@@ -24,18 +24,21 @@ class SortDropdown extends StatelessWidget {
                   DropdownMenuItem(
                     child: FaIcon(
                       FontAwesomeIcons.calendar,
+                      color: Colors.indigo.shade400,
                     ),
                     value: ItemSorting.AscendingDate,
                   ),
                   DropdownMenuItem(
                     child: FaIcon(
                       FontAwesomeIcons.sortAlphaDown,
+                      color: Colors.indigo.shade400,
                     ),
                     value: ItemSorting.AscendingAlphaName,
                   ),
                   DropdownMenuItem(
                     child: FaIcon(
                       FontAwesomeIcons.sortAlphaUp,
+                      color: Colors.indigo.shade400,
                     ),
                     value: ItemSorting.DescendingAlphaName,
                   ),
