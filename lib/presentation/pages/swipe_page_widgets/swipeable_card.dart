@@ -22,7 +22,7 @@ class SwipeableCard extends StatelessWidget {
                     ),
                   )
                 : BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.indigo.shade50,
                   ),
             child: Column(
               children: [
@@ -30,7 +30,7 @@ class SwipeableCard extends StatelessWidget {
                   child: (item.imagePath == null)
                       ? Icon(
                           Icons.image,
-                          color: Theme.of(context).accentColor.withAlpha(100),
+                          color: Theme.of(context).accentColor.withAlpha(25),
                           size: 220,
                         )
                       : Container(),

@@ -116,4 +116,31 @@ class DeclutterRepoImpl implements DeclutterRepo {
       return Left(Failure(Code.ItemEditFail));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> answerQuestion(
+    int questionId,
+    int itemId,
+    Answer answer,
+  ) async {
+    try {
+      bool success =
+          await localDatasource.answerQuestion(questionId, itemId, answer);
+      return Right(success);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<Question, Answer>>> getQuestionAnswers(
+      int itemId) async {
+    try {
+      Map<Question, Answer> questionAnswers =
+          await localDatasource.getQuestionAnswers(itemId);
+      return Right(questionAnswers);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
 }

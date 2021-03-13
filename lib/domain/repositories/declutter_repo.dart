@@ -26,4 +26,9 @@ abstract class DeclutterRepo {
   Future<Either<Failure, List<Item>>> getUnansweredItems(int questionId);
 
   Future<Either<Failure, Question>> getRandomQuestion();
+
+  Future<Either<Failure, bool>> answerQuestion(
+      int questionId, int itemId, Answer answer);
+
+  Future<Either<Failure, Map<Question, Answer>>> getQuestionAnswers(int itemId);
 }

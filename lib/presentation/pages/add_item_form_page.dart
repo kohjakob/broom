@@ -28,10 +28,11 @@ class AddItemFormPage extends StatelessWidget {
         onTap: () => Navigator.of(context).pop(),
         child: CircleAvatar(
           radius: 70,
-          backgroundColor: Theme.of(context).primaryColor.withAlpha(50),
-          child: Text(
-            "📦",
-            style: TextStyle(fontSize: 55),
+          backgroundColor: Colors.indigo.shade50,
+          child: Icon(
+            Icons.image,
+            color: Theme.of(context).accentColor.withAlpha(40),
+            size: 80,
           ),
         ),
       );

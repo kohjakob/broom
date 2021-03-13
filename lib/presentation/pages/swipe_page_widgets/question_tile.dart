@@ -1,9 +1,9 @@
+import 'package:broom/domain/entities/question.dart';
 import 'package:flutter/material.dart';
 
-class Question extends StatelessWidget {
-  const Question({
-    Key key,
-  }) : super(key: key);
+class QuestionTile extends StatelessWidget {
+  final Question question;
+  const QuestionTile(this.question);
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +16,13 @@ class Question extends StatelessWidget {
           padding: EdgeInsets.all(30),
           color: Colors.indigo.shade50,
           alignment: Alignment.center,
-          child: Text(
-            "Did you use this item in the last week?",
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Colors.indigo.shade500,
+          child: FittedBox(
+            child: Text(
+              question.text,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.indigo.shade500,
+              ),
             ),
           ),
         ),

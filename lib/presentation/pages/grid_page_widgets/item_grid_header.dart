@@ -96,7 +96,7 @@ class ItemGridHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 30),
       height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

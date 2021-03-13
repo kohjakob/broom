@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:broom/domain/entities/question.dart';
 import 'package:broom/presentation/bloc/grid_cubit.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_form_page.dart';
@@ -120,6 +121,12 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                               idState.item.description,
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
+                            SizedBox(height: 20),
+                            ...idState.questionAnswers.entries.map(
+                              (entry) {
+                                return QuestionAnswerTile(entry);
+                              },
+                            ).toList(),
                           ],
                         ),
                       ),
@@ -130,6 +137,53 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
                 }
               },
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class QuestionAnswerTile extends StatelessWidget {
+  final entry;
+  const QuestionAnswerTile(this.entry);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          color: Colors.indigoAccent,
+          padding: EdgeInsets.all(15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  entry.key.text,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .copyWith(color: Colors.white),
+                ),
+              ),
+              SizedBox(width: 10),
+              Icon(
+                Icons.thumb_up,
+                size: (entry.value == Answer.Yes) ? 20 : 18,
+                color:
+                    (entry.value == Answer.Yes) ? Colors.white : Colors.indigo,
+              ),
+              SizedBox(width: 15),
+              Icon(
+                Icons.thumb_down,
+                size: (entry.value == Answer.No) ? 20 : 18,
+                color:
+                    (entry.value == Answer.No) ? Colors.white : Colors.indigo,
+              ),
+            ],
           ),
         ),
       ),

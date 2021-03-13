@@ -14,9 +14,8 @@ class RoomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).accentColor.withAlpha(0),
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-      height: 65,
+      padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+      height: 55,
       child: Builder(
         builder: (ctx) {
           if (state is cubit.GridLoaded) {

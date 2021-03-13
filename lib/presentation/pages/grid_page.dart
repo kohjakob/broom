@@ -21,12 +21,11 @@ class GridPage extends StatelessWidget {
           return Column(
             children: [
               Container(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
                   child: Container(
                     color: Theme.of(context).accentColor.withAlpha(20),
-                    padding: EdgeInsets.all(20),
+                    padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: Row(
                       children: [
                         SearchBar(),

@@ -24,12 +24,12 @@ class ItemTile extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),
         child: Container(
-          color: Theme.of(context).primaryColor.withAlpha(15),
+          color: Theme.of(context).primaryColor.withAlpha(10),
           child: Column(
             children: [
               displayItem.item.imagePath != null
                   ? Flexible(
-                      flex: 3,
+                      flex: 5,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColor.withAlpha(30),
@@ -44,15 +44,18 @@ class ItemTile extends StatelessWidget {
                     )
                   : Container(),
               Flexible(
-                flex: 1,
+                flex: 3,
                 child: Container(
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 12),
                   color: Theme.of(context).primaryColor.withAlpha(15),
                   child: Center(
                     child: FittedBox(
                       child: Text(
                         displayItem.item.name,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyText2.copyWith(
+                              color: Colors.black87,
+                              fontSize: 11,
+                            ),
                       ),
                     ),
                   ),

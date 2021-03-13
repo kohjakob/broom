@@ -5,7 +5,7 @@ import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/bloc/swipe_cubit.dart';
 import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart';
 import 'package:broom/presentation/pages/item_detail_page.dart';
-import 'package:broom/presentation/pages/swipe_page_widgets/question.dart';
+import 'package:broom/presentation/pages/swipe_page_widgets/question_tile.dart';
 import 'package:broom/presentation/pages/swipe_page_widgets/skip_card.dart';
 import 'package:broom/presentation/pages/swipe_page_widgets/swipe_background.dart';
 import 'package:broom/presentation/pages/swipe_page_widgets/swipeable_card.dart';
@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'add_item_camera_page.dart';
 
 class SwipePage extends StatefulWidget {
   @override
@@ -185,7 +187,7 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
                 if (swipeState is SwipeLoaded) {
                   return Column(
                     children: [
-                      Question(),
+                      QuestionTile(swipeState.playPile.question),
                       SizedBox(height: 15),
                       Expanded(
                         child: Stack(
@@ -208,6 +210,24 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
                   );
                 } else if (swipeState is SwipedThrough) {
                   return SwipeBackground();
+                } else if (swipeState is SwipeNoItems) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("You have no items yet."),
+                        TextButton(
+                          child: Text("Add your first item"),
+                          onPressed: () async {
+                            context.read<ItemDetailCubit>().setEmptyItem(null);
+                            await Navigator.of(context)
+                                .pushNamed(AddItemCameraPage.routeName);
+                            context.read<SwipeCubit>().fetchPlayPile();
+                          },
+                        )
+                      ],
+                    ),
+                  );
                 } else {
                   return LoadingFallback();
                 }

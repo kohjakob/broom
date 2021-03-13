@@ -26,10 +26,9 @@ class RoomButton extends StatelessWidget {
       child: TextButton(
         style: ButtonStyle(
           minimumSize: MaterialStateProperty.all(Size(10, 0)),
-          padding:
-              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
+          padding: MaterialStateProperty.all(EdgeInsets.fromLTRB(12, 0, 10, 0)),
           shape: MaterialStateProperty.all(StadiumBorder()),
-          backgroundColor: MaterialStateProperty.all(color.withAlpha(20)),
+          backgroundColor: MaterialStateProperty.all(color.withAlpha(30)),
           overlayColor: MaterialStateProperty.all(color.withAlpha(20)),
           foregroundColor: MaterialStateProperty.all(color.withAlpha(20)),
         ),

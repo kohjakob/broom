@@ -41,6 +41,7 @@ class AddNewItemButton extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),

@@ -1,4 +1,6 @@
 import 'package:broom/data/models/question_model.dart';
+import 'package:broom/domain/entities/question.dart';
+import 'package:broom/domain/usecases/get_question_answers.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -29,6 +31,10 @@ abstract class LocalDatasource {
   Future<List<QuestionModel>> getQuestionsFromDatabase();
 
   Future<List<ItemModel>> getUnansweredItems(int questionId);
+
+  Future<bool> answerQuestion(int questionId, int itemId, Answer answer);
+
+  Future<Map<QuestionModel, Answer>> getQuestionAnswers(int itemId);
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
@@ -100,6 +106,18 @@ class LocalDatasourceImpl implements LocalDatasource {
           questionAnswer: 1,
         };
         await db.insert(questionTable, testQuestion);
+        final testQuestion1 = {
+          questionText: "Did you use this the past week?",
+          questionCategory: "VALUE",
+          questionAnswer: 1,
+        };
+        await db.insert(questionTable, testQuestion1);
+        final testQuestion2 = {
+          questionText: "Would you sell this if you get what you paid for it?",
+          questionCategory: "VALUE",
+          questionAnswer: 1,
+        };
+        await db.insert(questionTable, testQuestion2);
       },
       onUpgrade: (Database db, int version, int oldVersion) async {
         await db.execute('DELETE FROM $itemTable;');
@@ -347,11 +365,12 @@ class LocalDatasourceImpl implements LocalDatasource {
       final answeredQuestionIds =
           answersMap.map((answerMap) => answerMap[answerItemId]).toList();
 
-      List<Map> itemsMap = await db.query(
-        itemTable,
-        where: "$itemId NOT IN ?",
-        whereArgs: [...answeredQuestionIds],
-      );
+      var selectUnansweredQuestions =
+          'SELECT * FROM $itemTable  WHERE $itemId NOT IN (\'' +
+              (answeredQuestionIds.join('\',\'')).toString() +
+              '\')';
+      final itemsMap = await db.rawQuery(selectUnansweredQuestions);
+
       if (itemsMap.length > 0) {
         final items = itemsMap
             .map(
@@ -371,5 +390,48 @@ class LocalDatasourceImpl implements LocalDatasource {
     } else {
       return await getItemsFromDatabase();
     }
+  }
+
+  @override
+  Future<bool> answerQuestion(int questionId, int itemId, Answer answer) async {
+    final now = DateTime.now().toString();
+    final answerQuestion = {
+      answerDate: now,
+      answerItemId: itemId,
+      answerQuestionId: questionId,
+      answerValue: (answer == Answer.Yes) ? true : false,
+    };
+    final result = await db.insert(answerTable, answerQuestion);
+    if (result > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @override
+  Future<Map<QuestionModel, Answer>> getQuestionAnswers(int itemId) async {
+    final questions = await getQuestionsFromDatabase();
+    List<Map> questionAnswersMap = await db.query(
+      answerTable,
+      where: '$answerItemId = ?',
+      whereArgs: [itemId],
+    );
+    print(questionAnswersMap);
+    if (questionAnswersMap.length > 0) {
+      Map<QuestionModel, Answer> result = {};
+      questionAnswersMap.forEach(
+        (questionAnswerMap) {
+          final answer =
+              (questionAnswerMap[answerValue] == 1) ? Answer.Yes : Answer.No;
+          result[questions.firstWhere((question) =>
+              question.id == questionAnswerMap[answerQuestionId])] = answer;
+        },
+      );
+
+      return result;
+    }
+
+    return {};
   }
 }
