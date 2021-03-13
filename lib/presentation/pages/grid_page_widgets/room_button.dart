@@ -23,14 +23,17 @@ class RoomButton extends StatelessWidget {
     final label = (room == null) ? "All" : room.name;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 1, 10, 1),
-      child: FlatButton(
-        minWidth: 10,
-        color: selected ? color.withAlpha(40) : Colors.transparent,
-        highlightColor: color.withAlpha(20),
-        splashColor: color.withAlpha(20),
-        shape: StadiumBorder(),
+      child: TextButton(
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(10, 0)),
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
+          shape: MaterialStateProperty.all(StadiumBorder()),
+          backgroundColor: MaterialStateProperty.all(color.withAlpha(20)),
+          overlayColor: MaterialStateProperty.all(color.withAlpha(20)),
+          foregroundColor: MaterialStateProperty.all(color.withAlpha(20)),
+        ),
         onPressed: onPressed,
-        padding: EdgeInsets.fromLTRB(14, 10, 12, 10),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

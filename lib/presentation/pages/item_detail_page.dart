@@ -30,13 +30,13 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
     final deleteDialog = AlertDialog(
       title: Text("Really delete " + item.name + "?"),
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Text("No"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             context.read<GridCubit>().deleteItem(item.id);
             Navigator.of(context).popUntil(ModalRoute.withName("/"));
@@ -45,7 +45,10 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
         ),
       ],
     );
-    showDialog(context: context, child: deleteDialog);
+    showDialog(
+      context: context,
+      builder: (context) => deleteDialog,
+    );
   }
 
   @override

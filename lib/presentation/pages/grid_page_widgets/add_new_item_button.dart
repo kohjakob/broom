@@ -32,10 +32,9 @@ class AddNewItemButton extends StatelessWidget {
             children: [
               Icon(
                 Icons.add,
-                size: 50,
+                size: 40,
                 color: Colors.white,
               ),
-              SizedBox(height: 5),
               FittedBox(
                 child: Text(
                   "Add item",

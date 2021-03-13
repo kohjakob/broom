@@ -16,9 +16,14 @@ class SmallButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (icon != null) {
-      return FlatButton.icon(
-        color: color,
-        shape: StadiumBorder(),
+      return TextButton.icon(
+        style: ButtonStyle(
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
+          shape: MaterialStateProperty.all(StadiumBorder()),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).accentColor),
+        ),
         onPressed: onPressed,
         icon: Icon(
           icon,
@@ -30,10 +35,14 @@ class SmallButton extends StatelessWidget {
         ),
       );
     } else {
-      return FlatButton(
-        minWidth: 10,
-        color: color,
-        shape: StadiumBorder(),
+      return TextButton(
+        style: ButtonStyle(
+          padding:
+              MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 16)),
+          shape: MaterialStateProperty.all(StadiumBorder()),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).accentColor),
+        ),
         onPressed: onPressed,
         child: Text(
           label,

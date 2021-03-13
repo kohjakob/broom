@@ -53,13 +53,13 @@ class _DeleteRoomDialogState extends State<DeleteRoomDialog> {
         ),
       ),
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: Text("No"),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             if (deleteAllRooms) {
               context.read<GridCubit>().deleteRoomAndItems(widget.room.id);
@@ -88,7 +88,9 @@ class ItemGridHeader extends StatelessWidget {
 
   _deleteRoomDialog(context) async {
     await showDialog(
-        context: context, child: DeleteRoomDialog(state.roomSelected));
+      context: context,
+      builder: (context) => DeleteRoomDialog(state.roomSelected),
+    );
   }
 
   @override

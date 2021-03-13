@@ -16,34 +16,44 @@ class SwipeCubit extends Cubit<SwipeState> {
       (failure) {
         emit(SwipeFailed());
       },
-      (items) {
-        emit(SwipeLoaded(items));
+      (allItems) {
+        emit(SwipeLoaded(allItems, allItems.first, []));
       },
     );
   }
 
-  swipeLeft() {
+  swipeLeft(Item swipedItem) {
     if (state is SwipeLoaded) {
-      final previous = state as SwipeLoaded;
-      if (previous.items.length > 0) {
-        final itemPopped =
-            previous.items.getRange(0, previous.items.length - 1).toList();
-        emit(SwipeLoaded(itemPopped));
+      // Remove item from allItems
+      final allItems = (state as SwipeLoaded).allItems.toList();
+      allItems.removeWhere((item) => item.id == swipedItem.id);
+      // Add item to swiped items
+      final swipedItems = (state as SwipeLoaded).swipedItems.toList();
+      swipedItems.add(swipedItem);
+      if (allItems.isEmpty) {
+        emit(SwipedThrough());
       } else {
-        // OHOH
+        // New top item
+        final topItem = allItems.first;
+        emit(SwipeLoaded(allItems, topItem, swipedItems));
       }
     }
   }
 
-  swipeRight() {
+  swipeRight(Item swipedItem) {
     if (state is SwipeLoaded) {
-      final previous = state as SwipeLoaded;
-      if (previous.items.length > 0) {
-        final itemPopped =
-            previous.items.getRange(0, previous.items.length - 1).toList();
-        emit(SwipeLoaded(itemPopped));
+      // Remove item from allItems
+      final allItems = (state as SwipeLoaded).allItems.toList();
+      allItems.removeWhere((item) => item.id == swipedItem.id);
+      // Add item to swiped items
+      final swipedItems = (state as SwipeLoaded).swipedItems.toList();
+      swipedItems.add(swipedItem);
+      if (allItems.isEmpty) {
+        emit(SwipedThrough());
       } else {
-        // OHOH
+        // New top item
+        final topItem = allItems.first;
+        emit(SwipeLoaded(allItems, topItem, swipedItems));
       }
     }
   }
@@ -60,11 +70,15 @@ class SwipeInitial extends SwipeState {}
 
 class SwipeFailed extends SwipeState {}
 
-class SwipeLoaded extends SwipeState {
-  final List<Item> items;
+class SwipedThrough extends SwipeState {}
 
-  SwipeLoaded(this.items);
+class SwipeLoaded extends SwipeState {
+  final List<Item> allItems;
+  final List<Item> swipedItems;
+  final Item topItem;
+
+  SwipeLoaded(this.allItems, this.topItem, this.swipedItems);
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [allItems, topItem, swipedItems];
 }
