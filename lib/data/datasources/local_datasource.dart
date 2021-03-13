@@ -1,3 +1,4 @@
+import 'package:broom/data/models/question_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -24,6 +25,10 @@ abstract class LocalDatasource {
   Future<List<RoomModel>> getRoomsFromDatabase();
 
   Future<List<ItemModel>> getItemsFromDatabase();
+
+  Future<List<QuestionModel>> getQuestionsFromDatabase();
+
+  Future<List<ItemModel>> getUnansweredItems(int questionId);
 }
 
 class LocalDatasourceImpl implements LocalDatasource {
@@ -40,6 +45,18 @@ class LocalDatasourceImpl implements LocalDatasource {
   final String roomName = 'name';
   final String roomDescription = 'description';
   final String roomColor = 'color';
+
+  final String questionTable = 'questions';
+  final String questionId = 'id';
+  final String questionText = 'text';
+  final String questionAnswer = 'answer';
+  final String questionCategory = 'category';
+
+  final String answerTable = 'answers';
+  final String answerQuestionId = 'questionId';
+  final String answerItemId = 'itemId';
+  final String answerDate = 'date';
+  final String answerValue = 'answer';
 
   Database db;
   final dbName = 'broom.db';
@@ -64,6 +81,10 @@ class LocalDatasourceImpl implements LocalDatasource {
             'CREATE TABLE $itemTable ($itemId INTEGER PRIMARY KEY, $itemName TEXT, $itemDescription TEXT, $itemImagePath TEXT, $itemRoomId INTEGER, $itemCreatedAt DATE);');
         await db.execute(
             'CREATE TABLE $roomTable ($roomId INTEGER PRIMARY KEY, $roomName TEXT, $roomDescription TEXT, $roomColor TEXT);');
+        await db.execute(
+            'CREATE TABLE $questionTable ($questionId INTEGER PRIMARY KEY, $questionText TEXT, $questionAnswer BOOLEAN, $questionCategory INTEGER);');
+        await db.execute(
+            'CREATE TABLE $answerTable ($answerQuestionId INTEGER, $answerItemId INTEGER, $answerDate DATE, $answerValue BOOLEAN);');
 
         final uncategorizedRoom = {
           roomName: "Other",
@@ -72,10 +93,19 @@ class LocalDatasourceImpl implements LocalDatasource {
           roomColor: CustomColor.LIGHTGRAY.index,
         };
         await db.insert(roomTable, uncategorizedRoom);
+
+        final testQuestion = {
+          questionText: "Does this add value to your life?",
+          questionCategory: "VALUE",
+          questionAnswer: 1,
+        };
+        await db.insert(questionTable, testQuestion);
       },
       onUpgrade: (Database db, int version, int oldVersion) async {
         await db.execute('DELETE FROM $itemTable;');
         await db.execute('DELETE FROM $roomTable;');
+        await db.execute('DELETE FROM $questionTable;');
+        await db.execute('DELETE FROM $answerTable;');
       },
     );
   }
@@ -277,6 +307,69 @@ class LocalDatasourceImpl implements LocalDatasource {
       return items;
     } else {
       return [];
+    }
+  }
+
+  @override
+  Future<List<QuestionModel>> getQuestionsFromDatabase() async {
+    List<Map> questionsMap = await db.query(
+      questionTable,
+    );
+
+    if (questionsMap.length > 0) {
+      final questions = questionsMap
+          .map(
+            (questionMap) => QuestionModel(
+              id: questionMap[questionId],
+              category: questionMap[questionCategory],
+              text: questionMap[questionText],
+              answerIndicatingValue: questionMap[questionAnswer],
+            ),
+          )
+          .toList();
+
+      return questions;
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  Future<List<ItemModel>> getUnansweredItems(int questionId) async {
+    List<Map> answersMap = await db.query(
+      answerTable,
+      columns: ['$answerItemId'],
+      where: "$answerQuestionId = ?",
+      whereArgs: [questionId],
+    );
+
+    if (answersMap.length > 0) {
+      final answeredQuestionIds =
+          answersMap.map((answerMap) => answerMap[answerItemId]).toList();
+
+      List<Map> itemsMap = await db.query(
+        itemTable,
+        where: "$itemId NOT IN ?",
+        whereArgs: [...answeredQuestionIds],
+      );
+      if (itemsMap.length > 0) {
+        final items = itemsMap
+            .map(
+              (itemMap) => ItemModel(
+                name: itemMap[itemName],
+                description: itemMap[itemDescription],
+                id: itemMap[itemId],
+                imagePath: itemMap[itemImagePath],
+                roomId: itemMap[itemRoomId],
+              ),
+            )
+            .toList();
+
+        return items;
+      }
+      return [];
+    } else {
+      return await getItemsFromDatabase();
     }
   }
 }

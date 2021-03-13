@@ -14,11 +14,11 @@ class AddNewItemButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         final roomId = roomSelected?.id;
         context.read<ItemDetailCubit>().setEmptyItem(roomId);
-        context.read<SwipeCubit>().fetchItems();
-        Navigator.of(context).pushNamed(AddItemCameraPage.routeName);
+        await Navigator.of(context).pushNamed(AddItemCameraPage.routeName);
+        context.read<SwipeCubit>().fetchPlayPile();
       },
       child: ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10)),

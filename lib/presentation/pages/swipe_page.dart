@@ -27,7 +27,7 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    context.read<SwipeCubit>().fetchItems();
+    context.read<SwipeCubit>().fetchPlayPile();
     swipeAnimationController = AnimationController.unbounded(vsync: this);
   }
 

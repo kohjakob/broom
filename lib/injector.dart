@@ -1,6 +1,7 @@
 import 'package:broom/domain/usecases/delete_item.dart';
 import 'package:broom/domain/usecases/edit_item.dart';
 import 'package:broom/domain/usecases/get_items.dart';
+import 'package:broom/domain/usecases/get_question_play_pile.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import 'package:broom/presentation/bloc/swipe_cubit.dart';
@@ -33,6 +34,7 @@ Future<void> init() async {
   injector.registerLazySingleton(() => DeleteItem(injector()));
   injector.registerLazySingleton(() => DeleteRoom(injector()));
   injector.registerLazySingleton(() => GetItems(injector()));
+  injector.registerLazySingleton(() => GetQuestionPlayPile(injector()));
 
   // Repository
   injector.registerLazySingleton<DeclutterRepo>(
@@ -54,6 +56,6 @@ Future<void> init() async {
   );
 
   injector.registerFactory(
-    () => SwipeCubit(injector()),
+    () => SwipeCubit(injector(), injector()),
   );
 }

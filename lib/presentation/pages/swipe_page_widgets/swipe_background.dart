@@ -25,7 +25,7 @@ class SwipeBackground extends StatelessWidget {
               .bodyText1
               .copyWith(color: Colors.white),
         ),
-        onPressed: () => context.read<SwipeCubit>().fetchItems(),
+        onPressed: () => context.read<SwipeCubit>().fetchPlayPile(),
       ),
     );
   }

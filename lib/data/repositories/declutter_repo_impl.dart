@@ -1,3 +1,6 @@
+import 'package:broom/data/models/question_model.dart';
+import 'package:broom/domain/entities/play_pile.dart';
+import 'package:broom/domain/entities/question.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
@@ -87,6 +90,28 @@ class DeclutterRepoImpl implements DeclutterRepo {
     try {
       final success = await localDatasource.getItemsFromDatabase();
       return Right(success);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Question>> getRandomQuestion() async {
+    try {
+      List<QuestionModel> questions =
+          await localDatasource.getQuestionsFromDatabase();
+      questions.shuffle();
+      return Right(questions.first);
+    } on EditItemFailedException {
+      return Left(Failure(Code.ItemEditFail));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Item>>> getUnansweredItems(int questionId) async {
+    try {
+      List<Item> items = await localDatasource.getUnansweredItems(questionId);
+      return Right(items);
     } on EditItemFailedException {
       return Left(Failure(Code.ItemEditFail));
     }

@@ -1,23 +1,26 @@
 import 'package:bloc/bloc.dart';
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/domain/usecases/get_items.dart';
+import 'package:broom/domain/usecases/get_question_play_pile.dart';
 import 'package:equatable/equatable.dart';
 
 class SwipeCubit extends Cubit<SwipeState> {
   final GetItems getItemsUsecase;
+  final GetQuestionPlayPile getQuestionPlayPileUsecase;
 
-  SwipeCubit(this.getItemsUsecase) : super(SwipeInitial()) {
-    fetchItems();
+  SwipeCubit(this.getItemsUsecase, this.getQuestionPlayPileUsecase)
+      : super(SwipeInitial()) {
+    fetchPlayPile();
   }
 
-  fetchItems() async {
-    var either = await getItemsUsecase.execute();
+  fetchPlayPile() async {
+    var either = await getQuestionPlayPileUsecase.execute();
     either.fold(
       (failure) {
         emit(SwipeFailed());
       },
-      (allItems) {
-        emit(SwipeLoaded(allItems, allItems.first, []));
+      (playPile) {
+        emit(SwipeLoaded(playPile.items, playPile.items.first, []));
       },
     );
   }
