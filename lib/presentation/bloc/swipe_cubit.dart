@@ -40,6 +40,24 @@ class SwipeCubit extends Cubit<SwipeState> {
     }
   }
 
+  skipCard() {
+    if (state is SwipeLoaded) {
+      // Remove item from allItems
+      final allItems = (state as SwipeLoaded).allItems.toList();
+      allItems.removeAt(0);
+      // Add item to swiped items
+      final swipedItems = (state as SwipeLoaded).swipedItems.toList();
+      swipedItems.add((state as SwipeLoaded).allItems.first);
+      if (allItems.isEmpty) {
+        emit(SwipedThrough());
+      } else {
+        // New top item
+        final topItem = allItems.first;
+        emit(SwipeLoaded(allItems, topItem, swipedItems));
+      }
+    }
+  }
+
   swipeRight(Item swipedItem) {
     if (state is SwipeLoaded) {
       // Remove item from allItems

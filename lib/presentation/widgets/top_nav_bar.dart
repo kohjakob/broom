@@ -18,7 +18,7 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
       children: [
         Container(
           height: MediaQuery.of(context).padding.top,
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColorLight,
         ),
         Container(
           color: Theme.of(context).accentColor.withAlpha(20),

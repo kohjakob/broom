@@ -6,8 +6,8 @@ import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/pages/edit_item_camera_page.dart';
 import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart';
 
-import 'widgets/small_button.dart';
-import 'widgets/top_nav_bar.dart';
+import '../widgets/small_button.dart';
+import '../widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

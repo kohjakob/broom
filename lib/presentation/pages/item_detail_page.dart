@@ -7,7 +7,7 @@ import 'package:broom/presentation/pages/grid_page_widgets/loading_fallback.dart
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/item.dart';
-import 'widgets/top_nav_bar.dart';
+import '../widgets/top_nav_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemDetailPage extends StatefulWidget {

@@ -2,8 +2,8 @@ import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'add_item_form_page.dart';
-import 'widgets/small_button.dart';
-import 'widgets/top_nav_bar.dart';
+import '../widgets/small_button.dart';
+import '../widgets/top_nav_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddItemCameraPage extends StatefulWidget {

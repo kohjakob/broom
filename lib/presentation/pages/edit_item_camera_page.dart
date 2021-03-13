@@ -1,7 +1,7 @@
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'widgets/top_nav_bar.dart';
+import '../widgets/top_nav_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditItemCameraPage extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:broom/presentation/bloc/room_detail_cubit.dart';
 import '../../core/constants/colors.dart';
 import '../bloc/grid_cubit.dart';
 import 'grid_page_widgets/loading_fallback.dart';
-import 'widgets/small_button.dart';
-import 'widgets/top_nav_bar.dart';
+import '../widgets/small_button.dart';
+import '../widgets/top_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

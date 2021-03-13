@@ -128,6 +128,16 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
     }
   }
 
+  void skipAnswer() {
+    var animationFuture = this
+        .swipeAnimationController
+        .animateTo(-600, duration: Duration(milliseconds: 300));
+    animationFuture.whenComplete(() {
+      swipeAnimationController.value = 0;
+      context.read<SwipeCubit>().skipCard();
+    });
+  }
+
   _buildChildren(SwipeLoaded swipeState) {
     return [
       (swipeState.allItems.length >= 2)
@@ -175,7 +185,7 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
                       Expanded(
                         child: Stack(
                           children: [
-                            SkipCard(),
+                            SkipCard(skipAnswer),
                             Column(
                               children: [
                                 Expanded(
