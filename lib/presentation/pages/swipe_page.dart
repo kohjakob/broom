@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:broom/domain/entities/item.dart';
 import 'package:broom/presentation/bloc/item_detail_cubit.dart';
 import 'package:broom/presentation/bloc/swipe_cubit.dart';
@@ -44,9 +46,10 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
   }
 
   bool _velosityIsHighEnough(DragEndDetails drag) {
-    print(updateOffset.direction.abs());
+    print(updateOffset.distance);
     print(drag.velocity.pixelsPerSecond.distance);
-    return (updateOffset.direction.abs() > 0.7) &&
+    return (updateOffset.distance.abs() >
+            0.7 * MediaQuery.of(context).size.width) &&
         (drag.velocity.pixelsPerSecond.distance > 1000);
   }
 
@@ -65,7 +68,7 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
     return 1 > dragDirection && dragDirection > -1.5;
   }
 
-  void _onPanEnd(DragEndDetails drag, Item item) {
+  void _onPanEnd(DragEndDetails drag, Item item) async {
     if (_velosityIsHighEnough(drag)) {
       // Animate out the card
       swipeAnimationController.animateWith(
@@ -75,13 +78,15 @@ class _SwipePageState extends State<SwipePage> with TickerProviderStateMixin {
           drag.velocity.pixelsPerSecond.distance,
         ),
       );
+      Future.delayed(const Duration(milliseconds: 200), () {
+        swipeAnimationController.value = 0;
 
-      swipeAnimationController.value = 0;
-      if (_isRightDrag(directionVector)) {
-        context.read<SwipeCubit>().swipeRight(item);
-      } else {
-        context.read<SwipeCubit>().swipeLeft(item);
-      }
+        if (_isRightDrag(directionVector)) {
+          context.read<SwipeCubit>().swipeRight(item);
+        } else {
+          context.read<SwipeCubit>().swipeLeft(item);
+        }
+      });
     } else {
       // Animate card back to center
       swipeAnimationController.animateWith(
