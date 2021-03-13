@@ -272,6 +272,7 @@ class LocalDatasourceImpl implements LocalDatasource {
   Future<bool> deleteItemFromDatabase(int id) async {
     final countDeletedItems =
         await db.delete(itemTable, where: "$itemId = ?", whereArgs: [id]);
+    await db.delete(answerTable, where: "$answerItemId = ?", whereArgs: [id]);
     if (countDeletedItems > 0) {
       return true;
     } else {
@@ -292,14 +293,24 @@ class LocalDatasourceImpl implements LocalDatasource {
         return false;
       }
     } else {
+      // Delete all the answers
+      final rooms = await getRoomsFromDatabase();
+      final room = rooms.firstWhere((room) => room.id == id);
+      final items = room.items.map((item) => item.id).toList();
+      var deleteAnswersForItems =
+          'DELETE FROM $answerTable  WHERE $answerItemId IN (\'' +
+              (items.join('\',\'')).toString() +
+              '\')';
+      await db.rawQuery(deleteAnswersForItems);
+
+      // Delete the room
       final countDeletedRooms =
           await db.delete(roomTable, where: "$roomId = ?", whereArgs: [id]);
+
+      // Delete the items associated with teh room
       await db.delete(itemTable, where: "$itemRoomId = ?", whereArgs: [id]);
-      if (countDeletedRooms > 0) {
-        return true;
-      } else {
-        return false;
-      }
+
+      return true;
     }
   }
 
