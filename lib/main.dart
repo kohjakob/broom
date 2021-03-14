@@ -19,7 +19,16 @@ import 'presentation/pages/item_detail_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
+
   runApp(Broom());
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
 }
 
 class Broom extends StatelessWidget {

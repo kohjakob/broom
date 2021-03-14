@@ -26,7 +26,12 @@ class _DeleteRoomDialogState extends State<DeleteRoomDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
       title: Text("Really delete this room?"),
+      contentPadding: EdgeInsets.fromLTRB(10, 20, 30, 10),
       content: Container(
         child: Column(
           mainAxisSize: MainAxisSize.min,

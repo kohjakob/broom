@@ -29,6 +29,11 @@ class _ItemDetailPageState extends State<ItemDetailPage> {
 
   _deleteItem(Item item) {
     final deleteDialog = AlertDialog(
+      contentPadding: EdgeInsets.fromLTRB(10, 20, 30, 10),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
       title: Text("Really delete " + item.name + "?"),
       actions: [
         TextButton(
