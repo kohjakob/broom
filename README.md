@@ -13,4 +13,3 @@
 - Dependency Injection: [GetIt](https://pub.dev/packages/get_it)
 
 ## Demo
-<video src="./info/demo.mp4" width="300" />
