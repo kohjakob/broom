@@ -13,3 +13,8 @@
 - Dependency Injection: [GetIt](https://pub.dev/packages/get_it)
 
 ## Demo
+<div align="center">
+<video style="margin:20px;" src="https://github.com/user-attachments/assets/e6db4cb4-cb62-4976-88d8-6ad7493ceebd
+" controls="controls">
+</video>
+</div>
