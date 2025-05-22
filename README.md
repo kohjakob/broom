@@ -14,5 +14,5 @@
 
 ## Demo
 <video src="https://github.com/user-attachments/assets/e6db4cb4-cb62-4976-88d8-6ad7493ceebd
-" controls="controls" style="max-width: 450px;">
+" controls="controls">
 </video>
