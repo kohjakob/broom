@@ -14,7 +14,7 @@
 
 ## Demo
 <div align="center">
-<video style="padding:20px;" src="https://github.com/user-attachments/assets/e6db4cb4-cb62-4976-88d8-6ad7493ceebd
+<video style="margin:20px;" src="https://github.com/user-attachments/assets/e6db4cb4-cb62-4976-88d8-6ad7493ceebd
 " controls="controls">
 </video>
 </div>
